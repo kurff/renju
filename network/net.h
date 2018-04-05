@@ -1,9 +1,9 @@
-#ifndef UTIL_NET_H
-#define UTIL_NET_H
+#ifndef __NET_H__
+#define __NET_H__
 
 #include "caffe2/core/operator.h"
 
-namespace caffe2 {
+namespace Beta {
 
 class Net {
  public:

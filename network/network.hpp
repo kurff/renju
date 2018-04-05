@@ -17,10 +17,15 @@ namespace Beta{
             }
 
         public:
-
+            
 
 
             void create_network(){
+
+
+            }
+
+            void create_lenet(){
 
 
             }

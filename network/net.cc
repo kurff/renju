@@ -7,7 +7,7 @@
 #include "google/protobuf/io/zero_copy_stream_impl.h"
 #include "google/protobuf/text_format.h"
 
-namespace caffe2 {
+namespace Beta {
 
 const std::set<std::string> trainable_ops({
     "Add",          "AffineScale",
