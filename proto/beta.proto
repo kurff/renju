@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package Beta;
+
+//message 
+
+message Parameters{
+    required int32 depth =1 [default = 1]; // the depth of layer L used to MCTS
+    required string type =2 [default="chess"];
+    required int32 batch_size =3[default=10];
+    required int32 channel =4[default=8];
+    required int height =5[default=10];
+    required int width= 6[default=9];
+    required float epsilon =7[default=0.25];
+}

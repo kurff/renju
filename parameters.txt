@@ -1,0 +1,7 @@
+depth: 10
+# the batch size of state for evaluation
+type: chess
+batch_size: 10
+channel: 10
+height: 10
+width: 9
