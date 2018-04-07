@@ -7,6 +7,7 @@
         "new": "cpp",
         "stdexcept": "cpp",
         "typeinfo": "cpp",
-        "slist": "cpp"
+        "slist": "cpp",
+        "memory": "cpp"
     }
 }

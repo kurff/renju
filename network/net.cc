@@ -8,7 +8,7 @@
 #include "google/protobuf/text_format.h"
 
 namespace Beta {
-
+using namespace caffe2;
 const std::set<std::string> trainable_ops({
     "Add",          "AffineScale",
     "AveragedLoss", "AveragePool",

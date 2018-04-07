@@ -2,15 +2,16 @@
 #define __NETWORK_HPP__
 #include "network/net.h"
 #include <memory>
+#include <string>
 namespace Beta{
     
     template<typename State, typename Action>
     class Network{
         public:
-            Network(NetDef& init_net, NetDef& predict_net){
-                init_net_.reset(new Net(init_net));
-                predict_net_.reset(new Net(predict_net));
-
+            Network(NetDef& init_model, NetDef& predict_model):init_model_(init_model), predict_model_(predict_model){
+                init_net_.reset(new Net(init_model_));
+                predict_net_.reset(new Net(predict_model_));
+                workspace_.reset(new Workspace("workspace"));
             }
             ~Network(){
 
@@ -33,7 +34,7 @@ namespace Beta{
 
             }
 
-            void create_lenet(){
+            void create_lenet(bool training){
                 predict_net_->AddConvOp("data", "conv1_w", "conv1_b", "conv1", 1, 0, 5);
                 predict_net_->AddInput("conv1_w");
                 predict_net_->AddInput("conv1_b");
@@ -72,18 +73,27 @@ namespace Beta{
             }
 
 
+            void train(){
+
+            }
 
 
+            void inference(const State& state, Action& action, float& v){
 
-            void run(const State& state, Action& action, float& v){
 
+            }
 
+            void save(string proto_name){
+                WriteProtoToTextFile(predict_model_,proto_name+"_pred.pbtxt");
+                WriteProtoToTextFile(init_model_, proto_name+"_init.pbtxt");
             }
 
         protected:
             std::shared_ptr<Net> init_net_;
             std::shared_ptr<Net> predict_net_;
-
+            std::shared_ptr<Workspace> workspace_;
+            NetDef init_model_;
+            NetDef predict_model_;
 
 
     };

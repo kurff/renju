@@ -21,6 +21,10 @@ add_executable(test_random  test/test_random.cc )
 target_link_libraries(test_random gtest gtest_main glog )
 add_test(NAME test_random COMMAND test_random)
 
+
+add_executable(test_network  test/test_network.cc network/net.cc)
+target_link_libraries(test_network gtest gtest_main glog caffe2 caffe2_protos protobuf)
+add_test(NAME test_network COMMAND test_network)
 endif()
 
 include_directories(./)

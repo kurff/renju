@@ -4,7 +4,7 @@
 #include "caffe2/core/operator.h"
 
 namespace Beta {
-
+using namespace caffe2;
 class Net {
  public:
   Net(NetDef& net) : net_(net) {}
