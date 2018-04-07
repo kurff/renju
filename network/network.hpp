@@ -1,6 +1,7 @@
 #ifndef __NETWORK_HPP__
 #define __NETWORK_HPP__
 #include "network/net.h"
+#include "glog/logging.h"
 #include <memory>
 #include <string>
 namespace Beta{
@@ -68,12 +69,42 @@ namespace Beta{
                     init_net_->AddConstantFillOp({10}, "pred_b");
                 }
                 predict_net_->AddSoftmaxOp("pred", "softmax");
-
-
+                LOG(INFO)<<predict_model_.external_input().size();
+                for(auto x: predict_model_.external_input()){
+                    LOG(INFO)<<x;
+                }
+                LOG(INFO)<<init_model_.external_input().size();
+                for(auto x: init_model_.external_input()){
+                    LOG(INFO)<<x;
+                }
+                for(auto op: init_model_.op()){
+                    LOG(INFO)<<op.type()<<" "<<op.name();
+                }
+                for(auto op: predict_model_.op()){
+                    LOG(INFO)<<op.type()<<" "<<op.name();
+                }
             }
 
+            void add_loss(){
+                predict_net_->AddLabelCrossEntropyOp("softmax", "label", "xent");
+                predict_net_->AddAveragedLossOp("xent","loss");
+                predict_net_->AddConstantFillWithOp(1.f, "loss", "loss_grad");
+                predict_net_->AddGradientOps();
+                predict_net_->AddLearningRateOp("ITER", "LR", 0.1);
+
+  
+                init_net_->AddConstantFillOp({1}, 1.f, "ONE");
+                predict_net_->AddInput("ONE");
+                predict_net_->AddInput("ITER");
+                predict_net_->AddIterOp("ITER");
+                //for (auto param : params) {                  
+                //    predict.AddWeightedSumOp({param, "ONE", param + "_grad", "LR"}, param);
+                //}
+            }
 
             void train(){
+
+
 
             }
 

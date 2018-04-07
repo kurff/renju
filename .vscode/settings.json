@@ -8,6 +8,8 @@
         "stdexcept": "cpp",
         "typeinfo": "cpp",
         "slist": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "algorithm": "cpp",
+        "random": "cpp"
     }
 }
