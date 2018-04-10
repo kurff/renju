@@ -23,7 +23,7 @@ add_test(NAME test_random COMMAND test_random)
 
 
 add_executable(test_network  test/test_network.cc network/net.cc)
-target_link_libraries(test_network gtest gtest_main glog caffe2 caffe2_protos protobuf)
+target_link_libraries(test_network gtest gtest_main glog caffe2  protobuf)
 add_test(NAME test_network COMMAND test_network)
 endif()
 
@@ -32,7 +32,7 @@ include_directories(/usr/local/include)
 
 
 #add_library(libproto proto/beta.pb.cc)
-#add_executable(Demo main.cpp )
+add_executable(toy test/toy.cc )
 
-#target_link_libraries(Demo  libproto glog protobuf )
+target_link_libraries(toy  caffe2 protobuf)
 

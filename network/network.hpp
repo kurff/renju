@@ -30,8 +30,9 @@ namespace Beta{
             }
 
 
-            void create_network(bool training){
- 
+            void create(){
+                init_ = CreateNet( init_model_,workspace_.get());
+                //predict_ = CreateNet(predict_model_, workspace_.get());
 
             }
 
@@ -97,12 +98,24 @@ namespace Beta{
                 predict_net_->AddInput("ONE");
                 predict_net_->AddInput("ITER");
                 predict_net_->AddIterOp("ITER");
+
+
+                
                 //for (auto param : params) {                  
                 //    predict.AddWeightedSumOp({param, "ONE", param + "_grad", "LR"}, param);
                 //}
             }
 
+
+
             void train(){
+                init_->Run();
+                for(auto x: workspace_->Blobs()){
+                    LOG(INFO)<<"workspace: "<<x;
+                    auto y = workspace_->GetBlob(x);
+                    LOG(INFO)<<y->Get<TensorCPU>().data<float>()[0];
+                }
+                //predict_->Run();
 
 
 
@@ -125,6 +138,9 @@ namespace Beta{
             std::shared_ptr<Workspace> workspace_;
             NetDef init_model_;
             NetDef predict_model_;
+
+            unique_ptr<NetBase> init_;
+            unique_ptr<NetBase> predict_;
 
 
     };
