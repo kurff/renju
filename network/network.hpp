@@ -32,11 +32,17 @@ namespace Beta{
 
             void create(){
                 init_ = CreateNet( init_model_,workspace_.get());
-                //predict_ = CreateNet(predict_model_, workspace_.get());
+                Blob* data = workspace_->CreateBlob("data");
+                data->GetMutable<TensorCPU>()->Resize(vector<int>{1,1,28,28});
+                data->GetMutable<TensorCPU>()->mutable_data<float>();
+                LOG(INFO)<<"create network start";
+                predict_ = CreateNet(predict_model_, workspace_.get());
+                LOG(INFO)<<"create network finish";
 
             }
 
             void create_lenet(bool training){
+                predict_net_->AddInput("data");
                 predict_net_->AddConvOp("data", "conv1_w", "conv1_b", "conv1", 1, 0, 5);
                 predict_net_->AddInput("conv1_w");
                 predict_net_->AddInput("conv1_b");
@@ -113,17 +119,21 @@ namespace Beta{
 
 
 
-                Blob* data = workspace_->CreateBlob("data");
-                data->GetMutable<TensorCPU>()->Resize(vector<int>{1,3,28,28});
-                data->GetMutable<TensorCPU>()->mutable_data<float>();
+                
                 for(auto x: workspace_->Blobs()){
                     LOG(INFO)<<"workspace: "<<x;
                     auto y = workspace_->GetBlob(x);
-                    LOG(INFO)<<y->Get<TensorCPU>().data<float>()[0];
+                    //LOG(INFO)<<y->Get<TensorCPU>()->dims();
+                    //LOG(INFO)<<y->Get<TensorCPU>().data<float>()[0];
                     
                 }
-                for(int i =0; i< 10; ++ i){
+                
+                for(int i =0; i< 1; ++ i){
                     predict_->Run();
+                    auto o = workspace_->GetBlob("softmax");
+                    for(int j = 0; j < 10; ++ j){
+                        LOG(INFO)<<o->Get<TensorCPU>().data<float>()[j];
+                    }
                 }
                 //predict_->Run();
 
