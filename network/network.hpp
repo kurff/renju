@@ -110,10 +110,20 @@ namespace Beta{
 
             void train(){
                 init_->Run();
+
+
+
+                Blob* data = workspace_->CreateBlob("data");
+                data->GetMutable<TensorCPU>()->Resize(vector<int>{1,3,28,28});
+                data->GetMutable<TensorCPU>()->mutable_data<float>();
                 for(auto x: workspace_->Blobs()){
                     LOG(INFO)<<"workspace: "<<x;
                     auto y = workspace_->GetBlob(x);
                     LOG(INFO)<<y->Get<TensorCPU>().data<float>()[0];
+                    
+                }
+                for(int i =0; i< 10; ++ i){
+                    predict_->Run();
                 }
                 //predict_->Run();
 
@@ -136,6 +146,7 @@ namespace Beta{
             std::shared_ptr<Net> init_net_;
             std::shared_ptr<Net> predict_net_;
             std::shared_ptr<Workspace> workspace_;
+
             NetDef init_model_;
             NetDef predict_model_;
 

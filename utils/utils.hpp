@@ -66,7 +66,7 @@ namespace Beta{
                    distribution.push_back(element.confidence());
                 }
                 
-                std::discrete_distribution<float > distri(distribution.begin(), distribution.end());
+                std::discrete_distribution<int > distri(distribution.begin(), distribution.end());
 
                 return distri(gen);
            }

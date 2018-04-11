@@ -9,7 +9,7 @@ TEST(NETWORK, build){
     Network<int , int> net(init_model, predict_model);
     net.init(0);
     net.create_lenet(1);
-    net.add_loss();
+    //net.add_loss();
     net.create();
     net.save("lenet");
     net.train();

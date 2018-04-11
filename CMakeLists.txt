@@ -5,6 +5,7 @@ SET(CMAKE_C_COMPILER g++)
 add_compile_options(-std=c++11)
 
 link_directories(/usr/local/lib)
+link_directories()
 
 if (test)
 enable_testing()
@@ -13,17 +14,17 @@ enable_testing()
 #add_test(NAME test_tree COMMAND test_tree)
 
 add_executable(test_example  test/test_example.cc )
-target_link_libraries(test_example gtest gtest_main glog )
-add_test(NAME test_example COMMAND test_example)
+target_link_libraries(test_example gtest gtest_main glog pthread)
+add_test(NAME test_example COMMAND test_example )
 
 
 add_executable(test_random  test/test_random.cc )
-target_link_libraries(test_random gtest gtest_main glog )
+target_link_libraries(test_random gtest gtest_main glog pthread)
 add_test(NAME test_random COMMAND test_random)
 
 
 add_executable(test_network  test/test_network.cc network/net.cc)
-target_link_libraries(test_network gtest gtest_main glog caffe2  protobuf)
+target_link_libraries(test_network gtest gtest_main glog caffe2  protobuf pthread)
 add_test(NAME test_network COMMAND test_network)
 endif()
 
