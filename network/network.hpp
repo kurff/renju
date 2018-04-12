@@ -119,6 +119,7 @@ namespace Beta{
 
 
 
+
                 predict_->Run();
                 for(auto x: workspace_->Blobs()){
                     LOG(INFO)<<"workspace: "<<x;

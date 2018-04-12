@@ -34,6 +34,6 @@ include_directories(/usr/local/include)
 
 #add_library(libproto proto/beta.pb.cc)
 add_executable(toy test/toy.cc )
-
 target_link_libraries(toy  caffe2 protobuf)
-
+add_executable(test_caffe2 test/test_caffe2.cc network/net.cc)
+target_link_libraries(test_caffe2 caffe2 protobuf glog)
