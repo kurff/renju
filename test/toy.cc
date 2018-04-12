@@ -311,6 +311,7 @@ void run() {
   // >>> print("Before training, B is: {}".format(workspace.FetchBlob("B")))
   print(workspace.GetBlob("B"), "B before");
 
+  WriteProtoToTextFile(trainModel,"trainModel.pbtxt");
   // >>> for i in range(100):
   for (auto i = 1; i <= 100; i++) {
     // >>> workspace.RunNet(train_net.Proto().name)
