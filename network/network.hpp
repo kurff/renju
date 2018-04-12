@@ -119,12 +119,12 @@ namespace Beta{
 
 
 
-                
+                predict_->Run();
                 for(auto x: workspace_->Blobs()){
                     LOG(INFO)<<"workspace: "<<x;
                     auto y = workspace_->GetBlob(x);
-                    //LOG(INFO)<<y->Get<TensorCPU>()->dims();
-                    //LOG(INFO)<<y->Get<TensorCPU>().data<float>()[0];
+                    LOG(INFO)<<y->Get<TensorCPU>().dims();
+                    LOG(INFO)<<y->Get<TensorCPU>().data<float>()[0];
                     
                 }
                 
