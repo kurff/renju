@@ -10,9 +10,9 @@ TEST(NETWORK, build){
     net.init(0);
     net.create_lenet(1);
     net.add_loss();
-    net.create();
+    //net.create();
     net.save("lenet");
-    net.train();
+    //net.train();
 
 
 }

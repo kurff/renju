@@ -6,13 +6,13 @@
 #include <string>
 namespace Beta{
     
-    template<typename State, typename Action>
+    template<typename State, typename Action, typename T>
     class Network{
         public:
-            Network(NetDef& init_model, NetDef& predict_model):init_model_(init_model), predict_model_(predict_model){
-                init_net_.reset(new Net(init_model_));
-                predict_net_.reset(new Net(predict_model_));
-                workspace_.reset(new Workspace("workspace"));
+            Network(int board_size, int batch_size, int channels): 
+            board_size_(board_size), batch_size_(batch_size), channels_(channels){
+                
+
             }
             ~Network(){
 
@@ -21,25 +21,51 @@ namespace Beta{
 
         public:
             
-            void init(bool use_gpu){
+            void init(NetDef& init_model, NetDef& predict_model, bool use_gpu){
+                
+                init_model_ = init_model;
+                predict_model_ = predict_model;
+                init_net_.reset(new Net(init_model_));
+                predict_net_.reset(new Net(predict_model_)); 
                 if(use_gpu){
                     init_net_->SetDeviceCUDA();
                     predict_net_->SetDeviceCUDA();
                 }
+                workspace_.reset(new Workspace("workspace"));
+
+                // create input data
+                Blob* data = workspace_->CreateBlob("data");
+                T* input = data->GetMutable<T>();
+                input->Resize(vector<int>{batch_size_,channels_,board_size_,board_size_});
+                input->mutable_data<float>();
+
+                // create label pai, action prediction
+                Blob* pai = workspace_->CreateBlob("pai");
+                T* label_pai = pai->GetMutable<T>();
+                label_pai->Resize(vector<int>{batch_size_, 1, board_size_, board_size_});
+                label_pai->mutable_data<float>();
+
+                // create label z, game winner
+                Blob* z = workspace_->CreateBlob("z");
+                T* label_z = z->GetMutable<T>();
+                label_z->Resize(vector<int>{batch_size_, 1});
+
+                
+
 
             }
 
 
-            void create(){
+            void allocate(){
                 init_ = CreateNet( init_model_,workspace_.get());
-                Blob* data = workspace_->CreateBlob("data");
-                data->GetMutable<TensorCPU>()->Resize(vector<int>{1,1,28,28});
-                data->GetMutable<TensorCPU>()->mutable_data<float>();
                 LOG(INFO)<<"create network start";
                 predict_ = CreateNet(predict_model_, workspace_.get());
                 LOG(INFO)<<"create network finish";
-
             }
+
+
+
+
 
             void create_lenet(bool training){
                 predict_net_->AddInput("data");
@@ -99,7 +125,6 @@ namespace Beta{
                 predict_net_->AddGradientOps();
                 predict_net_->AddLearningRateOp("ITER", "LR", 0.1);
 
-  
                 init_net_->AddConstantFillOp({1}, 1.f, "ONE");
                 predict_net_->AddInput("ONE");
                 predict_net_->AddInput("ITER");
@@ -154,6 +179,10 @@ namespace Beta{
             }
 
         protected:
+            int board_size_;
+            int batch_size_;
+            int channels_;
+
             std::shared_ptr<Net> init_net_;
             std::shared_ptr<Net> predict_net_;
             std::shared_ptr<Workspace> workspace_;

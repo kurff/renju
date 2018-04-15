@@ -19,6 +19,9 @@
         "tuple": "cpp",
         "utility": "cpp",
         "string": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "ios": "cpp",
+        "iterator": "cpp",
+        "bitset": "cpp"
     }
 }
