@@ -168,7 +168,14 @@ namespace Beta{
             }
 
             void add_loss(){
+
                 update_net_->AddInput("ITER");
+                init_net_->AddConstantFillOp({1}, 1.f, "ONE");
+                init_net_->AddConstantFillOp({1}, (int64_t)0, "ITER")->mutable_device_option()->set_device_type(CPU);
+                update_net_->AddInput("ONE");
+                update_net_->AddIterOp("ITER");
+
+
                 update_net_->AddLabelCrossEntropyOp("softmax", "pai", "xent");
                 update_net_->AddAveragedLossOp("xent","loss");
                 update_net_->AddConstantFillWithOp(1.f, "loss", "loss_grad");
@@ -176,11 +183,7 @@ namespace Beta{
                 update_net_->AddLearningRateOp("ITER", "LR", 0.1);
 
 
-                init_net_->AddConstantFillOp({1}, 1.f, "ONE");
-                init_net_->AddConstantFillOp({1}, (int64_t)0, "ITER")->mutable_device_option()->set_device_type(CPU);
-                update_net_->AddInput("ONE");
-                
-                update_net_->AddIterOp("ITER");
+
 
 
                 
@@ -203,7 +206,7 @@ namespace Beta{
             }
 
             void update_parameters(){
-
+                update_->Run();
 
             }
             void forward(Blob* input, Blob* prob, float& v){
@@ -211,7 +214,7 @@ namespace Beta{
                 T* d = data->GetMutable<T>();
                 TensorCPU* in = input->GetMutable<TensorCPU>();
                 d->template CopyFrom<CPUContext>(in);
-
+                predict_->Run();
 
 
 
