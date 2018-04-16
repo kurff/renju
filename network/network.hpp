@@ -4,6 +4,7 @@
 #include "glog/logging.h"
 #include <memory>
 #include <string>
+#include <vector>
 namespace Beta{
     
     template<typename State, typename Action, typename T>
@@ -47,7 +48,7 @@ namespace Beta{
                 T* label_pai = pai->GetMutable<T>();
                 label_pai->Resize(vector<int>{batch_size_, board_size_* board_size_});
                 label_pai->template mutable_data<float>();
-
+                LOG(INFO)<<"label pai dim: "<<label_pai->dims();
                 // create label z, game winner
                 Blob* z = workspace_->CreateBlob("z");
                 T* label_z = z->GetMutable<T>();
@@ -127,7 +128,7 @@ namespace Beta{
 
 
                 if (training) {
-                    init_net_->AddXavierFillOp({500, 800}, "fc3_w");
+                    init_net_->AddXavierFillOp({500, 50}, "fc3_w");
                     init_net_->AddConstantFillOp({500}, "fc3_b");
                 }
                 update_net_->AddReluOp("fc3", "fc3");
@@ -182,14 +183,18 @@ namespace Beta{
                 update_net_->AddGradientOps();
                 update_net_->AddLearningRateOp("ITER", "LR", 0.1);
 
-
-
-
-
-                
-                //for (auto param : params) {                  
-                //    predict.AddWeightedSumOp({param, "ONE", param + "_grad", "LR"}, param);
-                //}
+                std::vector<string> params;
+                for(auto op : init_model_.op()){
+                    for(auto out: op.output()){
+                        if(!(out.compare("ITER")==0 || out.compare("ONE")==0)){
+                            params.push_back(out);
+                        }
+                    }
+                }
+                for(auto param : params){
+                    LOG(INFO)<<"init model output: "<<param;
+                    update_net_->AddWeightedSumOp({param,"ONE", param+"_grad","LR"},param);
+                }
             }
 
             void print_shape(){
@@ -230,8 +235,11 @@ namespace Beta{
 
 
                 init_->Run();
+                LOG(INFO)<<"init RUN";
                 predict_->Run();
-
+                LOG(INFO)<<"predict RUN";
+                update_->Run();
+                LOG(INFO)<<"update RUN";
                 print_shape();
                 
                 for(int i =0; i< 1; ++ i){

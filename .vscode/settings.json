@@ -22,6 +22,9 @@
         "vector": "cpp",
         "ios": "cpp",
         "iterator": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "__split_buffer": "cpp",
+        "deque": "cpp",
+        "list": "cpp"
     }
 }
