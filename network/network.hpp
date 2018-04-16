@@ -94,7 +94,7 @@ namespace Beta{
                 predict_net_->AddInput("conv1_b");
 
                 if (training) {
-                    init_net_->AddXavierFillOp({20, 1, 5, 5}, "conv1_w");
+                    init_net_->AddXavierFillOp({20, 3, 5, 5}, "conv1_w");
                     init_net_->AddConstantFillOp({20}, "conv1_b");
                 }
 
@@ -202,11 +202,13 @@ namespace Beta{
 
             void init_parameters(){
                 init_->Run();
+                print_shape();
 
             }
 
             void update_parameters(){
                 update_->Run();
+                print_shape();
 
             }
             void forward(Blob* input, Blob* prob, float& v){
@@ -227,10 +229,10 @@ namespace Beta{
 
 
 
-
+                init_->Run();
                 predict_->Run();
 
-
+                print_shape();
                 
                 for(int i =0; i< 1; ++ i){
                     predict_->Run();

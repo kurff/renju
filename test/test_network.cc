@@ -14,7 +14,7 @@ TEST(NETWORK, build){
     net.add_loss();
     net.allocate();
     net.save("lenet");
-    //net.train();
+    net.train();
 
 
 }
