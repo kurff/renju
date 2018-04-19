@@ -14,7 +14,10 @@ TEST(NETWORK, build){
     net.add_loss();
     net.allocate();
     net.save("lenet");
-    net.train();
+    net.init_parameters();
+    LOG(INFO)<<"update";
+    for(int i =0; i< 100; ++ i)
+        net.update_parameters();
 
 
 }

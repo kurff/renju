@@ -46,9 +46,9 @@ namespace Beta{
                 // create label pai, action prediction
                 Blob* pai = workspace_->CreateBlob("pai");
                 T* label_pai = pai->GetMutable<T>();
-                label_pai->Resize(vector<int>{batch_size_, board_size_* board_size_});
-                label_pai->template mutable_data<float>();
-                LOG(INFO)<<"label pai dim: "<<label_pai->dims();
+                label_pai->Resize(vector<int>{batch_size_, 1});
+                label_pai->template mutable_data<int>();
+                LOG(INFO)<<"label pai dim: "<<label_pai->ndim()<<" "<<label_pai->dim32(1);
                 // create label z, game winner
                 Blob* z = workspace_->CreateBlob("z");
                 T* label_z = z->GetMutable<T>();
@@ -160,12 +160,12 @@ namespace Beta{
                 for(auto x: init_model_.external_input()){
                     LOG(INFO)<<x;
                 }
-                for(auto op: init_model_.op()){
-                    LOG(INFO)<<op.type()<<" "<<op.name();
-                }
-                for(auto op: predict_model_.op()){
-                    LOG(INFO)<<op.type()<<" "<<op.name();
-                }
+                //for(auto op: init_model_.op()){
+                //    LOG(INFO)<<op.type()<<" "<<op.name();
+                //}
+                //for(auto op: predict_model_.op()){
+                //    LOG(INFO)<<op.type()<<" "<<op.name();
+                //}
             }
 
             void add_loss(){
@@ -207,13 +207,13 @@ namespace Beta{
 
             void init_parameters(){
                 init_->Run();
-                print_shape();
+                //print_shape();
 
             }
 
             void update_parameters(){
                 update_->Run();
-                print_shape();
+                //print_shape();
 
             }
             void forward(Blob* input, Blob* prob, float& v){
