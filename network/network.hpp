@@ -185,15 +185,15 @@ namespace Beta{
                 update_net_->AddGradientOps();
                 update_net_->AddLearningRateOp("ITER", "LR", 0.1);
 
-                std::vector<string> params;
+                params_.clear();
                 for(auto op : init_model_.op()){
                     for(auto out: op.output()){
                         if(!(out.compare("ITER")==0 || out.compare("ONE")==0)){
-                            params.push_back(out);
+                            params_.push_back(out);
                         }
                     }
                 }
-                for(auto param : params){
+                for(auto param : params_){
                     LOG(INFO)<<"init model output: "<<param;
                     update_net_->AddWeightedSumOp({param,"ONE", param+"_grad","LR"},param);
                 }
@@ -267,9 +267,32 @@ namespace Beta{
             }
 
             void save_model(string init_pb, string predict_pb){
-                init_net_->AddSaveOp(,1,"minidb","x","minidb","");
+                auto op = init_net_->AddSaveOp(params_,1,"minidb","x","minidb",{});
+                workspace_->RunOperatorOnce(*op);
+                
+                for(auto x: params_){
+                    auto b = workspace_->GetBlob(x);
+                    TensorPrinter tensor_print(x,"save"+x);
+                    tensor_print.Print<float>((b->template Get<TensorCPU>()));
+                    //tensor_print.PrintMeta(b->Get<>);
+                }
 
 
+            }
+
+            void load_model(string init_pb, string predict_pb){
+                auto op = init_net_->AddLoadOp(params_,1,"",{},"x",{},"minidb",1,1,1,{});
+                Workspace ws;
+                ws.RunOperatorOnce(*op);
+                
+                for(auto x : ws.Blobs()){
+                    LOG(INFO)<<"blob names "<<x;
+                    auto b = ws.GetBlob(x);
+                    TensorPrinter tensor_print(x,"load"+x);
+                    tensor_print.Print<float>(b->template Get<TensorCPU>());
+
+
+                }
             }
 
             void save(string proto_name){
@@ -300,7 +323,8 @@ namespace Beta{
             unique_ptr<NetBase> init_;
             unique_ptr<NetBase> predict_;
             unique_ptr<NetBase> update_;
-
+            
+            std::vector<std::string> params_;
 
     };
 

@@ -489,7 +489,7 @@ OperatorDef* Net::AddSaveOp(const std::vector<std::string>& inputs, int absolute
 
   return op;
 }
-OperatorDef* Net::AddLoadOp(const std::vector<std::string>& inputs,int absolute_path,
+OperatorDef* Net::AddLoadOp(const std::vector<std::string>& outputs,int absolute_path,
                         const std::string& add_prefix,
                         const std::string& strip_prefix,
                         const std::string& db,
@@ -499,7 +499,7 @@ OperatorDef* Net::AddLoadOp(const std::vector<std::string>& inputs,int absolute_
                         int load_all,
                         bool allow_incomplete,
                         const std::vector<std::string>& source_blob_names){
-  auto op = AddOp("Load", inputs, {});
+  auto op = AddOp("Load", {}, outputs);
   net_add_arg(*op, "absolute_path", absolute_path);
   net_add_arg(*op, "db_type", db_type);
   net_add_arg(*op, "db", db);
@@ -512,7 +512,7 @@ OperatorDef* Net::AddLoadOp(const std::vector<std::string>& inputs,int absolute_
   net_add_arg(*op, "load_all", load_all);
   net_add_arg(*op, "allow_incomplete", allow_incomplete); 
 
-
+  return op;
 
 }
 

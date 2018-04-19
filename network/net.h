@@ -151,7 +151,7 @@ class Net {
   OperatorDef* AddSaveOp(const std::vector<std::string>& inputs, int absolute_path, 
                          const std::string & db_type, const std::string& db, const std::string& strip_prefix, const vector<std::string>& blob_name_overrides);
 
-  OperatorDef* AddLoadOp(const std::vector<std::string>& inputs,int absolute_path,
+  OperatorDef* AddLoadOp(const std::vector<std::string>& outputs,int absolute_path,
                         const std::string& add_prefix,
                         const std::string& strip_prefix,
                         const std::string& db,
