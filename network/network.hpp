@@ -266,6 +266,12 @@ namespace Beta{
 
             }
 
+            void save_model(string init_pb, string predict_pb){
+                init_net_->AddSaveOp(,1,"minidb","x","minidb","");
+
+
+            }
+
             void save(string proto_name){
                 WriteProtoToTextFile(predict_model_,proto_name+"_pred.pbtxt");
                 WriteProtoToTextFile(init_model_, proto_name+"_init.pbtxt");

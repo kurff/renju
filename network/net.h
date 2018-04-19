@@ -148,6 +148,19 @@ class Net {
                                int every, const std::string& db_type,
                                const std::string& db);
 
+  OperatorDef* AddSaveOp(const std::vector<std::string>& inputs, int absolute_path, 
+                         const std::string & db_type, const std::string& db, const std::string& strip_prefix, const vector<std::string>& blob_name_overrides);
+
+  OperatorDef* AddLoadOp(const std::vector<std::string>& inputs,int absolute_path,
+                        const std::string& add_prefix,
+                        const std::string& strip_prefix,
+                        const std::string& db,
+                        const std::string& dbs,
+                        const std::string& db_type ,
+                        int keep_device,
+                        int load_all,
+                        bool allow_incomplete,
+                        const std::vector<std::string>& source_blob_names);
   void AddInput(const std::string input);
   void AddOutput(const std::string output);
   void SetName(const std::string name);
