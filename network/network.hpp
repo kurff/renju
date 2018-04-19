@@ -87,6 +87,9 @@ namespace Beta{
 
                 update_net_->AddConvOp("data", "conv1_w", "conv1_b", "conv1", 1, 0, 5);
                 predict_net_->AddConvOp("data", "conv1_w", "conv1_b", "conv1", 1, 0, 5);
+
+                update_net_->AddReluOp("conv1", "conv1");
+                predict_net_->AddReluOp("conv1", "conv1");
                 
                 update_net_->AddInput("conv1_w");
                 predict_net_->AddInput("conv1_w");
@@ -169,7 +172,6 @@ namespace Beta{
             }
 
             void add_loss(){
-
                 update_net_->AddInput("ITER");
                 init_net_->AddConstantFillOp({1}, 1.f, "ONE");
                 init_net_->AddConstantFillOp({1}, (int64_t)0, "ITER")->mutable_device_option()->set_device_type(CPU);
@@ -195,6 +197,8 @@ namespace Beta{
                     LOG(INFO)<<"init model output: "<<param;
                     update_net_->AddWeightedSumOp({param,"ONE", param+"_grad","LR"},param);
                 }
+
+                
             }
 
             void print_shape(){
@@ -223,6 +227,7 @@ namespace Beta{
                 d->template CopyFrom<CPUContext>(in);
                 predict_->Run();
 
+                
 
 
             }
@@ -256,7 +261,13 @@ namespace Beta{
             }
 
 
-            void inference(const State& state, Action& action, float& v){
+            void inference(const State& state, Action& action, float& v){   
+
+
+            }
+
+            void save_model(string init_pb, string predict_pb){
+                init_net_->AddSaveOp(,1,"minidb","x","minidb","");
 
 
             }

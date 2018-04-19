@@ -478,6 +478,45 @@ OperatorDef* Net::AddCheckpointOp(const std::vector<std::string>& inputs,
   return op;
 }
 
+OperatorDef* Net::AddSaveOp(const std::vector<std::string>& inputs, int absolute_path, 
+                         const std::string & db_type, const std::string& db, const std::string& strip_prefix, const vector<std::string>& blob_name_overrides){
+  auto op = AddOp("Save", inputs, {});
+  net_add_arg(*op, "absolute_path", absolute_path);
+  net_add_arg(*op, "db_type", db_type);
+  net_add_arg(*op, "db", db);
+  net_add_arg(*op, "strip_prefix", strip_prefix);
+  net_add_arg(*op, "blob_name_overrides", blob_name_overrides);
+
+  return op;
+}
+OperatorDef* Net::AddLoadOp(const std::vector<std::string>& inputs,int absolute_path,
+                        const std::string& add_prefix,
+                        const std::string& strip_prefix,
+                        const std::string& db,
+                        const std::string& dbs,
+                        const std::string& db_type ,
+                        int keep_device,
+                        int load_all,
+                        bool allow_incomplete,
+                        const std::vector<std::string>& source_blob_names){
+  auto op = AddOp("Load", inputs, {});
+  net_add_arg(*op, "absolute_path", absolute_path);
+  net_add_arg(*op, "db_type", db_type);
+  net_add_arg(*op, "db", db);
+  net_add_arg(*op, "strip_prefix", strip_prefix);
+  net_add_arg(*op, "source_blob_names", source_blob_names);
+
+  net_add_arg(*op, "add_prefix", add_prefix);
+  net_add_arg(*op, "dbs", dbs);
+  net_add_arg(*op, "keep_device", keep_device);
+  net_add_arg(*op, "load_all", load_all);
+  net_add_arg(*op, "allow_incomplete", allow_incomplete); 
+
+
+
+}
+
+
 OperatorDef* Net::AddSumOp(const std::vector<std::string>& inputs,
                                const std::string& sum) {
   return AddOp("Sum", inputs, {sum});
