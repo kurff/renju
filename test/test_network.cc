@@ -18,7 +18,7 @@ TEST(NETWORK, build){
     LOG(INFO)<<"update";
     for(int i =0; i< 1; ++ i)
         net.update_parameters();
-    net.save_model("","");
-    net.load_model("","");
+    net.save_model("model");
+    net.load_model("model");
 
 }

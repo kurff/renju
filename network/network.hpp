@@ -266,33 +266,27 @@ namespace Beta{
 
             }
 
-            void save_model(string init_pb, string predict_pb){
-                auto op = init_net_->AddSaveOp(params_,1,"minidb","x","minidb",{});
+            void save_model(string init_pb){
+                auto op = init_net_->AddSaveOp(params_,1,"minidb",init_pb,"minidb",{});
                 workspace_->RunOperatorOnce(*op);
-                
-                for(auto x: params_){
-                    auto b = workspace_->GetBlob(x);
-                    TensorPrinter tensor_print(x,"save"+x);
-                    tensor_print.Print<float>((b->template Get<TensorCPU>()));
+                //for(auto x: params_){
+                //    auto b = workspace_->GetBlob(x);
+                //    TensorPrinter tensor_print(x,"save"+x);
+                //    tensor_print.Print<float>((b->template Get<TensorCPU>()));
                     //tensor_print.PrintMeta(b->Get<>);
-                }
-
-
+                //}
             }
 
-            void load_model(string init_pb, string predict_pb){
-                auto op = init_net_->AddLoadOp(params_,1,"",{},"x",{},"minidb",1,1,1,{});
-                Workspace ws;
-                ws.RunOperatorOnce(*op);
+            void load_model(string init_pb){
+                auto op = init_net_->AddLoadOp(params_,1,"",{},init_pb,{},"minidb",1,1,1,{});
+                workspace_->RunOperatorOnce(*op);
                 
-                for(auto x : ws.Blobs()){
-                    LOG(INFO)<<"blob names "<<x;
-                    auto b = ws.GetBlob(x);
-                    TensorPrinter tensor_print(x,"load"+x);
-                    tensor_print.Print<float>(b->template Get<TensorCPU>());
-
-
-                }
+                //for(auto x : ws.Blobs()){
+                //    LOG(INFO)<<"blob names "<<x;
+                //    auto b = ws.GetBlob(x);
+                //    TensorPrinter tensor_print(x,"load"+x);
+                //    tensor_print.Print<float>(b->template Get<TensorCPU>());
+                //}
             }
 
             void save(string proto_name){
