@@ -208,8 +208,15 @@ OperatorDef* Net::AddPrintOp(const std::string& param, bool to_file) {
   return op;
 }
 
-OperatorDef* Net::AddSpatialBN(){
-  
+OperatorDef* Net::AddSpatialBN(const std::string& input, const std::string & output){
+  auto op = AddOp("SpatialBN",{input},{output});
+  return op;
+
+}
+
+OperatorDef* Net::AddTanh(const std::string& input, const std::string & output){
+  auto op = AddOp("Tanh",{input}, {output});
+  return op;
 }
 
 OperatorDef* Net::AddSummarizeOp(const std::string& param, bool to_file) {
@@ -491,6 +498,12 @@ OperatorDef* Net::AddSaveOp(const std::vector<std::string>& inputs, int absolute
   net_add_arg(*op, "strip_prefix", strip_prefix);
   net_add_arg(*op, "blob_name_overrides", blob_name_overrides);
 
+  return op;
+}
+
+OperatorDef* Net::AddSquaredL2DistanceOp(const std::vector<std::string>& input, 
+                          const std::string& output){
+  auto op = AddOp("SquaredL2DistanceOp", input, {output});
   return op;
 }
 OperatorDef* Net::AddLoadOp(const std::vector<std::string>& outputs,int absolute_path,

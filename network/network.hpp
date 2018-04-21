@@ -83,7 +83,7 @@ namespace Beta{
             }
 
             void add_convolutional_block(const vector<string>& inputs, 
-            vector<string>& outputs, vector<int> shapes,bool training, int index){
+            vector<string>& outputs, vector<int> shapes,bool training, int index, bool pooling = false){
                 string w = "conv_w_"+std::to_string(index);
                 string b = "conv_b_"+std::to_string(index);
                 string o = "conv_o_"+std::to_string(index);
@@ -105,14 +105,17 @@ namespace Beta{
                     update_net_->AddReluOp(m,m);
                     predict_net_->AddReluOp(m,m);
 
-                    update_net_->AddMaxPoolOp(m,o,2,0,2);
-                    predict_net_->AddMaxPoolOp(m,o,2,0,2);
+                    if(pooling){
+                        update_net_->AddMaxPoolOp(m,o,2,0,2);
+                        predict_net_->AddMaxPoolOp(m,o,2,0,2);
+                    }
+
 
 
 
                     if(training){
                         init_net_->AddXavierFillOp(shapes, w);
-                        init_net_->AddConstantFillOp(shapes[0], b);
+                        init_net_->AddConstantFillOp({shapes[0]}, b);
                     }
                 }else{
                     LOG(INFO)<<"size of input is "<< inputs.size();
@@ -122,7 +125,8 @@ namespace Beta{
 
             void add_fc_block(const vector<string>& inputs, 
             vector<string>& outputs, vector<int> shapes,bool training,
-                int index, bool add_relu = 1, bool add_softmax = 0){
+                int index, bool add_relu = true, bool add_softmax = false
+                , bool add_tanh = false){
                 string w = "fc_w_"+std::to_string(index);
                 string b = "fc_b_"+std::to_string(index);
                 string o = "fc_o_"+std::to_string(index);
@@ -140,13 +144,16 @@ namespace Beta{
                         predict_net_->AddReluOp(o,o);
                     }
                     if(add_softmax){
-                        update_net_->AddSoftmaxOp();
-                        predict_net_->AddSoftmaxOp();
-
+                        update_net_->AddSoftmaxOp(o,o);
+                        predict_net_->AddSoftmaxOp(o,o);
+                    }
+                    if(add_tanh){
+                        update_net_->AddTanh(o,o);
+                        predict_net_->AddTanh(o,o);
                     }
                     if(training){
                         init_net_->AddXavierFillOp(shapes, w);
-                        init_net_->AddConstantFillOp(shapes[0], b);
+                        init_net_->AddConstantFillOp({shapes[0]}, b);
                     }
                 }else{
                     LOG(INFO)<<"input size is "<< inputs.size();
@@ -161,35 +168,72 @@ namespace Beta{
 
             }
 
+            void add_feed_data(){
+                update_net_->AddInput("data");
+                predict_net_->AddInput("data");
+            }
+
+            void add_label_data(){
+                update_net_->AddInput("pai");
+                update_net_->AddInput("z");
+            }
+
             void create_base_network(const vector<string>& inputs, 
             vector<string>& outputs, bool training){
-
                 vector<string> output_block1;
                 vector<string> output_block2;
-                vector<string> output_block3;
-
-                
-
-                add_convolutional_block(inputs, output_block1,{32,32,3,3},training,0);
+                add_convolutional_block(inputs, output_block1,{32,8,3,3},training,0);
                 add_convolutional_block(output_block1, output_block2,{32,32,3,3},training,1);
-                add_convolutional_block(output_block2, output_block3,{32,32,3,3},training,2);
-                
-                vector<string> fc_block1;
-                vector<string> fc_block2;
-                add_fc_block(output_block3,fc_block1,{},1,0,1);
-                add_fc_block(fc_block1,fc_block2,{},1,1,0);
-
-
-
-
+                add_convolutional_block(output_block2, outputs,{32,32,3,3},training,2);
+                //vector<string> fc_block1;
+                //vector<string> fc_block2;
+                //add_fc_block(output_block3,fc_block1,{100,},1,0,1);
+                //add_fc_block(fc_block1,fc_block2,{},1,1,0);
             }
 
             void create_head(const vector<string>& inputs, 
             vector<string>& outputs, bool training){
-
+                vector<string> output_block1;
+                
+                add_convolutional_block(inputs, output_block1, {2,32,1,1}, training,3);
+                //vector<string> fc_block1;
+                add_fc_block(output_block1, {"p"},{ 100, output_dim_},training,0,0,0,1);
+                vector<string> output_block2;
+                add_convolutional_block(inputs,output_block2,{1,32,1,1},training,4);
+                //vector<string> fc_block2;
+                add_fc_block(output_block2, {"r"},{100,1},training,1,0,1,0);
 
             }
 
+            void create_multi_task_loss(){
+                //update_net_->AddLabelCrossEntropyOp();
+                update_net_->AddInput("ITER");
+                init_net_->AddConstantFillOp({1}, 1.f, "ONE");
+                init_net_->AddConstantFillOp({1}, (int64_t)0, "ITER")->mutable_device_option()->set_device_type(CPU);
+                update_net_->AddInput("ONE");
+                update_net_->AddIterOp("ITER");
+                update_net_->AddLabelCrossEntropyOp("p", "pai", "xent");
+                update_net_->AddAveragedLossOp("xent","loss1");
+                update_net_->AddSquaredL2DistanceOp({"r","z"},"l2_loss");
+                update_net_->AddAveragedLossOp("l2_loss","loss2");
+                update_net_->AddSumOp({"loss1","loss2"},"loss");
+                update_net_->AddConstantFillWithOp(1.f, "loss", "loss_grad");
+                update_net_->AddGradientOps();
+                update_net_->AddLearningRateOp("ITER", "LR", 0.1);
+                params_.clear();
+                for(auto op : init_model_.op()){
+                    for(auto out: op.output()){
+                        if(!(out.compare("ITER")==0 || out.compare("ONE")==0)){
+                            params_.push_back(out);
+                        }
+                    }
+                }
+                for(auto param : params_){
+                    LOG(INFO)<<"init model output: "<<param;
+                    update_net_->AddWeightedSumOp({param,"ONE", param+"_grad","LR"},param);
+                }
+
+            }
 
 
             void create_lenet(bool training){

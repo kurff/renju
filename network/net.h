@@ -101,7 +101,9 @@ class Net {
                              const std::string& diagonal,
                              const std::vector<int>& offset);
 
-  OperatorDef* AddSpatialBN();
+  OperatorDef* AddSpatialBN(const std::string& input, const std::string & output);
+
+  OperatorDef* AddTanh(const std::string& input, const std::string & output);
   
   OperatorDef* AddBackMeanOp(const std::string& input, const std::string& mean,
                              int count = 1);
@@ -153,6 +155,9 @@ class Net {
 
   OperatorDef* AddSaveOp(const std::vector<std::string>& inputs, int absolute_path, 
                          const std::string & db_type, const std::string& db, const std::string& strip_prefix, const vector<std::string>& blob_name_overrides);
+
+  OperatorDef* AddSquaredL2DistanceOp(const std::vector<std::string>& input, 
+                          const std::string& output);
 
   OperatorDef* AddLoadOp(const std::vector<std::string>& outputs,int absolute_path,
                         const std::string& add_prefix,
