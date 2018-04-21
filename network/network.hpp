@@ -77,6 +77,119 @@ namespace Beta{
 
             }
 
+            void add_batch_normalization(const vector<string>& inputs, 
+            vector<string>& outputs, bool training){
+
+            }
+
+            void add_convolutional_block(const vector<string>& inputs, 
+            vector<string>& outputs, vector<int> shapes,bool training, int index){
+                string w = "conv_w_"+std::to_string(index);
+                string b = "conv_b_"+std::to_string(index);
+                string o = "conv_o_"+std::to_string(index);
+                string m = "conv_m_"+std::to_string(index);
+                outputs.clear();
+                outputs.push_back(o);
+                //string r = "relu_"+std::to_string(index);
+                if(inputs.size() == 1){
+                    LOG(INFO)<<"size of inputs is 1";
+                    update_net_->AddConvOp(inputs[0],w,b,m,1,0,3);
+                    predict_net_->AddConvOp(inputs[0],w,b,m,1,0,3);
+
+                    update_net_->AddInput(w);
+                    update_net_->AddInput(b);
+
+                    predict_net_->AddInput(w);
+                    predict_net_->AddInput(b);
+
+                    update_net_->AddReluOp(m,m);
+                    predict_net_->AddReluOp(m,m);
+
+                    update_net_->AddMaxPoolOp(m,o,2,0,2);
+                    predict_net_->AddMaxPoolOp(m,o,2,0,2);
+
+
+
+                    if(training){
+                        init_net_->AddXavierFillOp(shapes, w);
+                        init_net_->AddConstantFillOp(shapes[0], b);
+                    }
+                }else{
+                    LOG(INFO)<<"size of input is "<< inputs.size();
+                    return;
+                }
+            }
+
+            void add_fc_block(const vector<string>& inputs, 
+            vector<string>& outputs, vector<int> shapes,bool training,
+                int index, bool add_relu = 1, bool add_softmax = 0){
+                string w = "fc_w_"+std::to_string(index);
+                string b = "fc_b_"+std::to_string(index);
+                string o = "fc_o_"+std::to_string(index);
+                outputs.clear();
+                outputs.push_back(o);
+                if(inputs.size() == 1){
+                    update_net_->AddFcOp(inputs[0],w,b,o);
+                    predict_net_->AddFcOp(inputs[0],w,b,o);
+                    update_net_->AddInput(w);
+                    update_net_->AddInput(b);
+                    predict_net_->AddInput(w);
+                    predict_net_->AddInput(b);
+                    if(add_relu){
+                        update_net_->AddReluOp(o,o);
+                        predict_net_->AddReluOp(o,o);
+                    }
+                    if(add_softmax){
+                        update_net_->AddSoftmaxOp();
+                        predict_net_->AddSoftmaxOp();
+
+                    }
+                    if(training){
+                        init_net_->AddXavierFillOp(shapes, w);
+                        init_net_->AddConstantFillOp(shapes[0], b);
+                    }
+                }else{
+                    LOG(INFO)<<"input size is "<< inputs.size();
+                    return;
+                }
+            }
+
+
+            void add_residual_block(const vector<string>& inputs, 
+            vector<string>& outputs, bool training){
+
+
+            }
+
+            void create_base_network(const vector<string>& inputs, 
+            vector<string>& outputs, bool training){
+
+                vector<string> output_block1;
+                vector<string> output_block2;
+                vector<string> output_block3;
+
+                
+
+                add_convolutional_block(inputs, output_block1,{32,32,3,3},training,0);
+                add_convolutional_block(output_block1, output_block2,{32,32,3,3},training,1);
+                add_convolutional_block(output_block2, output_block3,{32,32,3,3},training,2);
+                
+                vector<string> fc_block1;
+                vector<string> fc_block2;
+                add_fc_block(output_block3,fc_block1,{},1,0,1);
+                add_fc_block(fc_block1,fc_block2,{},1,1,0);
+
+
+
+
+            }
+
+            void create_head(const vector<string>& inputs, 
+            vector<string>& outputs, bool training){
+
+
+            }
+
 
 
             void create_lenet(bool training){
@@ -84,7 +197,6 @@ namespace Beta{
                 predict_net_->AddInput("data");
 
                 update_net_->AddInput("pai");
-
                 update_net_->AddConvOp("data", "conv1_w", "conv1_b", "conv1", 1, 0, 5);
                 predict_net_->AddConvOp("data", "conv1_w", "conv1_b", "conv1", 1, 0, 5);
 
@@ -124,6 +236,8 @@ namespace Beta{
                 update_net_->AddInput("fc3_w");
                 update_net_->AddInput("fc3_b");
 
+                
+
                 predict_net_->AddMaxPoolOp("conv2", "pool2", 2, 0, 2);
                 predict_net_->AddFcOp("pool2", "fc3_w", "fc3_b", "fc3");
                 predict_net_->AddInput("fc3_w");
@@ -134,15 +248,25 @@ namespace Beta{
                     init_net_->AddXavierFillOp({500, 50}, "fc3_w");
                     init_net_->AddConstantFillOp({500}, "fc3_b");
                 }
+
+
                 update_net_->AddReluOp("fc3", "fc3");
+
+                
                 update_net_->AddFcOp("fc3", "pred_w", "pred_b", "pred");
                 update_net_->AddInput("pred_w");
                 update_net_->AddInput("pred_b");
+
+
+
+
 
                 predict_net_->AddReluOp("fc3", "fc3");
                 predict_net_->AddFcOp("fc3", "pred_w", "pred_b", "pred");
                 predict_net_->AddInput("pred_w");
                 predict_net_->AddInput("pred_b");
+
+
 
                 if (training) {
                     init_net_->AddXavierFillOp({output_dim_, 500}, "pred_w");

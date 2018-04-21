@@ -208,6 +208,10 @@ OperatorDef* Net::AddPrintOp(const std::string& param, bool to_file) {
   return op;
 }
 
+OperatorDef* Net::AddSpatialBN(){
+  
+}
+
 OperatorDef* Net::AddSummarizeOp(const std::string& param, bool to_file) {
   auto op = AddOp("Summarize", {param}, {});
   if (to_file) {

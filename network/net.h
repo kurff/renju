@@ -100,6 +100,9 @@ class Net {
   OperatorDef* AddDiagonalOp(const std::string& input,
                              const std::string& diagonal,
                              const std::vector<int>& offset);
+
+  OperatorDef* AddSpatialBN();
+  
   OperatorDef* AddBackMeanOp(const std::string& input, const std::string& mean,
                              int count = 1);
   OperatorDef* AddMeanStdevOp(const std::string& input, const std::string& mean,
