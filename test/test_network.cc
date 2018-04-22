@@ -11,7 +11,7 @@ TEST(NETWORK, build){
 
     net.init(init_model, predict_model,update_model, 0);
     //net.create_lenet(1);
-    net.
+    net.create_network(1);
     //net.add_loss();
     net.allocate();
     net.save("lenet");

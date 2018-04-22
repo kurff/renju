@@ -38,19 +38,24 @@ namespace Beta{
                 workspace_.reset(new Workspace("workspace"));
 
                 // create input data
-                Blob* data = workspace_->CreateBlob("data");
+
+
+            }
+
+            void allocate_inputs(const std::vector<string>& inputs, const std::vector<string>& label){
+                Blob* data = workspace_->CreateBlob(inputs[0]);
                 T* input = data->GetMutable<T>();
                 input->Resize(vector<int>{batch_size_,channels_,board_size_,board_size_});
                 input->template mutable_data<float>();
 
                 // create label pai, action prediction
-                Blob* pai = workspace_->CreateBlob("pai");
+                Blob* pai = workspace_->CreateBlob(label[0]);
                 T* label_pai = pai->GetMutable<T>();
                 label_pai->Resize(vector<int>{batch_size_, 1});
                 label_pai->template mutable_data<int>();
                 LOG(INFO)<<"label pai dim: "<<label_pai->ndim()<<" "<<label_pai->dim32(1);
                 // create label z, game winner
-                Blob* z = workspace_->CreateBlob("z");
+                Blob* z = workspace_->CreateBlob(label[1]);
                 T* label_z = z->GetMutable<T>();
                 label_z->Resize(vector<int>{batch_size_, 1});
                 label_z->template mutable_data<float>();
@@ -61,6 +66,9 @@ namespace Beta{
 
 
             void allocate(){
+
+                
+
                 init_ = CreateNet( init_model_,workspace_.get());
                 LOG(INFO)<<"create init network finish";
                 predict_ = CreateNet(predict_model_, workspace_.get());
@@ -73,15 +81,13 @@ namespace Beta{
 
             void create_network(bool training){
                 //create_lenet(training);
+                allocate_inputs({"data"},{"pai","z"});
                 vector<string> base_net_outputs;
                 add_feed_data("data");
                 add_label_data({"pai","z"});
-                create_base_network("data",base_net_outputs, training);
+                create_base_network({"data"},base_net_outputs, training);
                 create_head(base_net_outputs, {"p","r"}, training);
                 create_multi_task_loss({"p","r"},{"pai","z"});
-                
-
-
             }
 
             void add_batch_normalization(const vector<string>& inputs, 
@@ -204,11 +210,11 @@ namespace Beta{
                 
                 add_convolutional_block(inputs, output_block1, {2,32,1,1}, training,3);
                 //vector<string> fc_block1;
-                add_fc_block(output_block1, outputs[0],{ 100, output_dim_},training,0,0,0,1);
+                add_fc_block(output_block1, {outputs[0]},{ 100, output_dim_},training,0,0,0,1);
                 vector<string> output_block2;
                 add_convolutional_block(inputs,output_block2,{1,32,1,1},training,4);
                 //vector<string> fc_block2;
-                add_fc_block(output_block2, outputs[1],{100,1},training,1,0,1,0);
+                add_fc_block(output_block2, {outputs[1]},{100,1},training,1,0,1,0);
 
             }
 
