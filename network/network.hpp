@@ -72,7 +72,14 @@ namespace Beta{
 
 
             void create_network(bool training){
-                create_lenet(training);
+                //create_lenet(training);
+                vector<string> base_net_outputs;
+                add_feed_data("data");
+                add_label_data({"pai","z"});
+                create_base_network("data",base_net_outputs, training);
+                create_head(base_net_outputs, {"p","r"}, training);
+                create_multi_task_loss({"p","r"},{"pai","z"});
+                
 
 
             }
@@ -168,14 +175,14 @@ namespace Beta{
 
             }
 
-            void add_feed_data(){
-                update_net_->AddInput("data");
-                predict_net_->AddInput("data");
+            void add_feed_data(const string& data){
+                update_net_->AddInput(data);
+                predict_net_->AddInput(data);
             }
 
-            void add_label_data(){
-                update_net_->AddInput("pai");
-                update_net_->AddInput("z");
+            void add_label_data(const vector<std::string>& labels){
+                update_net_->AddInput(labels[0]);
+                update_net_->AddInput(labels[1]);
             }
 
             void create_base_network(const vector<string>& inputs, 
@@ -192,29 +199,29 @@ namespace Beta{
             }
 
             void create_head(const vector<string>& inputs, 
-            vector<string>& outputs, bool training){
+            const vector<string>& outputs, bool training){
                 vector<string> output_block1;
                 
                 add_convolutional_block(inputs, output_block1, {2,32,1,1}, training,3);
                 //vector<string> fc_block1;
-                add_fc_block(output_block1, {"p"},{ 100, output_dim_},training,0,0,0,1);
+                add_fc_block(output_block1, outputs[0],{ 100, output_dim_},training,0,0,0,1);
                 vector<string> output_block2;
                 add_convolutional_block(inputs,output_block2,{1,32,1,1},training,4);
                 //vector<string> fc_block2;
-                add_fc_block(output_block2, {"r"},{100,1},training,1,0,1,0);
+                add_fc_block(output_block2, outputs[1],{100,1},training,1,0,1,0);
 
             }
 
-            void create_multi_task_loss(){
+            void create_multi_task_loss(const vector<string> predict, const vector<string> label ){
                 //update_net_->AddLabelCrossEntropyOp();
                 update_net_->AddInput("ITER");
                 init_net_->AddConstantFillOp({1}, 1.f, "ONE");
                 init_net_->AddConstantFillOp({1}, (int64_t)0, "ITER")->mutable_device_option()->set_device_type(CPU);
                 update_net_->AddInput("ONE");
                 update_net_->AddIterOp("ITER");
-                update_net_->AddLabelCrossEntropyOp("p", "pai", "xent");
+                update_net_->AddLabelCrossEntropyOp(predict[0], label[0], "xent");
                 update_net_->AddAveragedLossOp("xent","loss1");
-                update_net_->AddSquaredL2DistanceOp({"r","z"},"l2_loss");
+                update_net_->AddSquaredL2DistanceOp({predict[1],label[1]},"l2_loss");
                 update_net_->AddAveragedLossOp("l2_loss","loss2");
                 update_net_->AddSumOp({"loss1","loss2"},"loss");
                 update_net_->AddConstantFillWithOp(1.f, "loss", "loss_grad");
