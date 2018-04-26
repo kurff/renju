@@ -81,13 +81,19 @@ namespace Beta{
 
             void create_network(bool training){
                 //create_lenet(training);
+                LOG(INFO)<<"allocate_inputs";
                 allocate_inputs({"data"},{"pai","z"});
                 vector<string> base_net_outputs;
                 add_feed_data("data");
+                LOG(INFO)<<"add_feed_data";
                 add_label_data({"pai","z"});
+                LOG(INFO)<<"add_label_data";
                 create_base_network({"data"},base_net_outputs, training);
+                LOG(INFO)<<"create_base_network";
                 create_head(base_net_outputs, {"p","r"}, training);
+                LOG(INFO)<<"create_head";
                 create_multi_task_loss({"p","r"},{"pai","z"});
+                LOG(INFO)<<"create_multi_task_loss";
             }
 
             void add_batch_normalization(const vector<string>& inputs, 
@@ -102,12 +108,12 @@ namespace Beta{
                 string o = "conv_o_"+std::to_string(index);
                 string m = "conv_m_"+std::to_string(index);
                 outputs.clear();
-                outputs.push_back(o);
+                
                 //string r = "relu_"+std::to_string(index);
                 if(inputs.size() == 1){
                     LOG(INFO)<<"size of inputs is 1";
-                    update_net_->AddConvOp(inputs[0],w,b,m,1,0,3);
-                    predict_net_->AddConvOp(inputs[0],w,b,m,1,0,3);
+                    update_net_->AddConvOp(inputs[0],w,b,m,1,0,shapes[2]);
+                    predict_net_->AddConvOp(inputs[0],w,b,m,1,0,shapes[2]);
 
                     update_net_->AddInput(w);
                     update_net_->AddInput(b);
@@ -121,6 +127,9 @@ namespace Beta{
                     if(pooling){
                         update_net_->AddMaxPoolOp(m,o,2,0,2);
                         predict_net_->AddMaxPoolOp(m,o,2,0,2);
+                        outputs.push_back(o);
+                    }else{
+                        outputs.push_back(m);
                     }
 
 
@@ -137,14 +146,13 @@ namespace Beta{
             }
 
             void add_fc_block(const vector<string>& inputs, 
-            vector<string>& outputs, vector<int> shapes,bool training,
+            const vector<string>& outputs, vector<int> shapes,bool training,
                 int index, bool add_relu = true, bool add_softmax = false
                 , bool add_tanh = false){
+                LOG(INFO)<<"add fc block with const output";
                 string w = "fc_w_"+std::to_string(index);
                 string b = "fc_b_"+std::to_string(index);
                 string o = "fc_o_"+std::to_string(index);
-                outputs.clear();
-                outputs.push_back(o);
                 if(inputs.size() == 1){
                     update_net_->AddFcOp(inputs[0],w,b,o);
                     predict_net_->AddFcOp(inputs[0],w,b,o);
@@ -153,16 +161,59 @@ namespace Beta{
                     predict_net_->AddInput(w);
                     predict_net_->AddInput(b);
                     if(add_relu){
-                        update_net_->AddReluOp(o,o);
-                        predict_net_->AddReluOp(o,o);
+                        update_net_->AddReluOp(o,outputs[0]);
+                        predict_net_->AddReluOp(o,outputs[0]);
                     }
                     if(add_softmax){
-                        update_net_->AddSoftmaxOp(o,o);
-                        predict_net_->AddSoftmaxOp(o,o);
+                        update_net_->AddSoftmaxOp(o,outputs[0]);
+                        predict_net_->AddSoftmaxOp(o,outputs[0]);
                     }
                     if(add_tanh){
-                        update_net_->AddTanh(o,o);
-                        predict_net_->AddTanh(o,o);
+                        update_net_->AddTanh(o,outputs[0]);
+                        predict_net_->AddTanh(o,outputs[0]);
+                    }
+                    if(training){
+                        init_net_->AddXavierFillOp(shapes, w);
+                        init_net_->AddConstantFillOp({shapes[0]}, b);
+                    }
+                }else{
+                    LOG(INFO)<<"input size is "<< inputs.size();
+                    return;
+                }
+
+
+            }
+
+
+            void add_fc_block(const vector<string>& inputs, 
+            vector<string>& outputs, vector<int> shapes,bool training,
+                int index, bool add_relu = true, bool add_softmax = false
+                , bool add_tanh = false){
+                LOG(INFO)<<"add fc block with non-const output";
+                string w = "fc_w_"+std::to_string(index);
+                string b = "fc_b_"+std::to_string(index);
+                string o = "fc_o_"+std::to_string(index);
+                string t = "t_"+std::to_string(index);
+                outputs.clear();
+                outputs.push_back(o);
+                if(inputs.size() == 1){
+                    update_net_->AddFcOp(inputs[0],w,b,t);
+                    predict_net_->AddFcOp(inputs[0],w,b,t);
+                    update_net_->AddInput(w);
+                    update_net_->AddInput(b);
+                    predict_net_->AddInput(w);
+                    predict_net_->AddInput(b);
+                    if(add_relu){
+                        update_net_->AddReluOp(t,o);
+                        predict_net_->AddReluOp(t,o);
+                    }
+                    if(add_softmax){
+                        update_net_->AddSoftmaxOp(t,o);
+                        predict_net_->AddSoftmaxOp(t,o);
+                    }
+                    if(add_tanh){
+                        update_net_->AddTanh(t,o);
+                        predict_net_->AddTanh(t,o);
                     }
                     if(training){
                         init_net_->AddXavierFillOp(shapes, w);
@@ -218,21 +269,36 @@ namespace Beta{
 
             }
 
-            void create_multi_task_loss(const vector<string> predict, const vector<string> label ){
+            void create_multi_task_loss(const vector<string>& predict, const vector<string>& label ){
                 //update_net_->AddLabelCrossEntropyOp();
                 update_net_->AddInput("ITER");
                 init_net_->AddConstantFillOp({1}, 1.f, "ONE");
                 init_net_->AddConstantFillOp({1}, (int64_t)0, "ITER")->mutable_device_option()->set_device_type(CPU);
                 update_net_->AddInput("ONE");
                 update_net_->AddIterOp("ITER");
+                LOG(INFO)<<"add input and iter";
+                update_net_->AddConstantFillOp({1}, 0.5f,"weight1");
+                update_net_->AddConstantFillOp({1}, 0.5f,"weight2");
+
+
+
                 update_net_->AddLabelCrossEntropyOp(predict[0], label[0], "xent");
                 update_net_->AddAveragedLossOp("xent","loss1");
                 update_net_->AddSquaredL2DistanceOp({predict[1],label[1]},"l2_loss");
                 update_net_->AddAveragedLossOp("l2_loss","loss2");
-                update_net_->AddSumOp({"loss1","loss2"},"loss");
+                //update_net_->AddInput("weight1");
+                //update_net_->AddInput("weight2");
+
+                update_net_->AddWeightedSumOp({"loss1","weight1","loss2","weight2"},"loss");
+                LOG(INFO)<<"add loss op";
                 update_net_->AddConstantFillWithOp(1.f, "loss", "loss_grad");
+                update_net_->AddConstantFillWithOp(1.f, "loss1", "loss1_grad");
+                update_net_->AddConstantFillWithOp(1.f, "loss2", "loss2_grad");
+                LOG(INFO)<<"AddConstantFillWithOp";
                 update_net_->AddGradientOps();
+                LOG(INFO)<<"AddGradientOps";
                 update_net_->AddLearningRateOp("ITER", "LR", 0.1);
+                LOG(INFO)<<"add params";
                 params_.clear();
                 for(auto op : init_model_.op()){
                     for(auto out: op.output()){

@@ -6,7 +6,7 @@
 
 #include "google/protobuf/io/zero_copy_stream_impl.h"
 #include "google/protobuf/text_format.h"
-
+#include "glog/logging.h"
 namespace Beta {
 using namespace caffe2;
 const std::set<std::string> trainable_ops({
@@ -21,6 +21,7 @@ const std::set<std::string> trainable_ops({
     "Relu",         "Reshape",
     "Slice",        "Softmax",
     "SpatialBN",    "Sum",
+    "Tanh", "SquaredL2Distance",
 });
 
 const std::set<std::string> non_trainable_ops({
@@ -308,6 +309,7 @@ OperatorDef* Net::AddConvOp(const std::string& input, const std::string& w,
   net_add_arg(*op, "stride", stride);
   net_add_arg(*op, "pad", padding);
   net_add_arg(*op, "kernel", kernel);
+  net_add_arg(*op, "order", "NCHW");
   return op;
 }
 
@@ -503,7 +505,7 @@ OperatorDef* Net::AddSaveOp(const std::vector<std::string>& inputs, int absolute
 
 OperatorDef* Net::AddSquaredL2DistanceOp(const std::vector<std::string>& input, 
                           const std::string& output){
-  auto op = AddOp("SquaredL2DistanceOp", input, {output});
+  auto op = AddOp("SquaredL2Distance", input, {output});
   return op;
 }
 OperatorDef* Net::AddLoadOp(const std::vector<std::string>& outputs,int absolute_path,
@@ -686,6 +688,7 @@ void Net::SetEngineOps(const std::string engine) {
 
 OperatorDef* Net::AddGradientOp(OperatorDef& op) {
   auto grad = net_.add_op();
+  LOG(INFO)<<"add gradient op: "<< op.type();
   if (custom_gradient.find(op.type()) == custom_gradient.end()) {
     vector<GradientWrapper> output(op.output_size());
     for (auto i = 0; i < output.size(); i++) {
@@ -707,6 +710,7 @@ OperatorDef* Net::AddGradientOp(OperatorDef& op) {
     }
   }
   grad->set_is_gradient_op(true);
+
   return grad;
 }
 
@@ -757,7 +761,9 @@ std::vector<OperatorDef> Net::CollectGradientOps() {
                                         net_.external_input().end());
   std::vector<OperatorDef> gradient_ops;
   for (auto& op : net_.op()) {
+    
     if (trainable_ops.find(op.type()) != trainable_ops.end()) {
+      LOG(INFO)<<"type: " << op.type() << std::endl;
       gradient_ops.push_back(op);
       // std::cout << "type: " << op.type() << std::endl;
     } else if (non_trainable_ops.find(op.type()) == non_trainable_ops.end()) {
@@ -765,6 +771,7 @@ std::vector<OperatorDef> Net::CollectGradientOps() {
     }
   }
   std::reverse(gradient_ops.begin(), gradient_ops.end());
+  LOG(INFO)<<"reverse gradient"; 
   return gradient_ops;
 }
 
