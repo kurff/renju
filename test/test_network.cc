@@ -7,7 +7,7 @@ TEST(NETWORK, build){
     NetDef init_model;
     NetDef predict_model;
     NetDef update_model;
-    Network<int , int, TensorCPU> net(15,8,3);
+    Network<int , int, TensorCPU> net(15,16,3);
 
     net.init(init_model, predict_model,update_model, 0);
     //net.create_lenet(1);

@@ -246,7 +246,7 @@ namespace Beta{
             vector<string>& outputs, bool training){
                 vector<string> output_block1;
                 vector<string> output_block2;
-                add_convolutional_block(inputs, output_block1,{32,8,3,3},training,0);
+                add_convolutional_block(inputs, output_block1,{32,3,3,3},training,0);
                 add_convolutional_block(output_block1, output_block2,{32,32,3,3},training,1);
                 add_convolutional_block(output_block2, outputs,{32,32,3,3},training,2);
                 //vector<string> fc_block1;
@@ -261,11 +261,11 @@ namespace Beta{
                 
                 add_convolutional_block(inputs, output_block1, {2,32,1,1}, training,3);
                 //vector<string> fc_block1;
-                add_fc_block(output_block1, {outputs[0]},{ 100, output_dim_},training,0,0,0,1);
+                add_fc_block(output_block1, {outputs[0]},{ output_dim_,162},training,0,0,0,1);
                 vector<string> output_block2;
                 add_convolutional_block(inputs,output_block2,{1,32,1,1},training,4);
                 //vector<string> fc_block2;
-                add_fc_block(output_block2, {outputs[1]},{100,1},training,1,0,1,0);
+                add_fc_block(output_block2, {outputs[1]},{1,81},training,1,0,1,0);
 
             }
 
