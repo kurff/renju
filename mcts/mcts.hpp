@@ -30,7 +30,7 @@ class MCTS{
         }
     protected:
         shared_ptr<Context<State, Action> > context_;
-        shared_ptr<Tree<State> > tree_;
+        shared_ptr<Tree<State, Action> > tree_;
         
 
 

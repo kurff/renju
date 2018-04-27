@@ -6,9 +6,6 @@
 //#include "caffe2/core/tensor.h"
 //using namespace caffe2;
 namespace Beta{
-
-
-
 class Action{
     public:
         Action(){

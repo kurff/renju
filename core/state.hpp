@@ -38,11 +38,6 @@ namespace Beta{
             Blob* input(){ return input_.get();}
             Blob* prob(){return prob_.get();}
             Blob* z(){return z_.get();}
-
-
-
-
-
         protected:
             std::shared_ptr<Blob> input_;
             std::shared_ptr<Blob> prob_;
