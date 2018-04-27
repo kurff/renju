@@ -260,45 +260,30 @@ class Tree{
             NodeDef* best;
             while(cache.size()){
                 NodeDef* ele = cache.front();
-                DLOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->schild().size();
+                DLOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->child().size();
                 float maxQ = 0;
 
 
-                if(ele->schild().size() ==0){
-
-                    // push leaf node
-                    {
-                        //lock_guard<mutex> lock(mutex_);
-                        
-                    }
-
-
-                    contex_->get_legal_action(ele->state());
+                if(ele->child().size() ==0){
+                    contex_->get_legal_action(ele->node_state());
                     for(int i = 0; i < context_->size_legal_action(); ++ i){
                         NodeDef* node = new NodeDef (context_->get_legal_action(),"Node"+std::to_string(counter_));
-
                         add_node(ele, node);
                         leafs_.push(node);
-
                     }
                     //return;
-
                 }
-
-                for(Iterator it = ele->schild().begin(); it != ele->schild().end(); ++ it){
-                    if(maxQ <= it->second->Q() + it->second->U()){
-                        maxQ = it->second->Q() + it->second->U();
-                        best = it->second;
+                shared_ptr<NodeDef> ptr(new NodeDef());
+                for(auto child : ele->child() ){
+                    child.second->get(ptr.get());
+                    if(maxQ <= ptr->Q() + ptr->U()){
+                        maxQ = ptr->Q() + ptr->U();
+                        best = child.second;
                     }
-                    
                     cache.push(best);
                 }
-
                 cache.pop();
-
-            }
-
-            
+            }           
         }
 
 
@@ -334,27 +319,9 @@ class Tree{
 
 
             while(leafs_.size()){
-                
-
-
-
-                NodeDef* node = leafs_.front();
-
-                
-                //node->scircle_index() = counter % batch_size_;
-                //node->sbatch_index() = counter / batch_size_;
-
-                
+                NodeDef* node = leafs_.front();                
                 network_->forward(node->state());
-
-
-
-
                 backup(node);
-
-
-
-                
                 leafs_.pop();
 
             }
