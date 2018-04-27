@@ -5,10 +5,12 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "caffe2/core/tensor.h"
 namespace Beta{
     
-    template<typename State, typename Action, typename T>
+    template<typename State, typename Action, typename DataContext>
     class Network{
+        typedef typename caffe2::Tensor<DataContext> T;
         public:
             Network(int board_size, int batch_size, int channels): 
             board_size_(board_size), batch_size_(batch_size), channels_(channels), output_dim_(board_size*board_size){
@@ -131,10 +133,6 @@ namespace Beta{
                     }else{
                         outputs.push_back(m);
                     }
-
-
-
-
                     if(training){
                         init_net_->AddXavierFillOp(shapes, w);
                         init_net_->AddConstantFillOp({shapes[0]}, b);
@@ -467,25 +465,27 @@ namespace Beta{
                 //print_shape();
 
             }
-            void forward(Blob* input, Blob* prob, float& v){
+            void forward(State& state){
                 Blob* data = workspace_->GetBlob("data");
                 T* d = data->GetMutable<T>();
+
+                Blob* input = state.input();
                 TensorCPU* in = input->GetMutable<TensorCPU>();
-                d->template CopyFrom<CPUContext>(in);
+                d->template CopyFrom<CPUContext>(*in);
                 predict_->Run();
-
-                
-
-
+                Blob* prob = workspace_->GetBlob("p");
+                T* tp = prob->GetMutable<T>();
+                Blob* sp = state.prob();
+                sp->GetMutable<TensorCPU>()->template CopyFrom<DataContext>(*tp);
+                Blob* z = workspace_->GetBlob("z");
+                T* tz = z->GetMutable<T>();
+                Blob* sz = state.z();
+                sz->GetMutable<TensorCPU>()->template CopyFrom<DataContext>(*tz);
             }
 
-
+            
 
             void train(){
-                
-
-
-
                 init_->Run();
                 LOG(INFO)<<"init RUN";
                 predict_->Run();
@@ -502,16 +502,8 @@ namespace Beta{
                     }
                 }
                 //predict_->Run();
-
-
-
             }
 
-
-            void inference(const State& state, Action& action, float& v){   
-
-
-            }
 
             void save_model(string init_pb){
                 auto op = init_net_->AddSaveOp(params_,1,"minidb",init_pb,"minidb",{});
