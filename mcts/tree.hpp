@@ -108,9 +108,9 @@ class Node{
             node->set_index(index);
             child_.insert(std::pair<Index, Node<State,Action> >(node->index(), node) );
             node->set_parent(this);
-
-
         }
+
+        
     
         void set_parent(Node<State,Action>* p){
             parent_ = p;
@@ -118,6 +118,56 @@ class Node{
         void set_index(Index index){index_ = index;}
         void remove_all_child(){child_.clear(); }
         void remove_one_child(Index index){ child_.erase(index);}
+
+        void set(float N, float W, float Q, float P, float U, float v){
+            lock_guard<mutex> lock(mutex_);
+            N_ = N;
+            W_ = W;
+            Q_ = Q;
+            P_ = P;
+            U_ = U;
+            v_ = v;
+        }
+        void get(float& N, float& W, float & Q, float &P, float &U, float& v){
+            lock_guard<mutex> lock(mutex_);
+            N = N_;
+            W = W_;
+            Q = Q_;
+            P = P_;
+            U = U_;
+            v = v_;
+        }
+
+        void get(float & Q, float & U){
+            lock_guard<mutex> lock(mutex_);
+            Q = Q_;
+            U = U_;
+        }
+        void get(float & QU){
+            lock_guard<mutex> lock(mutex_);
+            QU = Q_+U_;
+        }
+
+        void get(float& N, float& Q, float& W){
+            lock_guard<mutex> lock(mutex_);
+
+        }
+
+        void set(float N, float Q, float W){
+            lock_guard<mutex> lock(mutex_);
+            N_ = N;
+            Q_ = Q;
+            W_ = W;
+        }
+
+        void update(){
+            lock_guard<mutex> lock(mutex_);
+            N_ += 1;
+            W_ += v_;
+            Q_ = W_/ N_;
+
+        }
+
     
     public:
         const map<Index, Node<State, Action>*  > child(){return child_;}
@@ -262,8 +312,6 @@ class Tree{
                 NodeDef* ele = cache.front();
                 DLOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->child().size();
                 float maxQ = 0;
-
-
                 if(ele->child().size() ==0){
                     contex_->get_legal_action(ele->node_state());
                     for(int i = 0; i < context_->size_legal_action(); ++ i){
@@ -273,11 +321,11 @@ class Tree{
                     }
                     //return;
                 }
-                shared_ptr<NodeDef> ptr(new NodeDef());
+                float Q = 0.0f, U = 0.0f, QU = 0.0f;
                 for(auto child : ele->child() ){
-                    child.second->get(ptr.get());
-                    if(maxQ <= ptr->Q() + ptr->U()){
-                        maxQ = ptr->Q() + ptr->U();
+                    child.second->get(QU);
+                    if(maxQ <= QU){
+                        maxQ = QU;
                         best = child.second;
                     }
                     cache.push(best);
@@ -333,11 +381,8 @@ class Tree{
             while(cache.size()){
                 
                 NodeDef* node = cache.front();
-
-                node->sN() += 1;
-                node->sW() += node->sv();
-                node->sQ() = node->sW() / node->sN();
-                cache.push(node->sparent());
+                node->update();
+                cache.push(node->parent());
                 cache.pop();
             }
         }
