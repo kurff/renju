@@ -50,6 +50,13 @@
         "system_error": "cpp",
         "type_traits": "cpp",
         "__locale": "cpp",
-        "__mutex_base": "cpp"
+        "__mutex_base": "cpp",
+        "__bit_reference": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp"
     }
 }

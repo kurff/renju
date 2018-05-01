@@ -20,7 +20,7 @@
 #include "core/network.hpp"
 #include "core/context.hpp"
 #include "core/action.hpp"
-
+#include "utils/utils.hpp"
 #include <cmath>
 
 
@@ -165,6 +165,23 @@ class Node{
             N_ += 1;
             W_ += v_;
             Q_ = W_/ N_;
+        }
+
+        TensorCPU* compute_pai(float inv_tau, TIndex max_child){
+            lock_guard<mutex> lock(mutex_);
+            float sum = 0.0f;
+            
+            TensorCPU* tensor = new TensorCPU();
+            tensor->Reshape(vector<TIndex>{1,max_child});
+            float * p = tensor->mutable_data<float>();
+            for(auto child : child_ ){
+               sum += pow(child.second->N(), inv_tau);
+            }
+            for(auto child: child_){
+                float value = child.second->N() / sum;
+                p[child.second->child_index()] = value;
+            }
+            return tensor;
 
         }
 
@@ -185,6 +202,7 @@ class Node{
         const bool keep_flag(){return keep_flag_;}
         const int batch_index(){return batch_index_;}
         const int circle_index(){return circle_index_;}
+        const int child_index(){return child_index_;}
 
     protected:
         map<Index,  Node<State, Action>*  > child_;
@@ -203,6 +221,7 @@ class Node{
         // used to cache tensor
         int batch_index_;
         int circle_index_;
+        int child_index_;
         mutex mutex_;
         //static int index;
 };
@@ -313,7 +332,7 @@ class Tree{
                 DLOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->child().size();
                 float maxQ = 0;
                 if(ele->child().size() ==0){
-                    contex_->get_legal_action(ele->node_state());
+                    context_->get_legal_action(ele->node_state());
                     for(int i = 0; i < context_->size_legal_action(); ++ i){
                         NodeDef* node = new NodeDef (context_->get_legal_action(),"Node"+std::to_string(counter_));
                         add_node(ele, node);
@@ -321,7 +340,7 @@ class Tree{
                     }
                     //return;
                 }
-                float Q = 0.0f, U = 0.0f, QU = 0.0f;
+                float QU = 0.0f;
                 for(auto child : ele->child() ){
                     child.second->get(QU);
                     if(maxQ <= QU){
@@ -390,33 +409,12 @@ class Tree{
 
         // compute pai
         void pai(NodeDef* root){
-            Tensor<TesnorCPU>* ptr = new Tensor<TensorCPU>();
-            ptr->Reshape();
-            float sum = 0.0f;
-            Iterator it;
-            for(it = root->schild().begin(); it != root->schild().end(); ++ it){
-                sum += pow(it->second->N(), inv_tau_);
-            }
-            float* p = ptr->mutable_data<float>();
-            for(it = root->schild().begin(); it != root->schild().end(); ++ it){
-                float value = it->second->N() / sum;
-                p[it->second->y() * ptr->dim(1) * ptr->dim(2) + it->second->x() * ptr->dim(2) + it->second->c() ] = value;
-                // context configuration
-                it->second->set_action_w(value);
-
-
-
-            }
-            contex_->push(ptr);
+            TensorCPU* ptr = root->compute_pai(inv_tau_, max_child_);
+            context_->push(ptr);
         }
 
         void sample(NodeDef* root){
-            Iterator it;
-
-
-            for(it = root->schild().begin(); it!= root->schild().end(); ++ it){
-
-            }
+            
 
 
         }
@@ -472,6 +470,7 @@ class Tree{
         float v_resign_;
         float inv_tau_;
         float epsilon_;
+        TIndex max_child_;
 };
 
 } //end of namespace Beta
