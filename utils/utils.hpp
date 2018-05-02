@@ -70,6 +70,15 @@ namespace Beta{
 
                 return distri(gen);
            }
+
+            int run(const vector<Element*>& elements, std::mt19937& gen ){
+                vector<float> distribution;
+                for(auto & element: elements){
+                    distribution.push_back(element->confidence());
+                }
+                std::discrete_distribution<float > distri(distribution.begin(), distribution.end());
+                return distri(gen);    
+           }
         protected:
             
 

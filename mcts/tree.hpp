@@ -12,12 +12,12 @@
 
 
 #include "glog/logging.h"
-
+#include "utils/utils.hpp"
 #include <thread>
 #include <mutex>
 #include <condition_variable>
 #include <functional>
-#include "core/network.hpp"
+#include "network/network.hpp"
 #include "core/context.hpp"
 #include "core/action.hpp"
 #include "utils/utils.hpp"
@@ -239,7 +239,7 @@ class Tree{
             network_ = shared_ptr<Network>(new Network());
             inv_tau_ = 1.0f/tau;
             thread_pool_.reset(new TaskThreadPool(num_thread_));
-            
+            sample_.reset( new Sample<Action>() );
 
         }
         ~Tree(){
@@ -380,11 +380,6 @@ class Tree{
             //     tensor->Reshape(vector<int>{batch_size_, height_, width_, channel_});
             //     batch_.push(tensor);
             // }
-
-
-
-
-
             while(leafs_.size()){
                 NodeDef* node = leafs_.front();                
                 network_->forward(node->state());
@@ -422,7 +417,6 @@ class Tree{
 
 
         void run(NodeDef* root){
-
             for(int i = 0; i < num_simulation_; ++ i){
                 select(root);
                 expand_and_evaluate();
@@ -464,6 +458,10 @@ class Tree{
         shared_ptr<Context<State, Action> > context_;
         Index counter_;
         //queue<Tensor<TesnorCPU>* > batch_;
+        
+        vector<NodeDef*> validate_action_;
+        
+        shared_ptr<Sample<Action> > sample_;
         mutex mutex_;
         int L_;
         int num_simulation_;
