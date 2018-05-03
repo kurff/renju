@@ -10,6 +10,11 @@ TEST(random, generator){
 vector<ChessAction> actions;
 actions.resize(10);
 
+Dirichlet dirichlet(0.1);
+dirichlet.push(0.1);
+dirichlet.push(0.9);
+LOG(INFO)<<"dirichilet: " <<dirichlet.run();
+
 
 float counter = 0;
 float* pattern = new float [10]();
@@ -19,7 +24,7 @@ for(auto& x: actions){
 }
 
 vector<ChessAction* > acts;
-for(int i = 0; i < 20; ++ i){
+for(int i = 0; i < 10; ++ i){
     ChessAction* ptr = new ChessAction();
     ptr->set_confidence(1.0f*i);
     acts.push_back(ptr);

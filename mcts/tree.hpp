@@ -410,6 +410,12 @@ class Tree{
 
         void sample(NodeDef* root){
             
+            validate_action_.clear();
+            for(auto child : root->child() ){
+                child.second->action()->set
+                validate_action_.push_back(child.second);
+            }
+
 
 
         }

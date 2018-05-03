@@ -61,21 +61,7 @@ class GoAction: public Action{
 
 
 
-class RenjuAction: public Action{
-    public:
-        RenjuAction(){
 
-        }
-        ~RenjuAction(){
-
-        }
-
-        
-    protected:
-        int x_;
-        int y_;
-
-};
 
 
 //class ChessAction: public Action{
@@ -88,13 +74,8 @@ class ChessAction: public Action{
 
         }
 
-        // select action from probability
-        //void play(Tensor<CPUContext>& probability){
 
 
-
-
-        //}
 
         const int x() const {return x_;}
         const int y() const {return y_;}
@@ -107,10 +88,11 @@ class ChessAction: public Action{
         void set_y(int y){y_ = y;}
         void set_c(int c){c_ = c;}
 
+
         void set_w(float w){w_=w;}
         void set_noise(float noise){noise_ = noise;}
         void set_confidence(float confidence){confidence_ = confidence;}
-
+        
 
     protected:  
         int x_; // the 

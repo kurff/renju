@@ -22,6 +22,10 @@ namespace Beta{
                 x_.push_back(v);
             }
 
+            void clear(){
+                x_.clear();
+            }
+
             float run(){
                 float prodr = pow(x_[0], (alpha_ - 1.0));
                 /// sum of the alphas for the bottom of the B normalization function
@@ -32,7 +36,7 @@ namespace Beta{
                     alpha_sum  += alpha_;
                     prodr      *= pow(x_[j], (alpha_ - 1));
                 }
-  /// Normalization constant
+                /// Normalization constant
                 float B = gamma_prod / tgamma(alpha_sum);
 
                 float pdf = (1.0/B) * prodr; 
@@ -49,6 +53,12 @@ namespace Beta{
 
     };
 
+    
+
+
+    
+
+
     template<typename Element>
     class Sample{
 
@@ -61,38 +71,33 @@ namespace Beta{
           
 
            int run(const vector<Element>& elements,  std::mt19937& gen){
-                vector<float> distribution;
+                vector<int> distribution;
                 for(auto& element : elements){
-                   distribution.push_back(element.confidence());
+                   distribution.push_back(static_cast<int>(1000.0f*element->confidence()));
                 }
                 
-                std::discrete_distribution<float > distri(distribution.begin(), distribution.end());
+                std::discrete_distribution<int > distri(distribution.begin(), distribution.end());
 
                 return distri(gen);
            }
 
             int run(const vector<Element*>& elements, std::mt19937& gen ){
-                vector<float> distribution;
+                vector<int> distribution;
                 for(auto & element: elements){
-                    distribution.push_back(element->confidence());
+                    distribution.push_back(static_cast<int>(1000.0f*element->confidence()));
                 }
-                std::discrete_distribution<float > distri(distribution.begin(), distribution.end());
+                std::discrete_distribution<int > distri(distribution.begin(), distribution.end());
                 return distri(gen);    
            }
+
+           int run(const vector<Element*>& elements, std::mt19937& gen){
+
+
+           }
+
+
+
         protected:
-            
-
-
-            
-
-
-
-         
-          
-
-
-
-
 
     };
 
