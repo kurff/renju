@@ -116,8 +116,8 @@ namespace Beta{
 
 
       void calc_next_state(){
-        current_legal_states_.resize(current_legal_action_.size());
-        for(int i = 0; i < current_legal_action_.size(); ++ i){
+        this->current_legal_states_.resize(this->current_legal_action_.size());
+        for(int i = 0; i < this->current_legal_action_.size(); ++ i){
 
 
         }

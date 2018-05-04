@@ -10,7 +10,7 @@
 #include "caffe2/core/tensor.h"
 
 
-
+#include "utils/utils.hpp"
 #include "glog/logging.h"
 #include "utils/utils.hpp"
 #include <thread>
@@ -33,7 +33,7 @@ namespace Beta{
 
 template<typename State, typename Action>
 class Node{
-    typedef typename unsigned long Index;
+    typedef unsigned long Index;
     public:
         Node(string name):N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), index_(0), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
@@ -229,7 +229,7 @@ class Node{
 
 template<typename State, typename Action>
 class Tree{
-    typedef typename unsigned long Index;
+    typedef unsigned long Index;
     typedef Node<State, Action> NodeDef;
     typedef typename map<Index, shared_ptr<NodeDef> >::iterator Iterator;
     public:
@@ -357,7 +357,7 @@ class Tree{
 
 
 
-        void copy_to_batch(Node<State>* node){
+        void copy_to_batch(Node<State, Action>* node){
 
 
 
@@ -460,14 +460,14 @@ class Tree{
         // multiple-thread for pararel computation
         shared_ptr<TaskThreadPool> thread_pool_;
         int num_thread_;
-        shared_ptr<Network> network_;
+        shared_ptr<Network<State, Action, CPUContext> > network_;
         shared_ptr<Context<State, Action> > context_;
         Index counter_;
         //queue<Tensor<TesnorCPU>* > batch_;
         
         vector<NodeDef*> validate_action_;
         
-        shared_ptr<Sample<Action> > sample_;
+        shared_ptr<Sample> sample_;
         mutex mutex_;
         int L_;
         int num_simulation_;
@@ -475,6 +475,8 @@ class Tree{
         float inv_tau_;
         float epsilon_;
         TIndex max_child_;
+
+
 };
 
 } //end of namespace Beta

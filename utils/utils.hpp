@@ -6,6 +6,7 @@
 #include <vector>
 #include <cmath>
 #include <random>
+#include <memory>
 using namespace std;
 
 
@@ -13,92 +14,63 @@ namespace Beta{
     class Dirichlet{
         public:
             Dirichlet(float alpha): alpha_(alpha){
+                distribution_.reset(new gamma_distribution<float>(alpha_,1.0) );
+                random_generator_.reset(new std::mt19937());
             }
             ~Dirichlet(){
 
             }
 
-            void push(float v){
-                x_.push_back(v);
-            }
-
-            void clear(){
-                x_.clear();
-            }
-
-            float run(){
-                float prodr = pow(x_[0], (alpha_ - 1.0));
-                /// sum of the alphas for the bottom of the B normalization function
-                float alpha_sum = alpha_;
-                float gamma_prod = tgamma(alpha_); 
-                for(int j = 1; j < x_.size(); j++){
-                    gamma_prod *= tgamma(alpha_);
-                    alpha_sum  += alpha_;
-                    prodr      *= pow(x_[j], (alpha_ - 1));
+            void run(vector<float>& prior, int K){
+                prior.clear();
+                for(int i = 0; i < K; ++ i){
+                    prior.push_back(distribution_->operator()(*random_generator_));
                 }
-                /// Normalization constant
-                float B = gamma_prod / tgamma(alpha_sum);
-
-                float pdf = (1.0/B) * prodr; 
-                return pdf;
+                float sum = 0.0f;
+                for(int i = 0; i < K; ++ i ){
+                    sum += prior[i];
+                }
+                for(int i = 0; i < K; ++ i){
+                    prior[i] /= sum;
+                    //LOG(INFO)<<"prior: "<<i<<" "<<prior[i];
+                }
             }
-
-            const float & alpha(){return alpha_;}
-        protected:
-            vector<float>  x_;
-            vector<float> pdf_;
+            template<typename Node>
+            void run(vector<Node*>& children){
+                vector<float> prior;
+                run(prior, children.size());
+                int c = 0;
+                for(auto child : children){
+                    child->action()->set_noise(prior[c]);
+                    ++ c;
+                }
+            }
+            const float alpha(){return alpha_;}
+        protected:   
             float alpha_;
-
-
-
+            std::shared_ptr<gamma_distribution<float> > distribution_;
+            std::shared_ptr<std::mt19937> random_generator_;
     };
 
-    
-
-
-    
-
-
-    template<typename Element>
     class Sample{
-
         public: 
           Sample(){
-              
-            
+              random_generator_.reset(new std::mt19937());        
           }
           ~Sample(){}
-          
-
-           int run(const vector<Element>& elements,  std::mt19937& gen){
+            template<typename Node>
+            Node* run(const vector<Node*>& children){
                 vector<int> distribution;
-                for(auto& element : elements){
-                   distribution.push_back(static_cast<int>(1000.0f*element->confidence()));
-                }
-                
-                std::discrete_distribution<int > distri(distribution.begin(), distribution.end());
-
-                return distri(gen);
-           }
-
-            int run(const vector<Element*>& elements, std::mt19937& gen ){
-                vector<int> distribution;
-                for(auto & element: elements){
-                    distribution.push_back(static_cast<int>(1000.0f*element->confidence()));
+                for(auto & child: children){
+                    distribution.push_back(static_cast<int>(1000.0f*child->action()->confidence()));
                 }
                 std::discrete_distribution<int > distri(distribution.begin(), distribution.end());
-                return distri(gen);    
+                int index = distri(*random_generator_);
+                assert(index < children.size()&& index>=0);
+                return children[index];
            }
-
-           int run(const vector<Element*>& elements, std::mt19937& gen){
-
-
-           }
-
-
-
         protected:
-
+            std::shared_ptr<std::mt19937> random_generator_;
     };
 
 

@@ -67,21 +67,20 @@ class GoAction: public Action{
 //class ChessAction: public Action{
 class ChessAction: public Action{
     public:
-        ChessAction(){
+        ChessAction():epsilon_(0.25f),x_(0),y_(0)
+        ,c_(0),prior_(0.0f),confidence_(0.0f), noise_(0.0f){
 
         }
         ~ChessAction(){
 
         }
-
-
-
-
         const int x() const {return x_;}
         const int y() const {return y_;}
         const int c() const {return c_;}
-        const float w() const {return w_;}
-        const float confidence() const {return confidence_;}
+        const float prior() const {return prior_;}
+        const float confidence() {
+            return (1-epsilon_)*prior_ + epsilon_*noise_;
+        }
         const float noise(){return noise_;}
 
         void set_x(int x){x_ = x;}
@@ -89,18 +88,17 @@ class ChessAction: public Action{
         void set_c(int c){c_ = c;}
 
 
-        void set_w(float w){w_=w;}
+        void set_prior(float prior){prior_=prior;}
         void set_noise(float noise){noise_ = noise;}
-        void set_confidence(float confidence){confidence_ = confidence;}
-        
 
     protected:  
         int x_; // the 
         int y_;
         int c_;
-        float w_;
+        float prior_;
         float confidence_;  // confidence_ = (1-epsilon)* w + epsilon * noise_; 
-        float noise_;        
+        float noise_;
+        float epsilon_;        
 
 };
 
