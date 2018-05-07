@@ -9,9 +9,9 @@ link_directories()
 
 if (test)
 enable_testing()
-#add_executable(test_tree  test/test_tree.cc proto/beta.pb.cc)
-#target_link_libraries(test_tree gtest gtest_main glog protobuf)
-#add_test(NAME test_tree COMMAND test_tree)
+add_executable(test_tree  test/test_tree.cc proto/beta.pb.cc)
+target_link_libraries(test_tree gtest gtest_main glog protobuf)
+add_test(NAME test_tree COMMAND test_tree)
 
 add_executable(test_example  test/test_example.cc )
 target_link_libraries(test_example gtest gtest_main glog pthread)

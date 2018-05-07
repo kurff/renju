@@ -51,11 +51,23 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Parameters, depth_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Parameters, type_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Parameters, batch_size_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Parameters, channel_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Parameters, height_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Parameters, width_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Parameters, epsilon_),
+  1,
   0,
+  2,
+  3,
+  4,
+  5,
+  6,
 };
 
 static const ::google::protobuf::internal::MigrationSchema schemas[] = {
-  { 0, 6, sizeof(Parameters)},
+  { 0, 12, sizeof(Parameters)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -88,12 +100,15 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void TableStruct::Shutdown() {
   _Parameters_default_instance_.Shutdown();
   delete file_level_metadata[0].reflection;
+  Parameters::_default_type_.Shutdown();
 }
 
 void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::internal::InitProtobufDefaults();
+  Parameters::_default_type_.DefaultConstruct();
+  *Parameters::_default_type_.get_mutable() = ::std::string("chess", 5);
   _Parameters_default_instance_.DefaultConstruct();
 }
 
@@ -104,11 +119,14 @@ void InitDefaults() {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
-      "\n\nbeta.proto\022\004Beta\"\036\n\nParameters\022\020\n\005dept"
-      "h\030\001 \002(\005:\0011"
+      "\n\nbeta.proto\022\004Beta\"\234\001\n\nParameters\022\020\n\005dep"
+      "th\030\001 \002(\005:\0011\022\023\n\004type\030\002 \002(\t:\005chess\022\026\n\nbatc"
+      "h_size\030\003 \002(\005:\00210\022\022\n\007channel\030\004 \002(\005:\0018\022\022\n\006"
+      "height\030\005 \002(\005:\00210\022\020\n\005width\030\006 \002(\005:\0019\022\025\n\007ep"
+      "silon\030\007 \002(\002:\0040.25"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 50);
+      descriptor, 177);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "beta.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -130,8 +148,15 @@ struct StaticDescriptorInitializer {
 
 // ===================================================================
 
+::google::protobuf::internal::ExplicitlyConstructed< ::std::string> Parameters::_default_type_;
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Parameters::kDepthFieldNumber;
+const int Parameters::kTypeFieldNumber;
+const int Parameters::kBatchSizeFieldNumber;
+const int Parameters::kChannelFieldNumber;
+const int Parameters::kHeightFieldNumber;
+const int Parameters::kWidthFieldNumber;
+const int Parameters::kEpsilonFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Parameters::Parameters()
@@ -148,13 +173,25 @@ Parameters::Parameters(const Parameters& from)
       _has_bits_(from._has_bits_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  depth_ = from.depth_;
+  type_.UnsafeSetDefault(&Parameters::_default_type_.get());
+  if (from.has_type()) {
+    type_.AssignWithDefault(&Parameters::_default_type_.get(), from.type_);
+  }
+  ::memcpy(&depth_, &from.depth_,
+    reinterpret_cast<char*>(&epsilon_) -
+    reinterpret_cast<char*>(&depth_) + sizeof(epsilon_));
   // @@protoc_insertion_point(copy_constructor:Beta.Parameters)
 }
 
 void Parameters::SharedCtor() {
   _cached_size_ = 0;
+  type_.UnsafeSetDefault(&Parameters::_default_type_.get());
   depth_ = 1;
+  batch_size_ = 10;
+  channel_ = 8;
+  height_ = 10;
+  width_ = 9;
+  epsilon_ = 0.25f;
 }
 
 Parameters::~Parameters() {
@@ -163,6 +200,7 @@ Parameters::~Parameters() {
 }
 
 void Parameters::SharedDtor() {
+  type_.DestroyNoArena(&Parameters::_default_type_.get());
 }
 
 void Parameters::SetCachedSize(int size) const {
@@ -190,7 +228,18 @@ Parameters* Parameters::New(::google::protobuf::Arena* arena) const {
 
 void Parameters::Clear() {
 // @@protoc_insertion_point(message_clear_start:Beta.Parameters)
-  depth_ = 1;
+  if (_has_bits_[0 / 32] & 127u) {
+    if (has_type()) {
+      GOOGLE_DCHECK(!type_.IsDefault(&Parameters::_default_type_.get()));
+      (*type_.UnsafeRawStringPointer())->assign(*&Parameters::_default_type_.get());
+    }
+    depth_ = 1;
+    batch_size_ = 10;
+    channel_ = 8;
+    height_ = 10;
+    width_ = 9;
+    epsilon_ = 0.25f;
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -213,6 +262,92 @@ bool Parameters::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &depth_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required string type = 2 [default = "chess"];
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_type()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->type().data(), this->type().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "Beta.Parameters.type");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required int32 batch_size = 3 [default = 10];
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u)) {
+          set_has_batch_size();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &batch_size_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required int32 channel = 4 [default = 8];
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u)) {
+          set_has_channel();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &channel_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required int32 height = 5 [default = 10];
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u)) {
+          set_has_height();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &height_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required int32 width = 6 [default = 9];
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u)) {
+          set_has_width();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &width_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required float epsilon = 7 [default = 0.25];
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(61u)) {
+          set_has_epsilon();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &epsilon_)));
         } else {
           goto handle_unusual;
         }
@@ -249,8 +384,43 @@ void Parameters::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required int32 depth = 1 [default = 1];
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->depth(), output);
+  }
+
+  // required string type = 2 [default = "chess"];
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->type().data(), this->type().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "Beta.Parameters.type");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->type(), output);
+  }
+
+  // required int32 batch_size = 3 [default = 10];
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->batch_size(), output);
+  }
+
+  // required int32 channel = 4 [default = 8];
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->channel(), output);
+  }
+
+  // required int32 height = 5 [default = 10];
+  if (cached_has_bits & 0x00000010u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->height(), output);
+  }
+
+  // required int32 width = 6 [default = 9];
+  if (cached_has_bits & 0x00000020u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->width(), output);
+  }
+
+  // required float epsilon = 7 [default = 0.25];
+  if (cached_has_bits & 0x00000040u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(7, this->epsilon(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -268,8 +438,44 @@ void Parameters::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required int32 depth = 1 [default = 1];
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->depth(), target);
+  }
+
+  // required string type = 2 [default = "chess"];
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->type().data(), this->type().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "Beta.Parameters.type");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->type(), target);
+  }
+
+  // required int32 batch_size = 3 [default = 10];
+  if (cached_has_bits & 0x00000004u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->batch_size(), target);
+  }
+
+  // required int32 channel = 4 [default = 8];
+  if (cached_has_bits & 0x00000008u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->channel(), target);
+  }
+
+  // required int32 height = 5 [default = 10];
+  if (cached_has_bits & 0x00000010u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->height(), target);
+  }
+
+  // required int32 width = 6 [default = 9];
+  if (cached_has_bits & 0x00000020u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->width(), target);
+  }
+
+  // required float epsilon = 7 [default = 0.25];
+  if (cached_has_bits & 0x00000040u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(7, this->epsilon(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -280,6 +486,59 @@ void Parameters::SerializeWithCachedSizes(
   return target;
 }
 
+size_t Parameters::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:Beta.Parameters)
+  size_t total_size = 0;
+
+  if (has_type()) {
+    // required string type = 2 [default = "chess"];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
+  }
+
+  if (has_depth()) {
+    // required int32 depth = 1 [default = 1];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->depth());
+  }
+
+  if (has_batch_size()) {
+    // required int32 batch_size = 3 [default = 10];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->batch_size());
+  }
+
+  if (has_channel()) {
+    // required int32 channel = 4 [default = 8];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->channel());
+  }
+
+  if (has_height()) {
+    // required int32 height = 5 [default = 10];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->height());
+  }
+
+  if (has_width()) {
+    // required int32 width = 6 [default = 9];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->width());
+  }
+
+  if (has_epsilon()) {
+    // required float epsilon = 7 [default = 0.25];
+    total_size += 1 + 4;
+  }
+
+  return total_size;
+}
 size_t Parameters::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Beta.Parameters)
   size_t total_size = 0;
@@ -289,11 +548,42 @@ size_t Parameters::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         unknown_fields());
   }
-  // required int32 depth = 1 [default = 1];
-  if (has_depth()) {
+  if (((_has_bits_[0] & 0x0000007f) ^ 0x0000007f) == 0) {  // All required fields are present.
+    // required string type = 2 [default = "chess"];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->type());
+
+    // required int32 depth = 1 [default = 1];
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->depth());
+
+    // required int32 batch_size = 3 [default = 10];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->batch_size());
+
+    // required int32 channel = 4 [default = 8];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->channel());
+
+    // required int32 height = 5 [default = 10];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->height());
+
+    // required int32 width = 6 [default = 9];
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->width());
+
+    // required float epsilon = 7 [default = 0.25];
+    total_size += 1 + 4;
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
   }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -324,8 +614,31 @@ void Parameters::MergeFrom(const Parameters& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.has_depth()) {
-    set_depth(from.depth());
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 127u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_type();
+      type_.AssignWithDefault(&Parameters::_default_type_.get(), from.type_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      depth_ = from.depth_;
+    }
+    if (cached_has_bits & 0x00000004u) {
+      batch_size_ = from.batch_size_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      channel_ = from.channel_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      height_ = from.height_;
+    }
+    if (cached_has_bits & 0x00000020u) {
+      width_ = from.width_;
+    }
+    if (cached_has_bits & 0x00000040u) {
+      epsilon_ = from.epsilon_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -344,7 +657,7 @@ void Parameters::CopyFrom(const Parameters& from) {
 }
 
 bool Parameters::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  if ((_has_bits_[0] & 0x0000007f) != 0x0000007f) return false;
   return true;
 }
 
@@ -353,7 +666,13 @@ void Parameters::Swap(Parameters* other) {
   InternalSwap(other);
 }
 void Parameters::InternalSwap(Parameters* other) {
+  type_.Swap(&other->type_);
   std::swap(depth_, other->depth_);
+  std::swap(batch_size_, other->batch_size_);
+  std::swap(channel_, other->channel_);
+  std::swap(height_, other->height_);
+  std::swap(width_, other->width_);
+  std::swap(epsilon_, other->epsilon_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
@@ -369,13 +688,13 @@ void Parameters::InternalSwap(Parameters* other) {
 
 // required int32 depth = 1 [default = 1];
 bool Parameters::has_depth() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 void Parameters::set_has_depth() {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
 }
 void Parameters::clear_has_depth() {
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 void Parameters::clear_depth() {
   depth_ = 1;
@@ -389,6 +708,189 @@ void Parameters::set_depth(::google::protobuf::int32 value) {
   set_has_depth();
   depth_ = value;
   // @@protoc_insertion_point(field_set:Beta.Parameters.depth)
+}
+
+// required string type = 2 [default = "chess"];
+bool Parameters::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+void Parameters::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+void Parameters::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+void Parameters::clear_type() {
+  type_.ClearToDefaultNoArena(&Parameters::_default_type_.get());
+  clear_has_type();
+}
+const ::std::string& Parameters::type() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.type)
+  return type_.GetNoArena();
+}
+void Parameters::set_type(const ::std::string& value) {
+  set_has_type();
+  type_.SetNoArena(&Parameters::_default_type_.get(), value);
+  // @@protoc_insertion_point(field_set:Beta.Parameters.type)
+}
+#if LANG_CXX11
+void Parameters::set_type(::std::string&& value) {
+  set_has_type();
+  type_.SetNoArena(
+    &Parameters::_default_type_.get(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Beta.Parameters.type)
+}
+#endif
+void Parameters::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_type();
+  type_.SetNoArena(&Parameters::_default_type_.get(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Beta.Parameters.type)
+}
+void Parameters::set_type(const char* value, size_t size) {
+  set_has_type();
+  type_.SetNoArena(&Parameters::_default_type_.get(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Beta.Parameters.type)
+}
+::std::string* Parameters::mutable_type() {
+  set_has_type();
+  // @@protoc_insertion_point(field_mutable:Beta.Parameters.type)
+  return type_.MutableNoArena(&Parameters::_default_type_.get());
+}
+::std::string* Parameters::release_type() {
+  // @@protoc_insertion_point(field_release:Beta.Parameters.type)
+  clear_has_type();
+  return type_.ReleaseNoArena(&Parameters::_default_type_.get());
+}
+void Parameters::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    set_has_type();
+  } else {
+    clear_has_type();
+  }
+  type_.SetAllocatedNoArena(&Parameters::_default_type_.get(), type);
+  // @@protoc_insertion_point(field_set_allocated:Beta.Parameters.type)
+}
+
+// required int32 batch_size = 3 [default = 10];
+bool Parameters::has_batch_size() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void Parameters::set_has_batch_size() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void Parameters::clear_has_batch_size() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+void Parameters::clear_batch_size() {
+  batch_size_ = 10;
+  clear_has_batch_size();
+}
+::google::protobuf::int32 Parameters::batch_size() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.batch_size)
+  return batch_size_;
+}
+void Parameters::set_batch_size(::google::protobuf::int32 value) {
+  set_has_batch_size();
+  batch_size_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.batch_size)
+}
+
+// required int32 channel = 4 [default = 8];
+bool Parameters::has_channel() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+void Parameters::set_has_channel() {
+  _has_bits_[0] |= 0x00000008u;
+}
+void Parameters::clear_has_channel() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+void Parameters::clear_channel() {
+  channel_ = 8;
+  clear_has_channel();
+}
+::google::protobuf::int32 Parameters::channel() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.channel)
+  return channel_;
+}
+void Parameters::set_channel(::google::protobuf::int32 value) {
+  set_has_channel();
+  channel_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.channel)
+}
+
+// required int32 height = 5 [default = 10];
+bool Parameters::has_height() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+void Parameters::set_has_height() {
+  _has_bits_[0] |= 0x00000010u;
+}
+void Parameters::clear_has_height() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+void Parameters::clear_height() {
+  height_ = 10;
+  clear_has_height();
+}
+::google::protobuf::int32 Parameters::height() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.height)
+  return height_;
+}
+void Parameters::set_height(::google::protobuf::int32 value) {
+  set_has_height();
+  height_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.height)
+}
+
+// required int32 width = 6 [default = 9];
+bool Parameters::has_width() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+void Parameters::set_has_width() {
+  _has_bits_[0] |= 0x00000020u;
+}
+void Parameters::clear_has_width() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+void Parameters::clear_width() {
+  width_ = 9;
+  clear_has_width();
+}
+::google::protobuf::int32 Parameters::width() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.width)
+  return width_;
+}
+void Parameters::set_width(::google::protobuf::int32 value) {
+  set_has_width();
+  width_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.width)
+}
+
+// required float epsilon = 7 [default = 0.25];
+bool Parameters::has_epsilon() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+void Parameters::set_has_epsilon() {
+  _has_bits_[0] |= 0x00000040u;
+}
+void Parameters::clear_has_epsilon() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+void Parameters::clear_epsilon() {
+  epsilon_ = 0.25f;
+  clear_has_epsilon();
+}
+float Parameters::epsilon() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.epsilon)
+  return epsilon_;
+}
+void Parameters::set_epsilon(float value) {
+  set_has_epsilon();
+  epsilon_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.epsilon)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

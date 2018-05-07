@@ -126,6 +126,21 @@ class Parameters : public ::google::protobuf::Message /* @@protoc_insertion_poin
 
   // accessors -------------------------------------------------------
 
+  // required string type = 2 [default = "chess"];
+  bool has_type() const;
+  void clear_type();
+  static const int kTypeFieldNumber = 2;
+  const ::std::string& type() const;
+  void set_type(const ::std::string& value);
+  #if LANG_CXX11
+  void set_type(::std::string&& value);
+  #endif
+  void set_type(const char* value);
+  void set_type(const char* value, size_t size);
+  ::std::string* mutable_type();
+  ::std::string* release_type();
+  void set_allocated_type(::std::string* type);
+
   // required int32 depth = 1 [default = 1];
   bool has_depth() const;
   void clear_depth();
@@ -133,15 +148,72 @@ class Parameters : public ::google::protobuf::Message /* @@protoc_insertion_poin
   ::google::protobuf::int32 depth() const;
   void set_depth(::google::protobuf::int32 value);
 
+  // required int32 batch_size = 3 [default = 10];
+  bool has_batch_size() const;
+  void clear_batch_size();
+  static const int kBatchSizeFieldNumber = 3;
+  ::google::protobuf::int32 batch_size() const;
+  void set_batch_size(::google::protobuf::int32 value);
+
+  // required int32 channel = 4 [default = 8];
+  bool has_channel() const;
+  void clear_channel();
+  static const int kChannelFieldNumber = 4;
+  ::google::protobuf::int32 channel() const;
+  void set_channel(::google::protobuf::int32 value);
+
+  // required int32 height = 5 [default = 10];
+  bool has_height() const;
+  void clear_height();
+  static const int kHeightFieldNumber = 5;
+  ::google::protobuf::int32 height() const;
+  void set_height(::google::protobuf::int32 value);
+
+  // required int32 width = 6 [default = 9];
+  bool has_width() const;
+  void clear_width();
+  static const int kWidthFieldNumber = 6;
+  ::google::protobuf::int32 width() const;
+  void set_width(::google::protobuf::int32 value);
+
+  // required float epsilon = 7 [default = 0.25];
+  bool has_epsilon() const;
+  void clear_epsilon();
+  static const int kEpsilonFieldNumber = 7;
+  float epsilon() const;
+  void set_epsilon(float value);
+
   // @@protoc_insertion_point(class_scope:Beta.Parameters)
  private:
   void set_has_depth();
   void clear_has_depth();
+  void set_has_type();
+  void clear_has_type();
+  void set_has_batch_size();
+  void clear_has_batch_size();
+  void set_has_channel();
+  void clear_has_channel();
+  void set_has_height();
+  void clear_has_height();
+  void set_has_width();
+  void clear_has_width();
+  void set_has_epsilon();
+  void clear_has_epsilon();
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable int _cached_size_;
+  static ::google::protobuf::internal::ExplicitlyConstructed< ::std::string> _default_type_;
+  ::google::protobuf::internal::ArenaStringPtr type_;
   ::google::protobuf::int32 depth_;
+  ::google::protobuf::int32 batch_size_;
+  ::google::protobuf::int32 channel_;
+  ::google::protobuf::int32 height_;
+  ::google::protobuf::int32 width_;
+  float epsilon_;
   friend struct protobuf_beta_2eproto::TableStruct;
 };
 // ===================================================================
@@ -154,13 +226,13 @@ class Parameters : public ::google::protobuf::Message /* @@protoc_insertion_poin
 
 // required int32 depth = 1 [default = 1];
 inline bool Parameters::has_depth() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 inline void Parameters::set_has_depth() {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
 }
 inline void Parameters::clear_has_depth() {
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void Parameters::clear_depth() {
   depth_ = 1;
@@ -174,6 +246,189 @@ inline void Parameters::set_depth(::google::protobuf::int32 value) {
   set_has_depth();
   depth_ = value;
   // @@protoc_insertion_point(field_set:Beta.Parameters.depth)
+}
+
+// required string type = 2 [default = "chess"];
+inline bool Parameters::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Parameters::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Parameters::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Parameters::clear_type() {
+  type_.ClearToDefaultNoArena(&Parameters::_default_type_.get());
+  clear_has_type();
+}
+inline const ::std::string& Parameters::type() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.type)
+  return type_.GetNoArena();
+}
+inline void Parameters::set_type(const ::std::string& value) {
+  set_has_type();
+  type_.SetNoArena(&Parameters::_default_type_.get(), value);
+  // @@protoc_insertion_point(field_set:Beta.Parameters.type)
+}
+#if LANG_CXX11
+inline void Parameters::set_type(::std::string&& value) {
+  set_has_type();
+  type_.SetNoArena(
+    &Parameters::_default_type_.get(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Beta.Parameters.type)
+}
+#endif
+inline void Parameters::set_type(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_type();
+  type_.SetNoArena(&Parameters::_default_type_.get(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Beta.Parameters.type)
+}
+inline void Parameters::set_type(const char* value, size_t size) {
+  set_has_type();
+  type_.SetNoArena(&Parameters::_default_type_.get(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Beta.Parameters.type)
+}
+inline ::std::string* Parameters::mutable_type() {
+  set_has_type();
+  // @@protoc_insertion_point(field_mutable:Beta.Parameters.type)
+  return type_.MutableNoArena(&Parameters::_default_type_.get());
+}
+inline ::std::string* Parameters::release_type() {
+  // @@protoc_insertion_point(field_release:Beta.Parameters.type)
+  clear_has_type();
+  return type_.ReleaseNoArena(&Parameters::_default_type_.get());
+}
+inline void Parameters::set_allocated_type(::std::string* type) {
+  if (type != NULL) {
+    set_has_type();
+  } else {
+    clear_has_type();
+  }
+  type_.SetAllocatedNoArena(&Parameters::_default_type_.get(), type);
+  // @@protoc_insertion_point(field_set_allocated:Beta.Parameters.type)
+}
+
+// required int32 batch_size = 3 [default = 10];
+inline bool Parameters::has_batch_size() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Parameters::set_has_batch_size() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Parameters::clear_has_batch_size() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Parameters::clear_batch_size() {
+  batch_size_ = 10;
+  clear_has_batch_size();
+}
+inline ::google::protobuf::int32 Parameters::batch_size() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.batch_size)
+  return batch_size_;
+}
+inline void Parameters::set_batch_size(::google::protobuf::int32 value) {
+  set_has_batch_size();
+  batch_size_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.batch_size)
+}
+
+// required int32 channel = 4 [default = 8];
+inline bool Parameters::has_channel() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Parameters::set_has_channel() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Parameters::clear_has_channel() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Parameters::clear_channel() {
+  channel_ = 8;
+  clear_has_channel();
+}
+inline ::google::protobuf::int32 Parameters::channel() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.channel)
+  return channel_;
+}
+inline void Parameters::set_channel(::google::protobuf::int32 value) {
+  set_has_channel();
+  channel_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.channel)
+}
+
+// required int32 height = 5 [default = 10];
+inline bool Parameters::has_height() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Parameters::set_has_height() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Parameters::clear_has_height() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Parameters::clear_height() {
+  height_ = 10;
+  clear_has_height();
+}
+inline ::google::protobuf::int32 Parameters::height() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.height)
+  return height_;
+}
+inline void Parameters::set_height(::google::protobuf::int32 value) {
+  set_has_height();
+  height_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.height)
+}
+
+// required int32 width = 6 [default = 9];
+inline bool Parameters::has_width() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Parameters::set_has_width() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Parameters::clear_has_width() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Parameters::clear_width() {
+  width_ = 9;
+  clear_has_width();
+}
+inline ::google::protobuf::int32 Parameters::width() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.width)
+  return width_;
+}
+inline void Parameters::set_width(::google::protobuf::int32 value) {
+  set_has_width();
+  width_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.width)
+}
+
+// required float epsilon = 7 [default = 0.25];
+inline bool Parameters::has_epsilon() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void Parameters::set_has_epsilon() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void Parameters::clear_has_epsilon() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void Parameters::clear_epsilon() {
+  epsilon_ = 0.25f;
+  clear_has_epsilon();
+}
+inline float Parameters::epsilon() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.epsilon)
+  return epsilon_;
+}
+inline void Parameters::set_epsilon(float value) {
+  set_has_epsilon();
+  epsilon_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.epsilon)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
