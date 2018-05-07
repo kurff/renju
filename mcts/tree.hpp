@@ -233,13 +233,13 @@ class Tree{
     typedef Node<State, Action> NodeDef;
     typedef typename map<Index, shared_ptr<NodeDef> >::iterator Iterator;
     public:
-        Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread):L_(L),  num_simulation_(simulation),counter_(0),  v_resign_(v_resign), epsilon_(epsilon), num_thread_(num_thread){
+        Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread):L_(L),  num_simulation_(num_simulation),counter_(0),  v_resign_(v_resign), epsilon_(epsilon), num_thread_(num_thread){
 
-            context_ = shared_ptr<Context>(new ChessContext());
-            network_ = shared_ptr<Network>(new Network());
+            context_ = shared_ptr<Context<State, Action> >(new ChessContext<State,Action>());
+            network_ = shared_ptr<Network< State, Action, CPUContext > >(new Network<State,Action,CPUContext>());
             inv_tau_ = 1.0f/tau;
             thread_pool_.reset(new TaskThreadPool(num_thread_));
-            sample_.reset( new Sample<Action>() );
+            sample_.reset( new Sample() );
 
         }
         ~Tree(){
@@ -412,7 +412,7 @@ class Tree{
             
             validate_action_.clear();
             for(auto child : root->child() ){
-                child.second->action()->set
+                //child.second->action()->set
                 validate_action_.push_back(child.second);
             }
 
@@ -454,7 +454,6 @@ class Tree{
 
     protected:
         std::map<Index, NodeDef* > nodes_;
-        
         //queue<function<void (NodeDef* ) > > tasks_;
         queue<NodeDef* > leafs_;
         // multiple-thread for pararel computation

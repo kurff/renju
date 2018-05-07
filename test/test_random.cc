@@ -9,10 +9,10 @@
 using namespace std;
 using namespace Beta;
 TEST(random, generator){
-Dirichlet dirichlet(0.2,5);
+Dirichlet dirichlet(0.2);
 vector<float> prior;
 for(int i = 0; i < 2; ++ i){
-    dirichlet.run(prior);
+    dirichlet.run(prior,5);
     LOG(INFO)<<"run: prior"<< prior.size();
     for(int j = 0; j < 5; ++ j){
         cout<< prior[j]<<" ";
