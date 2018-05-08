@@ -24,8 +24,7 @@ namespace Beta{
         }
 
         // get current state
-        virtual void get_current_state() = 0;
-        virtual void get_current_features() = 0;
+        
         //virtual void self_play() = 0;
 
 
@@ -46,9 +45,9 @@ namespace Beta{
         }
 
 
-        virtual void calc_next_state() = 0;
+        //virtual void calc_next_state() = 0;
 
-        virtual void get_legal_action(const Tensor<CPUContext>& current) = 0;
+        //virtual void get_legal_action(const Tensor<CPUContext>& current) = 0;
 
         size_t size_legal_action(){
           return current_legal_action_.size(); 
@@ -86,7 +85,7 @@ namespace Beta{
   template<typename State, typename Action>
   class RenjuContext: public Context<State, Action>{
     public:
-      RenjuContext(){
+      RenjuContext(float epsilon): Context<State,Action>(epsilon){
 
       }
 
@@ -105,7 +104,7 @@ namespace Beta{
   template<typename State, typename Action>
   class GoContext: public Context<State, Action>{
     public:
-      GoContext(){}
+      GoContext(float epsilon):Context<State,Action>(epsilon){}
       ~GoContext(){}
       void get_current_state() {
 
@@ -142,7 +141,7 @@ namespace Beta{
   template<typename State, typename Action>
   class ChessContext: public Context<State, Action>{
     public:
-      ChessContext(){}
+      ChessContext(float epsilon):Context<State,Action>(epsilon){}
       ~ChessContext(){}
       void get_current_state() {
 

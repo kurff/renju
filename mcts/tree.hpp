@@ -18,8 +18,8 @@
 #include <condition_variable>
 #include <functional>
 #include "network/network.hpp"
-#include "core/context.hpp"
-#include "core/action.hpp"
+//#include "core/context.hpp"
+//#include "core/action.hpp"
 #include "utils/utils.hpp"
 #include <cmath>
 
@@ -227,21 +227,24 @@ class Node{
 };
 
 
-template<typename State, typename Action, typename DataContext>
+template<typename State, typename Action, typename Context,typename DataContext>
 class Tree{
     typedef unsigned long Index;
     typedef Node<State, Action> NodeDef;
     typedef typename map<Index, shared_ptr<NodeDef> >::iterator Iterator;
     public:
-        Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread):L_(L),  num_simulation_(num_simulation),counter_(0),  v_resign_(v_resign), epsilon_(epsilon), num_thread_(num_thread){
+        Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread, int board_size, int batch_size, int channels):L_(L),  num_simulation_(num_simulation),counter_(0),  v_resign_(v_resign), num_thread_(num_thread){
 
-            context_ = shared_ptr<Context<State, Action> >(new ChessContext<State,Action>());
-            network_ = shared_ptr<Network< State, Action, DataContext > >(new Network<State,Action, DataContext>());
+            context_.reset(new Context(epsilon));
+            network_.reset(new Network<State,Action, DataContext>(board_size, batch_size, channels));
             inv_tau_ = 1.0f/tau;
             thread_pool_.reset(new TaskThreadPool(num_thread_));
             sample_.reset( new Sample() );
 
         }
+
+        
+
         ~Tree(){
 
         }
@@ -460,7 +463,7 @@ class Tree{
         shared_ptr<TaskThreadPool> thread_pool_;
         int num_thread_;
         shared_ptr<Network<State, Action, DataContext> > network_;
-        shared_ptr<Context<State, Action> > context_;
+        shared_ptr<Context> context_;
         Index counter_;
         //queue<Tensor<TesnorCPU>* > batch_;
         
@@ -472,7 +475,6 @@ class Tree{
         int num_simulation_;
         float v_resign_;
         float inv_tau_;
-        float epsilon_;
         TIndex max_child_;
 
 

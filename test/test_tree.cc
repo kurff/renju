@@ -1,9 +1,12 @@
 #include "gtest/gtest.h"
 #include "mcts/tree.hpp"
 #include "core/parameters.hpp"
+#include "core/context.hpp"
+#include "core/state.hpp"
+#include "core/action.hpp"
 using namespace Beta;
 TEST(NodeTest, Allocate){
-    Node<int, int >* node = new Node<int, int>("1");
+    Node<ChessState, ChessAction >* node = new Node<ChessState, ChessAction>("1");
     EXPECT_NE(node, nullptr);
     EXPECT_EQ(node->N(),0.0);
     EXPECT_EQ(node->P(),0.0);
@@ -11,7 +14,11 @@ TEST(NodeTest, Allocate){
     EXPECT_EQ(node->parent(),nullptr);
 }
 
+
 TEST(TreeTest, Allocate){
+    typedef typename Beta::Tree<ChessState, ChessAction,ChessContext<ChessState,ChessAction>, CPUContext > TreeDef;
+    TreeDef* tree = new TreeDef(5,1,0.1,0.1,0.1,1,15,1,3);
+
     //Tree<int, int, int>* tree = new Tree<int, int, int>(1);
     //EXPECT_NE(tree, nullptr);
     //EXPECT_EQ()
