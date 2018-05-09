@@ -20,11 +20,20 @@ TEST(TreeTest, Allocate){
     TreeDef* tree = new TreeDef(5,1,0.1,0.1,0.1,1,15,1,3);
 
     //Tree<int, int, int>* tree = new Tree<int, int, int>(1);
-    //EXPECT_NE(tree, nullptr);
+    EXPECT_NE(tree, nullptr);
     //EXPECT_EQ()
 }
 
 TEST(TreeTest, AddDeleteNode){
+    typedef typename Beta::Tree<ChessState, ChessAction,ChessContext<ChessState,ChessAction>, CPUContext > TreeDef;
+    TreeDef* tree = new TreeDef(5,1,0.1,0.1,0.1,1,15,1,3);
+    //tree->add_node(0);
+    Index parent = 0;
+    Index child = 1;
+    tree->add_node(parent);
+    tree->add_node(parent, child);
+
+    
     // Tree<int, int , int>* tree = new Tree<int, int ,int>(0);
     // Node<int>* node = new Node<int>("0");
     // Node<int>* node1 = new Node<int>("1");

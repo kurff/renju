@@ -141,12 +141,19 @@ class Parameters : public ::google::protobuf::Message /* @@protoc_insertion_poin
   ::std::string* release_type();
   void set_allocated_type(::std::string* type);
 
-  // required int32 depth = 1 [default = 1];
-  bool has_depth() const;
-  void clear_depth();
-  static const int kDepthFieldNumber = 1;
-  ::google::protobuf::int32 depth() const;
-  void set_depth(::google::protobuf::int32 value);
+  // required int32 num_thread = 10 [default = 1];
+  bool has_num_thread() const;
+  void clear_num_thread();
+  static const int kNumThreadFieldNumber = 10;
+  ::google::protobuf::int32 num_thread() const;
+  void set_num_thread(::google::protobuf::int32 value);
+
+  // required int32 L = 1 [default = 1];
+  bool has_l() const;
+  void clear_l();
+  static const int kLFieldNumber = 1;
+  ::google::protobuf::int32 l() const;
+  void set_l(::google::protobuf::int32 value);
 
   // required int32 batch_size = 3 [default = 10];
   bool has_batch_size() const;
@@ -162,43 +169,63 @@ class Parameters : public ::google::protobuf::Message /* @@protoc_insertion_poin
   ::google::protobuf::int32 channel() const;
   void set_channel(::google::protobuf::int32 value);
 
-  // required int32 height = 5 [default = 10];
-  bool has_height() const;
-  void clear_height();
-  static const int kHeightFieldNumber = 5;
-  ::google::protobuf::int32 height() const;
-  void set_height(::google::protobuf::int32 value);
+  // required int32 board_size = 5 [default = 10];
+  bool has_board_size() const;
+  void clear_board_size();
+  static const int kBoardSizeFieldNumber = 5;
+  ::google::protobuf::int32 board_size() const;
+  void set_board_size(::google::protobuf::int32 value);
 
-  // required int32 width = 6 [default = 9];
-  bool has_width() const;
-  void clear_width();
-  static const int kWidthFieldNumber = 6;
-  ::google::protobuf::int32 width() const;
-  void set_width(::google::protobuf::int32 value);
-
-  // required float epsilon = 7 [default = 0.25];
+  // required float epsilon = 6 [default = 0.25];
   bool has_epsilon() const;
   void clear_epsilon();
-  static const int kEpsilonFieldNumber = 7;
+  static const int kEpsilonFieldNumber = 6;
   float epsilon() const;
   void set_epsilon(float value);
 
+  // required int32 num_simulation = 7 [default = 1];
+  bool has_num_simulation() const;
+  void clear_num_simulation();
+  static const int kNumSimulationFieldNumber = 7;
+  ::google::protobuf::int32 num_simulation() const;
+  void set_num_simulation(::google::protobuf::int32 value);
+
+  // required float tau = 8 [default = 0.1];
+  bool has_tau() const;
+  void clear_tau();
+  static const int kTauFieldNumber = 8;
+  float tau() const;
+  void set_tau(float value);
+
+  // required float v_resign = 9 [default = 0.1];
+  bool has_v_resign() const;
+  void clear_v_resign();
+  static const int kVResignFieldNumber = 9;
+  float v_resign() const;
+  void set_v_resign(float value);
+
   // @@protoc_insertion_point(class_scope:Beta.Parameters)
  private:
-  void set_has_depth();
-  void clear_has_depth();
+  void set_has_l();
+  void clear_has_l();
   void set_has_type();
   void clear_has_type();
   void set_has_batch_size();
   void clear_has_batch_size();
   void set_has_channel();
   void clear_has_channel();
-  void set_has_height();
-  void clear_has_height();
-  void set_has_width();
-  void clear_has_width();
+  void set_has_board_size();
+  void clear_has_board_size();
   void set_has_epsilon();
   void clear_has_epsilon();
+  void set_has_num_simulation();
+  void clear_has_num_simulation();
+  void set_has_tau();
+  void clear_has_tau();
+  void set_has_v_resign();
+  void clear_has_v_resign();
+  void set_has_num_thread();
+  void clear_has_num_thread();
 
   // helper for ByteSizeLong()
   size_t RequiredFieldsByteSizeFallback() const;
@@ -208,12 +235,15 @@ class Parameters : public ::google::protobuf::Message /* @@protoc_insertion_poin
   mutable int _cached_size_;
   static ::google::protobuf::internal::ExplicitlyConstructed< ::std::string> _default_type_;
   ::google::protobuf::internal::ArenaStringPtr type_;
-  ::google::protobuf::int32 depth_;
+  ::google::protobuf::int32 num_thread_;
+  ::google::protobuf::int32 l_;
   ::google::protobuf::int32 batch_size_;
   ::google::protobuf::int32 channel_;
-  ::google::protobuf::int32 height_;
-  ::google::protobuf::int32 width_;
+  ::google::protobuf::int32 board_size_;
   float epsilon_;
+  ::google::protobuf::int32 num_simulation_;
+  float tau_;
+  float v_resign_;
   friend struct protobuf_beta_2eproto::TableStruct;
 };
 // ===================================================================
@@ -224,28 +254,28 @@ class Parameters : public ::google::protobuf::Message /* @@protoc_insertion_poin
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // Parameters
 
-// required int32 depth = 1 [default = 1];
-inline bool Parameters::has_depth() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+// required int32 L = 1 [default = 1];
+inline bool Parameters::has_l() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Parameters::set_has_depth() {
-  _has_bits_[0] |= 0x00000002u;
+inline void Parameters::set_has_l() {
+  _has_bits_[0] |= 0x00000004u;
 }
-inline void Parameters::clear_has_depth() {
-  _has_bits_[0] &= ~0x00000002u;
+inline void Parameters::clear_has_l() {
+  _has_bits_[0] &= ~0x00000004u;
 }
-inline void Parameters::clear_depth() {
-  depth_ = 1;
-  clear_has_depth();
+inline void Parameters::clear_l() {
+  l_ = 1;
+  clear_has_l();
 }
-inline ::google::protobuf::int32 Parameters::depth() const {
-  // @@protoc_insertion_point(field_get:Beta.Parameters.depth)
-  return depth_;
+inline ::google::protobuf::int32 Parameters::l() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.L)
+  return l_;
 }
-inline void Parameters::set_depth(::google::protobuf::int32 value) {
-  set_has_depth();
-  depth_ = value;
-  // @@protoc_insertion_point(field_set:Beta.Parameters.depth)
+inline void Parameters::set_l(::google::protobuf::int32 value) {
+  set_has_l();
+  l_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.L)
 }
 
 // required string type = 2 [default = "chess"];
@@ -313,13 +343,13 @@ inline void Parameters::set_allocated_type(::std::string* type) {
 
 // required int32 batch_size = 3 [default = 10];
 inline bool Parameters::has_batch_size() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void Parameters::set_has_batch_size() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void Parameters::clear_has_batch_size() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void Parameters::clear_batch_size() {
   batch_size_ = 10;
@@ -337,13 +367,13 @@ inline void Parameters::set_batch_size(::google::protobuf::int32 value) {
 
 // required int32 channel = 4 [default = 8];
 inline bool Parameters::has_channel() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void Parameters::set_has_channel() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void Parameters::clear_has_channel() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void Parameters::clear_channel() {
   channel_ = 8;
@@ -359,55 +389,31 @@ inline void Parameters::set_channel(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:Beta.Parameters.channel)
 }
 
-// required int32 height = 5 [default = 10];
-inline bool Parameters::has_height() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void Parameters::set_has_height() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void Parameters::clear_has_height() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void Parameters::clear_height() {
-  height_ = 10;
-  clear_has_height();
-}
-inline ::google::protobuf::int32 Parameters::height() const {
-  // @@protoc_insertion_point(field_get:Beta.Parameters.height)
-  return height_;
-}
-inline void Parameters::set_height(::google::protobuf::int32 value) {
-  set_has_height();
-  height_ = value;
-  // @@protoc_insertion_point(field_set:Beta.Parameters.height)
-}
-
-// required int32 width = 6 [default = 9];
-inline bool Parameters::has_width() const {
+// required int32 board_size = 5 [default = 10];
+inline bool Parameters::has_board_size() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void Parameters::set_has_width() {
+inline void Parameters::set_has_board_size() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void Parameters::clear_has_width() {
+inline void Parameters::clear_has_board_size() {
   _has_bits_[0] &= ~0x00000020u;
 }
-inline void Parameters::clear_width() {
-  width_ = 9;
-  clear_has_width();
+inline void Parameters::clear_board_size() {
+  board_size_ = 10;
+  clear_has_board_size();
 }
-inline ::google::protobuf::int32 Parameters::width() const {
-  // @@protoc_insertion_point(field_get:Beta.Parameters.width)
-  return width_;
+inline ::google::protobuf::int32 Parameters::board_size() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.board_size)
+  return board_size_;
 }
-inline void Parameters::set_width(::google::protobuf::int32 value) {
-  set_has_width();
-  width_ = value;
-  // @@protoc_insertion_point(field_set:Beta.Parameters.width)
+inline void Parameters::set_board_size(::google::protobuf::int32 value) {
+  set_has_board_size();
+  board_size_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.board_size)
 }
 
-// required float epsilon = 7 [default = 0.25];
+// required float epsilon = 6 [default = 0.25];
 inline bool Parameters::has_epsilon() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
@@ -429,6 +435,102 @@ inline void Parameters::set_epsilon(float value) {
   set_has_epsilon();
   epsilon_ = value;
   // @@protoc_insertion_point(field_set:Beta.Parameters.epsilon)
+}
+
+// required int32 num_simulation = 7 [default = 1];
+inline bool Parameters::has_num_simulation() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void Parameters::set_has_num_simulation() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void Parameters::clear_has_num_simulation() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void Parameters::clear_num_simulation() {
+  num_simulation_ = 1;
+  clear_has_num_simulation();
+}
+inline ::google::protobuf::int32 Parameters::num_simulation() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.num_simulation)
+  return num_simulation_;
+}
+inline void Parameters::set_num_simulation(::google::protobuf::int32 value) {
+  set_has_num_simulation();
+  num_simulation_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.num_simulation)
+}
+
+// required float tau = 8 [default = 0.1];
+inline bool Parameters::has_tau() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void Parameters::set_has_tau() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void Parameters::clear_has_tau() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void Parameters::clear_tau() {
+  tau_ = 0.1f;
+  clear_has_tau();
+}
+inline float Parameters::tau() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.tau)
+  return tau_;
+}
+inline void Parameters::set_tau(float value) {
+  set_has_tau();
+  tau_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.tau)
+}
+
+// required float v_resign = 9 [default = 0.1];
+inline bool Parameters::has_v_resign() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Parameters::set_has_v_resign() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Parameters::clear_has_v_resign() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Parameters::clear_v_resign() {
+  v_resign_ = 0.1f;
+  clear_has_v_resign();
+}
+inline float Parameters::v_resign() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.v_resign)
+  return v_resign_;
+}
+inline void Parameters::set_v_resign(float value) {
+  set_has_v_resign();
+  v_resign_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.v_resign)
+}
+
+// required int32 num_thread = 10 [default = 1];
+inline bool Parameters::has_num_thread() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Parameters::set_has_num_thread() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Parameters::clear_has_num_thread() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Parameters::clear_num_thread() {
+  num_thread_ = 1;
+  clear_has_num_thread();
+}
+inline ::google::protobuf::int32 Parameters::num_thread() const {
+  // @@protoc_insertion_point(field_get:Beta.Parameters.num_thread)
+  return num_thread_;
+}
+inline void Parameters::set_num_thread(::google::protobuf::int32 value) {
+  set_has_num_thread();
+  num_thread_ = value;
+  // @@protoc_insertion_point(field_set:Beta.Parameters.num_thread)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

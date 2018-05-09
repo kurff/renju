@@ -21,6 +21,7 @@
 //#include "core/context.hpp"
 //#include "core/action.hpp"
 #include "utils/utils.hpp"
+
 #include <cmath>
 
 
@@ -30,17 +31,33 @@ using namespace caffe2;
 #include "mcts/thread_pool.h"
 
 namespace Beta{
-
+typedef unsigned long Index;
 template<typename State, typename Action>
 class Node{
-    typedef unsigned long Index;
+    
     public:
-        Node(string name):N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), index_(0), name_(name), keep_flag_(true), parent_(nullptr){
+        Node(string name):N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
+        index_(0), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
             node_state_.reset(new State());
 
             
         }
+
+        Node(string name, Index index):
+        N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
+        index_(index), name_(name), keep_flag_(true), parent_(nullptr){
+            child_.clear();
+            node_state_.reset(new State());
+
+        }
+        Node( Index index):
+        N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
+        index_(index), name_(std::to_string(index)), keep_flag_(true), parent_(nullptr){
+            child_.clear();
+            node_state_.reset(new State());
+
+        }    
 
         Node(const Node<State, Action>& node){
            
@@ -106,7 +123,7 @@ class Node{
         void insert_child(Node<State, Action>* node, Index index){
             lock_guard<mutex> lock(mutex_);
             node->set_index(index);
-            child_.insert(std::pair<Index, Node<State,Action> >(node->index(), node) );
+            child_.insert(std::make_pair(node->index(), node) );
             node->set_parent(this);
         }
 
@@ -229,9 +246,8 @@ class Node{
 
 template<typename State, typename Action, typename Context,typename DataContext>
 class Tree{
-    typedef unsigned long Index;
     typedef Node<State, Action> NodeDef;
-    typedef typename map<Index, shared_ptr<NodeDef> >::iterator Iterator;
+    typedef typename map<Index, NodeDef* >::iterator Iterator;
     public:
         Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread, int board_size, int batch_size, int channels):L_(L),  num_simulation_(num_simulation),counter_(0),  v_resign_(v_resign), num_thread_(num_thread){
 
@@ -256,11 +272,40 @@ class Tree{
             nodes_[index] = node;
             leaf_node->insert_child(node, index);
         }
+        
+        bool add_node(Index index){
+            
+            //lock_guard<mutex> lock(mutex_);
+            NodeDef* node = new NodeDef(index);
+            return add_node(node, index);
+        }
 
+
+
+        bool add_node(Index parent, Index child){
+            //lock_guard<mutex> lock(mutex_);
+            auto itp = nodes_.find(parent);
+            if(itp == nodes_.end()){
+                LOG(INFO)<<"no parent node: "<< parent <<" adding node";   
+                add_node(parent);
+            }
+            auto itc = nodes_.find(child);
+            if(itc == nodes_.end()){
+                LOG(INFO)<<"no child node: "<< child <<" adding node";
+                add_node(child);
+            }
+            auto p = find(parent);
+            auto c = find(child);
+            add_node(p,c, child);
+            return true;
+
+        }
+
+        
         bool add_node(NodeDef* node, Index index){
             lock_guard<mutex> lock(mutex_);
             DLOG(INFO)<< "adding "<< index<<" node: "<< node->name();
-            Iterator it = nodes_.find(index);
+            auto it = nodes_.find(index);
             if(it != nodes_.end()){
                 LOG(INFO)<<" tree already has such node";
                 return false;
@@ -272,7 +317,7 @@ class Tree{
 
         NodeDef* find(int index){
             lock_guard<mutex> lock(mutex_);
-            Iterator it = nodes_.find(index);
+            auto it = nodes_.find(index);
             if(it == nodes_.end()){
                 LOG(INFO)<< "can not find " << index;
             }else{
