@@ -7,6 +7,7 @@
 
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
+#include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
 #include <google/protobuf/descriptor.h>
@@ -18,7 +19,6 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
-
 namespace Beta {
 class ParametersDefaultTypeInternal {
  public:
@@ -27,13 +27,18 @@ class ParametersDefaultTypeInternal {
 } _Parameters_default_instance_;
 }  // namespace Beta
 namespace protobuf_beta_2eproto {
-static void InitDefaultsParameters() {
+void InitDefaultsParametersImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.DefaultConstruct();
-  *::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get_mutable() = ::std::string("chess", 5);
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::Beta::Parameters::_default_type_.DefaultConstruct();
+  *::Beta::Parameters::_default_type_.get_mutable() = ::std::string("chess", 5);
   ::google::protobuf::internal::OnShutdownDestroyString(
-      ::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get_mutable());
+      ::Beta::Parameters::_default_type_.get_mutable());
   {
     void* ptr = &::Beta::_Parameters_default_instance_;
     new (ptr) ::Beta::Parameters();
@@ -42,11 +47,9 @@ static void InitDefaultsParameters() {
   ::Beta::Parameters::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<0> scc_info_Parameters =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsParameters}, {}};
-
-void InitDefaults() {
-  ::google::protobuf::internal::InitSCC(&scc_info_Parameters.base);
+void InitDefaultsParameters() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsParametersImpl);
 }
 
 ::google::protobuf::Metadata file_level_metadata[1];
@@ -88,14 +91,15 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 void protobuf_AssignDescriptors() {
   AddDescriptors();
+  ::google::protobuf::MessageFactory* factory = NULL;
   AssignDescriptors(
-      "beta.proto", schemas, file_default_instances, TableStruct::offsets,
+      "beta.proto", schemas, file_default_instances, TableStruct::offsets, factory,
       file_level_metadata, NULL, NULL);
 }
 
 void protobuf_AssignDescriptorsOnce() {
-  static ::google::protobuf::internal::once_flag once;
-  ::google::protobuf::internal::call_once(once, protobuf_AssignDescriptors);
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &protobuf_AssignDescriptors);
 }
 
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
@@ -122,8 +126,8 @@ void AddDescriptorsImpl() {
 }
 
 void AddDescriptors() {
-  static ::google::protobuf::internal::once_flag once;
-  ::google::protobuf::internal::call_once(once, AddDescriptorsImpl);
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
 }
 // Force AddDescriptors() to be called at dynamic initialization time.
 struct StaticDescriptorInitializer {
@@ -138,7 +142,7 @@ namespace Beta {
 
 void Parameters::InitAsDefaultInstance() {
 }
-::google::protobuf::internal::ExplicitlyConstructed<::std::string> Parameters::_i_give_permission_to_break_this_code_default_type_;
+::google::protobuf::internal::ExplicitlyConstructed< ::std::string> Parameters::_default_type_;
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Parameters::kLFieldNumber;
 const int Parameters::kTypeFieldNumber;
@@ -154,19 +158,21 @@ const int Parameters::kNumThreadFieldNumber;
 
 Parameters::Parameters()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  ::google::protobuf::internal::InitSCC(
-      &protobuf_beta_2eproto::scc_info_Parameters.base);
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_beta_2eproto::InitDefaultsParameters();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:Beta.Parameters)
 }
 Parameters::Parameters(const Parameters& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      _has_bits_(from._has_bits_) {
+      _has_bits_(from._has_bits_),
+      _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  type_.UnsafeSetDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
+  type_.UnsafeSetDefault(&::Beta::Parameters::_default_type_.get());
   if (from.has_type()) {
-    type_.AssignWithDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get(), from.type_);
+    type_.AssignWithDefault(&::Beta::Parameters::_default_type_.get(), from.type_);
   }
   ::memcpy(&num_thread_, &from.num_thread_,
     static_cast<size_t>(reinterpret_cast<char*>(&v_resign_) -
@@ -175,7 +181,8 @@ Parameters::Parameters(const Parameters& from)
 }
 
 void Parameters::SharedCtor() {
-  type_.UnsafeSetDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
+  _cached_size_ = 0;
+  type_.UnsafeSetDefault(&::Beta::Parameters::_default_type_.get());
   num_thread_ = 1;
   l_ = 1;
   batch_size_ = 10;
@@ -193,11 +200,13 @@ Parameters::~Parameters() {
 }
 
 void Parameters::SharedDtor() {
-  type_.DestroyNoArena(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
+  type_.DestroyNoArena(&::Beta::Parameters::_default_type_.get());
 }
 
 void Parameters::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const ::google::protobuf::Descriptor* Parameters::descriptor() {
   ::protobuf_beta_2eproto::protobuf_AssignDescriptorsOnce();
@@ -205,10 +214,17 @@ const ::google::protobuf::Descriptor* Parameters::descriptor() {
 }
 
 const Parameters& Parameters::default_instance() {
-  ::google::protobuf::internal::InitSCC(&protobuf_beta_2eproto::scc_info_Parameters.base);
+  ::protobuf_beta_2eproto::InitDefaultsParameters();
   return *internal_default_instance();
 }
 
+Parameters* Parameters::New(::google::protobuf::Arena* arena) const {
+  Parameters* n = new Parameters;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
 
 void Parameters::Clear() {
 // @@protoc_insertion_point(message_clear_start:Beta.Parameters)
@@ -219,7 +235,8 @@ void Parameters::Clear() {
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 255u) {
     if (cached_has_bits & 0x00000001u) {
-      type_.UnsafeMutablePointer()->assign(*&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
+      GOOGLE_DCHECK(!type_.IsDefault(&::Beta::Parameters::_default_type_.get()));
+      (*type_.UnsafeRawStringPointer())->assign(*&::Beta::Parameters::_default_type_.get());
     }
     num_thread_ = 1;
     l_ = 1;
@@ -243,7 +260,7 @@ bool Parameters::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:Beta.Parameters)
   for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -678,7 +695,9 @@ size_t Parameters::ByteSizeLong() const {
     total_size += RequiredFieldsByteSizeFallback();
   }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
@@ -708,7 +727,7 @@ void Parameters::MergeFrom(const Parameters& from) {
   if (cached_has_bits & 255u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_type();
-      type_.AssignWithDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get(), from.type_);
+      type_.AssignWithDefault(&::Beta::Parameters::_default_type_.get(), from.type_);
     }
     if (cached_has_bits & 0x00000002u) {
       num_thread_ = from.num_thread_;
@@ -769,8 +788,7 @@ void Parameters::Swap(Parameters* other) {
 }
 void Parameters::InternalSwap(Parameters* other) {
   using std::swap;
-  type_.Swap(&other->type_, &::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get(),
-    GetArenaNoVirtual());
+  type_.Swap(&other->type_);
   swap(num_thread_, other->num_thread_);
   swap(l_, other->l_);
   swap(batch_size_, other->batch_size_);
@@ -782,6 +800,7 @@ void Parameters::InternalSwap(Parameters* other) {
   swap(v_resign_, other->v_resign_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
 }
 
 ::google::protobuf::Metadata Parameters::GetMetadata() const {
@@ -792,12 +811,5 @@ void Parameters::InternalSwap(Parameters* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Beta
-namespace google {
-namespace protobuf {
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::Beta::Parameters* Arena::CreateMaybeMessage< ::Beta::Parameters >(Arena* arena) {
-  return Arena::CreateInternal< ::Beta::Parameters >(arena);
-}
-}  // namespace protobuf
-}  // namespace google
 
 // @@protoc_insertion_point(global_scope)

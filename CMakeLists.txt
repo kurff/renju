@@ -11,7 +11,7 @@ include_directories(/usr/include/graphviz)
 if (test)
 enable_testing()
 add_executable(test_tree  test/test_tree.cc proto/beta.pb.cc)
-target_link_libraries(test_tree gtest gtest_main glog protobuf caffe2 pthread)
+target_link_libraries(test_tree gtest gtest_main glog protobuf caffe2 caffe2_protos pthread gvc cgraph)
 add_test(NAME test_tree COMMAND test_tree )
 
 add_executable(test_example  test/test_example.cc )
@@ -25,7 +25,7 @@ add_test(NAME test_example COMMAND test_example )
 
 
 add_executable(test_network  test/test_network.cc network/net.cc)
-target_link_libraries(test_network gtest gtest_main glog caffe2  protobuf pthread)
+target_link_libraries(test_network gtest gtest_main glog caffe2 caffe2_protos protobuf pthread)
 add_test(NAME test_network COMMAND test_network)
 endif()
 
@@ -34,10 +34,10 @@ include_directories(/usr/local/include)
 
 
 add_executable(test_graphviz test/test_graphviz.cc)
-target_link_libraries(test_graphviz gvc cgraph)
+target_link_libraries(test_graphviz gvc cgraph glog)
 
 #add_library(libproto proto/beta.pb.cc)
 add_executable(toy test/toy.cc )
-target_link_libraries(toy  caffe2 protobuf)
+target_link_libraries(toy  caffe2 caffe2_protos protobuf)
 add_executable(test_caffe2 test/test_caffe2.cc network/net.cc)
-target_link_libraries(test_caffe2 caffe2 protobuf glog)
+target_link_libraries(test_caffe2 caffe2 caffe2_protos protobuf glog)

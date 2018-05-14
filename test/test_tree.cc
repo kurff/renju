@@ -5,24 +5,24 @@
 #include "core/state.hpp"
 #include "core/action.hpp"
 using namespace Beta;
-TEST(NodeTest, Allocate){
-    Node<ChessState, ChessAction >* node = new Node<ChessState, ChessAction>("1");
-    EXPECT_NE(node, nullptr);
-    EXPECT_EQ(node->N(),0.0);
-    EXPECT_EQ(node->P(),0.0);
-    EXPECT_EQ(node->child().size(),0);
-    EXPECT_EQ(node->parent(),nullptr);
-}
+// TEST(NodeTest, Allocate){
+//     Node<ChessState, ChessAction >* node = new Node<ChessState, ChessAction>("1");
+//     EXPECT_NE(node, nullptr);
+//     EXPECT_EQ(node->N(),0.0);
+//     EXPECT_EQ(node->P(),0.0);
+//     EXPECT_EQ(node->child().size(),0);
+//     EXPECT_EQ(node->parent(),nullptr);
+// }
 
 
-TEST(TreeTest, Allocate){
-    typedef typename Beta::Tree<ChessState, ChessAction,ChessContext<ChessState,ChessAction>, CPUContext > TreeDef;
-    TreeDef* tree = new TreeDef(5,1,0.1,0.1,0.1,1,15,1,3);
+// TEST(TreeTest, Allocate){
+//     typedef typename Beta::Tree<ChessState, ChessAction,ChessContext<ChessState,ChessAction>, CPUContext > TreeDef;
+//     TreeDef* tree = new TreeDef(5,1,0.1,0.1,0.1,1,15,1,3);
 
-    //Tree<int, int, int>* tree = new Tree<int, int, int>(1);
-    EXPECT_NE(tree, nullptr);
-    //EXPECT_EQ()
-}
+//     //Tree<int, int, int>* tree = new Tree<int, int, int>(1);
+//     EXPECT_NE(tree, nullptr);
+//     //EXPECT_EQ()
+// }
 
 TEST(TreeTest, AddDeleteNode){
     typedef typename Beta::Tree<ChessState, ChessAction,ChessContext<ChessState,ChessAction>, CPUContext > TreeDef;
@@ -31,8 +31,11 @@ TEST(TreeTest, AddDeleteNode){
     //tree->add_node(0);
     Index parent = 0;
     Index child = 1;
-    tree->add_node(parent);
+    NodeDef* n = new NodeDef(parent);
+    tree->add_node(n);
     NodeDef* node = new NodeDef(child);
+    tree->add_node(n, node);
+    tree->render();
     //tree->add_node(,node, child);
 
     

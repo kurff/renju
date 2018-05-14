@@ -64,7 +64,7 @@ using namespace std;
 
 class Node{
     public:
-        Node(string name){
+        Node(string name):name_(name){
 
         }
 
@@ -77,11 +77,11 @@ class Node{
 
 int main(){
     Beta::GraphViz<Node> graph;
-    Node n("m");
-    Node m("m");
-    graph.add_node(&n);
-    graph.add_node(&m);
-    graph.add_edge(&n,&m);
+    Node* n = new Node("n");
+    Node* m = new Node("m");
+    graph.add_node(n);
+    graph.add_node(m);
+    graph.add_edge(n,m);
     graph.render();
     return 0;
 }

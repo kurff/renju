@@ -11,9 +11,10 @@ namespace Beta{
         public:
             GraphViz(){
                 gvc_ = gvContext();
-                char* argv[4] = {{"exe"},{"-Kdot"},{"-Tpng"},{"-ograph.png"}};
-                gvParseArgs(gvc_, 4 , argv);
-                g_ = agopen("graph", Agdirected, 0);
+                const char* argv[4] = {"exe","-Kdot","-Tpng","-ograph.png"};
+                gvParseArgs(gvc_, 4 , const_cast<char* *>(argv));
+                string name = "graph";
+                g_ = agopen(const_cast<char*>(name.c_str()), Agdirected, 0);
             }
             ~GraphViz(){
                 gvFreeLayout(gvc_, g_);
@@ -22,9 +23,10 @@ namespace Beta{
             }
 
             Agnode_t* add_node(T* node){
-               Agnode_t* t = agnode(g_, node->name(), 1);
-               nodes_.insert(std::make_pair(node->name(), t));
-               return t;
+                LOG(INFO)<< "creating "<< node->name();
+                Agnode_t* t = agnode(g_, const_cast<char*>(node->name().c_str()), true);
+                nodes_.insert(std::make_pair(node->name(), t));
+                return t;
             }
 
 
@@ -40,8 +42,9 @@ namespace Beta{
                     LOG(INFO)<<"can not find node" << child->name();
                     return nullptr;
                 }
-                Agedge_t* edge = agedge(g_,prt->second, cid->second, parent->name()+"_"+child->name(), 1);
-                edges_.insert(std::make_pair(parent->name()+"_"+child->name(), edge ));
+                string name = parent->name()+"_"+child->name();
+                Agedge_t* edge = agedge(g_,prt->second, cid->second, const_cast<char*>(name.c_str()), 1);
+                edges_.insert(std::make_pair(name.c_str(), edge ));
                 return edge;
 
             }

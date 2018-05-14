@@ -18,6 +18,9 @@
 #include <condition_variable>
 #include <functional>
 #include "network/network.hpp"
+
+
+#include "utils/graphviz.hpp"
 //#include "core/context.hpp"
 //#include "core/action.hpp"
 #include "utils/utils.hpp"
@@ -57,17 +60,18 @@ class Node{
             child_.clear();
             node_state_.reset(new State());
 
+
         }    
 
         Node(const Node<State, Action>& node){
            
-
 
         }
 
         Node(const State & state, string name){
             node_state_ = state;
             name_ = name;
+
 
         }
 
@@ -263,7 +267,7 @@ class Tree{
             inv_tau_ = 1.0f/tau;
             thread_pool_.reset(new TaskThreadPool(num_thread_));
             sample_.reset( new Sample() );
-
+            graph_viz_.reset(new GraphViz<NodeDef>() );
         }
 
         
@@ -275,28 +279,30 @@ class Tree{
         void add_node(NodeDef * leaf_node, NodeDef* node){
             //leaf_node->
             int index = node->index();
-            DLOG(INFO)<< "adding "<< node->index()<<" node";
+            LOG(INFO)<< "adding "<< node->index()<<" node";
             nodes_[index] = node;
             leaf_node->insert_child(node, index);
+
+            graph_viz_->add_node(node);
+            graph_viz_->add_edge(leaf_node, node);
+
         }
+
+        // for simplicity
         
         bool add_node(Index index){
             NodeDef* node = new NodeDef(index);
+            graph_viz_->add_node(node);
             return add_node(node, index);
         }
 
         
 
 
-        bool add_node(NodeDef* node, Index index){
-            DLOG(INFO)<< "adding "<< index<<" node: "<< node->name();
-            auto it = find(index);
-            if(it == nullptr){
-                LOG(INFO)<<" tree already has such node";
-                return false;
-            }
-            node->set_index(index);
-            nodes_[index] = node;
+        bool add_node(NodeDef* node){
+           // LOG(INFO)<< "adding "<< index<<" node: "<< node->name();
+            graph_viz_->add_node(node);
+            nodes_[node->index()] = node;
             return true;
         }
 
@@ -318,7 +324,7 @@ class Tree{
             cache.push(root);
             while(cache.size()){
                 NodeDef* ele = cache.front();
-                DLOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->schild().size();
+                LOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->schild().size();
                 for(auto x : ele->child()){
                     cache.push(x.second);
                 }
@@ -333,7 +339,7 @@ class Tree{
         void remove_itself_and_child(NodeDef*  node){
             Iterator it = nodes_.find(node->index());
             if(it == nodes_.end()){
-                DLOG(INFO)<<"can not find node "<< node->name(); 
+                LOG(INFO)<<"can not find node "<< node->name(); 
                 return;
             }
             node->parent()->remove_one_child(node->index());
@@ -363,7 +369,7 @@ class Tree{
             NodeDef* best;
             while(cache.size()){
                 NodeDef* ele = cache.front();
-                DLOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->child().size();
+                LOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->child().size();
                 float maxQ = 0;
                 if(ele->child().size() ==0){
                     context_->get_legal_action(ele->node_state());
@@ -484,7 +490,11 @@ class Tree{
         void deserialize(){
             
         }
+        
 
+        void render(){
+            graph_viz_->render();
+        }
 
 
         const size_t size(){return nodes_.size();}
@@ -507,6 +517,7 @@ class Tree{
         Index counter_;
         //queue<Tensor<TesnorCPU>* > batch_;
         
+        
         vector<NodeDef*> validate_action_;
         
         shared_ptr<Sample> sample_;
@@ -516,6 +527,8 @@ class Tree{
         float v_resign_;
         float inv_tau_;
         TIndex max_child_;
+
+        shared_ptr<GraphViz<NodeDef> > graph_viz_;
 
 
 };
