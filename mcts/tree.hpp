@@ -199,6 +199,13 @@ class Node{
                 p[child.second->child_index()] = value;
             }
             return tensor;
+        }
+
+        void serialize(){
+
+        }
+
+        void deserialize(){
 
         }
 
@@ -265,48 +272,26 @@ class Tree{
 
         }
 
-        void add_node(NodeDef * leaf_node, NodeDef* node, Index index){
+        void add_node(NodeDef * leaf_node, NodeDef* node){
             //leaf_node->
-            lock_guard<mutex> lock(mutex_);
-            DLOG(INFO)<< "adding "<< index<<" node";
+            int index = node->index();
+            DLOG(INFO)<< "adding "<< node->index()<<" node";
             nodes_[index] = node;
             leaf_node->insert_child(node, index);
         }
         
         bool add_node(Index index){
-            
-            //lock_guard<mutex> lock(mutex_);
             NodeDef* node = new NodeDef(index);
             return add_node(node, index);
         }
 
-
-
-        bool add_node(Index parent, Index child){
-            //lock_guard<mutex> lock(mutex_);
-            auto itp = nodes_.find(parent);
-            if(itp == nodes_.end()){
-                LOG(INFO)<<"no parent node: "<< parent <<" adding node";   
-                add_node(parent);
-            }
-            auto itc = nodes_.find(child);
-            if(itc == nodes_.end()){
-                LOG(INFO)<<"no child node: "<< child <<" adding node";
-                add_node(child);
-            }
-            auto p = find(parent);
-            auto c = find(child);
-            add_node(p,c, child);
-            return true;
-
-        }
-
         
+
+
         bool add_node(NodeDef* node, Index index){
-            lock_guard<mutex> lock(mutex_);
             DLOG(INFO)<< "adding "<< index<<" node: "<< node->name();
-            auto it = nodes_.find(index);
-            if(it != nodes_.end()){
+            auto it = find(index);
+            if(it == nullptr){
                 LOG(INFO)<<" tree already has such node";
                 return false;
             }
@@ -316,15 +301,16 @@ class Tree{
         }
 
         NodeDef* find(int index){
-            lock_guard<mutex> lock(mutex_);
             auto it = nodes_.find(index);
             if(it == nodes_.end()){
                 LOG(INFO)<< "can not find " << index;
+                return nullptr;
             }else{
                 LOG(INFO)<<"find "<< index;
+                return it->second;
             }
-            return it->second;
         }
+
 
 
         void travel(NodeDef* root){       
@@ -488,6 +474,15 @@ class Tree{
 
 
 
+        }
+
+
+        void serialize(){
+
+        }
+
+        void deserialize(){
+            
         }
 
 

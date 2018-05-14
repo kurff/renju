@@ -5,22 +5,23 @@ SET(CMAKE_C_COMPILER g++)
 add_compile_options(-std=c++11)
 
 link_directories(/usr/local/lib)
-link_directories()
+link_directories(/usr/lib/graphviz /usr/lib/)
+include_directories(/usr/include/graphviz)
 
 if (test)
 enable_testing()
 add_executable(test_tree  test/test_tree.cc proto/beta.pb.cc)
-target_link_libraries(test_tree gtest gtest_main glog protobuf caffe2)
-add_test(NAME test_tree COMMAND test_tree)
+target_link_libraries(test_tree gtest gtest_main glog protobuf caffe2 pthread)
+add_test(NAME test_tree COMMAND test_tree )
 
 add_executable(test_example  test/test_example.cc )
 target_link_libraries(test_example gtest gtest_main glog pthread)
 add_test(NAME test_example COMMAND test_example )
 
 
-add_executable(test_random  test/test_random.cc )
-target_link_libraries(test_random gtest gtest_main glog pthread)
-add_test(NAME test_random COMMAND test_random)
+#add_executable(test_random  test/test_random.cc )
+#target_link_libraries(test_random gtest gtest_main glog pthread)
+#add_test(NAME test_random COMMAND test_random)
 
 
 add_executable(test_network  test/test_network.cc network/net.cc)
@@ -31,6 +32,9 @@ endif()
 include_directories(./)
 include_directories(/usr/local/include)
 
+
+add_executable(test_graphviz test/test_graphviz.cc)
+target_link_libraries(test_graphviz gvc cgraph)
 
 #add_library(libproto proto/beta.pb.cc)
 add_executable(toy test/toy.cc )
