@@ -472,14 +472,6 @@ class Tree{
             // compute pai
             pai(root);
 
-
-
-
-
-
-
-
-
         }
 
 

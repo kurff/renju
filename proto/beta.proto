@@ -5,10 +5,10 @@ package Beta;
 //message 
 
 message Parameters{
-    required int32 L =1 [default = 1]; // the depth of layer L used to MCTS
+    required int32 l=1 [default = 1]; // the depth of layer L used to MCTS
     required string type =2 [default="chess"];
     required int32 batch_size =3[default=10];
-    required int32 channel =4[default=8];
+    required int32 channels =4[default=8];
     required int32 board_size =5[default=10];
     required float epsilon =6[default=0.25];
     required int32 num_simulation =7[default=1];

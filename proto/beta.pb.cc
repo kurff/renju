@@ -7,7 +7,6 @@
 
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/port.h>
-#include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
 #include <google/protobuf/descriptor.h>
@@ -19,6 +18,7 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
+
 namespace Beta {
 class ParametersDefaultTypeInternal {
  public:
@@ -27,18 +27,13 @@ class ParametersDefaultTypeInternal {
 } _Parameters_default_instance_;
 }  // namespace Beta
 namespace protobuf_beta_2eproto {
-void InitDefaultsParametersImpl() {
+static void InitDefaultsParameters() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
-#else
-  ::google::protobuf::internal::InitProtobufDefaults();
-#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-  ::Beta::Parameters::_default_type_.DefaultConstruct();
-  *::Beta::Parameters::_default_type_.get_mutable() = ::std::string("chess", 5);
+  ::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.DefaultConstruct();
+  *::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get_mutable() = ::std::string("chess", 5);
   ::google::protobuf::internal::OnShutdownDestroyString(
-      ::Beta::Parameters::_default_type_.get_mutable());
+      ::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get_mutable());
   {
     void* ptr = &::Beta::_Parameters_default_instance_;
     new (ptr) ::Beta::Parameters();
@@ -47,9 +42,11 @@ void InitDefaultsParametersImpl() {
   ::Beta::Parameters::InitAsDefaultInstance();
 }
 
-void InitDefaultsParameters() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsParametersImpl);
+::google::protobuf::internal::SCCInfo<0> scc_info_Parameters =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsParameters}, {}};
+
+void InitDefaults() {
+  ::google::protobuf::internal::InitSCC(&scc_info_Parameters.base);
 }
 
 ::google::protobuf::Metadata file_level_metadata[1];
@@ -63,7 +60,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, l_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, batch_size_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, channel_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, channels_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, board_size_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, epsilon_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Beta::Parameters, num_simulation_),
@@ -91,15 +88,14 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 void protobuf_AssignDescriptors() {
   AddDescriptors();
-  ::google::protobuf::MessageFactory* factory = NULL;
   AssignDescriptors(
-      "beta.proto", schemas, file_default_instances, TableStruct::offsets, factory,
+      "beta.proto", schemas, file_default_instances, TableStruct::offsets,
       file_level_metadata, NULL, NULL);
 }
 
 void protobuf_AssignDescriptorsOnce() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &protobuf_AssignDescriptors);
+  static ::google::protobuf::internal::once_flag once;
+  ::google::protobuf::internal::call_once(once, protobuf_AssignDescriptors);
 }
 
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
@@ -111,23 +107,23 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\nbeta.proto\022\004Beta\"\345\001\n\nParameters\022\014\n\001L\030\001"
+      "\n\nbeta.proto\022\004Beta\"\346\001\n\nParameters\022\014\n\001l\030\001"
       " \002(\005:\0011\022\023\n\004type\030\002 \002(\t:\005chess\022\026\n\nbatch_si"
-      "ze\030\003 \002(\005:\00210\022\022\n\007channel\030\004 \002(\005:\0018\022\026\n\nboar"
-      "d_size\030\005 \002(\005:\00210\022\025\n\007epsilon\030\006 \002(\002:\0040.25\022"
-      "\031\n\016num_simulation\030\007 \002(\005:\0011\022\020\n\003tau\030\010 \002(\002:"
-      "\0030.1\022\025\n\010v_resign\030\t \002(\002:\0030.1\022\025\n\nnum_threa"
-      "d\030\n \002(\005:\0011"
+      "ze\030\003 \002(\005:\00210\022\023\n\010channels\030\004 \002(\005:\0018\022\026\n\nboa"
+      "rd_size\030\005 \002(\005:\00210\022\025\n\007epsilon\030\006 \002(\002:\0040.25"
+      "\022\031\n\016num_simulation\030\007 \002(\005:\0011\022\020\n\003tau\030\010 \002(\002"
+      ":\0030.1\022\025\n\010v_resign\030\t \002(\002:\0030.1\022\025\n\nnum_thre"
+      "ad\030\n \002(\005:\0011"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 250);
+      descriptor, 251);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "beta.proto", &protobuf_RegisterTypes);
 }
 
 void AddDescriptors() {
-  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
-  ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
+  static ::google::protobuf::internal::once_flag once;
+  ::google::protobuf::internal::call_once(once, AddDescriptorsImpl);
 }
 // Force AddDescriptors() to be called at dynamic initialization time.
 struct StaticDescriptorInitializer {
@@ -142,12 +138,12 @@ namespace Beta {
 
 void Parameters::InitAsDefaultInstance() {
 }
-::google::protobuf::internal::ExplicitlyConstructed< ::std::string> Parameters::_default_type_;
+::google::protobuf::internal::ExplicitlyConstructed<::std::string> Parameters::_i_give_permission_to_break_this_code_default_type_;
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Parameters::kLFieldNumber;
 const int Parameters::kTypeFieldNumber;
 const int Parameters::kBatchSizeFieldNumber;
-const int Parameters::kChannelFieldNumber;
+const int Parameters::kChannelsFieldNumber;
 const int Parameters::kBoardSizeFieldNumber;
 const int Parameters::kEpsilonFieldNumber;
 const int Parameters::kNumSimulationFieldNumber;
@@ -158,21 +154,19 @@ const int Parameters::kNumThreadFieldNumber;
 
 Parameters::Parameters()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
-    ::protobuf_beta_2eproto::InitDefaultsParameters();
-  }
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_beta_2eproto::scc_info_Parameters.base);
   SharedCtor();
   // @@protoc_insertion_point(constructor:Beta.Parameters)
 }
 Parameters::Parameters(const Parameters& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      _has_bits_(from._has_bits_),
-      _cached_size_(0) {
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  type_.UnsafeSetDefault(&::Beta::Parameters::_default_type_.get());
+  type_.UnsafeSetDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
   if (from.has_type()) {
-    type_.AssignWithDefault(&::Beta::Parameters::_default_type_.get(), from.type_);
+    type_.AssignWithDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get(), from.type_);
   }
   ::memcpy(&num_thread_, &from.num_thread_,
     static_cast<size_t>(reinterpret_cast<char*>(&v_resign_) -
@@ -181,12 +175,11 @@ Parameters::Parameters(const Parameters& from)
 }
 
 void Parameters::SharedCtor() {
-  _cached_size_ = 0;
-  type_.UnsafeSetDefault(&::Beta::Parameters::_default_type_.get());
+  type_.UnsafeSetDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
   num_thread_ = 1;
   l_ = 1;
   batch_size_ = 10;
-  channel_ = 8;
+  channels_ = 8;
   board_size_ = 10;
   epsilon_ = 0.25f;
   num_simulation_ = 1;
@@ -200,13 +193,11 @@ Parameters::~Parameters() {
 }
 
 void Parameters::SharedDtor() {
-  type_.DestroyNoArena(&::Beta::Parameters::_default_type_.get());
+  type_.DestroyNoArena(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
 }
 
 void Parameters::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  _cached_size_.Set(size);
 }
 const ::google::protobuf::Descriptor* Parameters::descriptor() {
   ::protobuf_beta_2eproto::protobuf_AssignDescriptorsOnce();
@@ -214,17 +205,10 @@ const ::google::protobuf::Descriptor* Parameters::descriptor() {
 }
 
 const Parameters& Parameters::default_instance() {
-  ::protobuf_beta_2eproto::InitDefaultsParameters();
+  ::google::protobuf::internal::InitSCC(&protobuf_beta_2eproto::scc_info_Parameters.base);
   return *internal_default_instance();
 }
 
-Parameters* Parameters::New(::google::protobuf::Arena* arena) const {
-  Parameters* n = new Parameters;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
 
 void Parameters::Clear() {
 // @@protoc_insertion_point(message_clear_start:Beta.Parameters)
@@ -235,13 +219,12 @@ void Parameters::Clear() {
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 255u) {
     if (cached_has_bits & 0x00000001u) {
-      GOOGLE_DCHECK(!type_.IsDefault(&::Beta::Parameters::_default_type_.get()));
-      (*type_.UnsafeRawStringPointer())->assign(*&::Beta::Parameters::_default_type_.get());
+      type_.UnsafeMutablePointer()->assign(*&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get());
     }
     num_thread_ = 1;
     l_ = 1;
     batch_size_ = 10;
-    channel_ = 8;
+    channels_ = 8;
     board_size_ = 10;
     epsilon_ = 0.25f;
     num_simulation_ = 1;
@@ -260,11 +243,11 @@ bool Parameters::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:Beta.Parameters)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required int32 L = 1 [default = 1];
+      // required int32 l = 1 [default = 1];
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
@@ -308,14 +291,14 @@ bool Parameters::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 channel = 4 [default = 8];
+      // required int32 channels = 4 [default = 8];
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
-          set_has_channel();
+          set_has_channels();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &channel_)));
+                 input, &channels_)));
         } else {
           goto handle_unusual;
         }
@@ -433,7 +416,7 @@ void Parameters::SerializeWithCachedSizes(
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required int32 L = 1 [default = 1];
+  // required int32 l = 1 [default = 1];
   if (cached_has_bits & 0x00000004u) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->l(), output);
   }
@@ -453,9 +436,9 @@ void Parameters::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->batch_size(), output);
   }
 
-  // required int32 channel = 4 [default = 8];
+  // required int32 channels = 4 [default = 8];
   if (cached_has_bits & 0x00000010u) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->channel(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->channels(), output);
   }
 
   // required int32 board_size = 5 [default = 10];
@@ -503,7 +486,7 @@ void Parameters::SerializeWithCachedSizes(
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required int32 L = 1 [default = 1];
+  // required int32 l = 1 [default = 1];
   if (cached_has_bits & 0x00000004u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->l(), target);
   }
@@ -524,9 +507,9 @@ void Parameters::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->batch_size(), target);
   }
 
-  // required int32 channel = 4 [default = 8];
+  // required int32 channels = 4 [default = 8];
   if (cached_has_bits & 0x00000010u) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->channel(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->channels(), target);
   }
 
   // required int32 board_size = 5 [default = 10];
@@ -586,7 +569,7 @@ size_t Parameters::RequiredFieldsByteSizeFallback() const {
   }
 
   if (has_l()) {
-    // required int32 L = 1 [default = 1];
+    // required int32 l = 1 [default = 1];
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->l());
@@ -599,11 +582,11 @@ size_t Parameters::RequiredFieldsByteSizeFallback() const {
         this->batch_size());
   }
 
-  if (has_channel()) {
-    // required int32 channel = 4 [default = 8];
+  if (has_channels()) {
+    // required int32 channels = 4 [default = 8];
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->channel());
+        this->channels());
   }
 
   if (has_board_size()) {
@@ -657,7 +640,7 @@ size_t Parameters::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->num_thread());
 
-    // required int32 L = 1 [default = 1];
+    // required int32 l = 1 [default = 1];
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->l());
@@ -667,10 +650,10 @@ size_t Parameters::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->batch_size());
 
-    // required int32 channel = 4 [default = 8];
+    // required int32 channels = 4 [default = 8];
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->channel());
+        this->channels());
 
     // required int32 board_size = 5 [default = 10];
     total_size += 1 +
@@ -695,9 +678,7 @@ size_t Parameters::ByteSizeLong() const {
     total_size += RequiredFieldsByteSizeFallback();
   }
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  SetCachedSize(cached_size);
   return total_size;
 }
 
@@ -727,7 +708,7 @@ void Parameters::MergeFrom(const Parameters& from) {
   if (cached_has_bits & 255u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_type();
-      type_.AssignWithDefault(&::Beta::Parameters::_default_type_.get(), from.type_);
+      type_.AssignWithDefault(&::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get(), from.type_);
     }
     if (cached_has_bits & 0x00000002u) {
       num_thread_ = from.num_thread_;
@@ -739,7 +720,7 @@ void Parameters::MergeFrom(const Parameters& from) {
       batch_size_ = from.batch_size_;
     }
     if (cached_has_bits & 0x00000010u) {
-      channel_ = from.channel_;
+      channels_ = from.channels_;
     }
     if (cached_has_bits & 0x00000020u) {
       board_size_ = from.board_size_;
@@ -788,11 +769,12 @@ void Parameters::Swap(Parameters* other) {
 }
 void Parameters::InternalSwap(Parameters* other) {
   using std::swap;
-  type_.Swap(&other->type_);
+  type_.Swap(&other->type_, &::Beta::Parameters::_i_give_permission_to_break_this_code_default_type_.get(),
+    GetArenaNoVirtual());
   swap(num_thread_, other->num_thread_);
   swap(l_, other->l_);
   swap(batch_size_, other->batch_size_);
-  swap(channel_, other->channel_);
+  swap(channels_, other->channels_);
   swap(board_size_, other->board_size_);
   swap(epsilon_, other->epsilon_);
   swap(num_simulation_, other->num_simulation_);
@@ -800,7 +782,6 @@ void Parameters::InternalSwap(Parameters* other) {
   swap(v_resign_, other->v_resign_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(_cached_size_, other->_cached_size_);
 }
 
 ::google::protobuf::Metadata Parameters::GetMetadata() const {
@@ -811,5 +792,12 @@ void Parameters::InternalSwap(Parameters* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Beta
+namespace google {
+namespace protobuf {
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::Beta::Parameters* Arena::CreateMaybeMessage< ::Beta::Parameters >(Arena* arena) {
+  return Arena::CreateInternal< ::Beta::Parameters >(arena);
+}
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)

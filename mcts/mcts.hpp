@@ -20,7 +20,7 @@ class MCTS{
         bool init(Parameters* parameters){
 
             tree_.reset(new Tree<State, Action, Context, DataContext>(
-               parameters->L(),
+               parameters->l(),
                parameters->num_simulation(),
                parameters->tau(),
                parameters->v_resign(),
@@ -30,12 +30,13 @@ class MCTS{
                parameters->batch_size(),
                parameters->channels() 
             ));
-            context_ .reset(new Context());
+            context_ .reset(new Context(parameters->epsilon()));
             return true;
         }
 
         void run(State root){
             tree_->run();
+
 
         }
     protected:

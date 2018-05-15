@@ -1,8 +1,11 @@
-depth: 10
+l: 10
 type: "chess"
 batch_size: 10
-channel: 10
-height: 10
-width: 9
+channels: 10
+board_size: 10
 epsilon: 0.01
+num_simulation: 1
+tau: 0.1
+v_resign: 0.1
+num_thread: 1
 

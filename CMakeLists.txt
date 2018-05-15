@@ -4,6 +4,9 @@ option(test "Build all tests." ON)
 SET(CMAKE_C_COMPILER g++)
 add_compile_options(-std=c++11)
 
+#set(CAFFE_LIBS caffe2 caffe2_protos)
+set(CAFFE_LIBS caffe2)
+
 link_directories(/usr/local/lib)
 link_directories(/usr/lib/graphviz /usr/lib/)
 include_directories(/usr/include/graphviz)
@@ -11,7 +14,7 @@ include_directories(/usr/include/graphviz)
 if (test)
 enable_testing()
 add_executable(test_tree  test/test_tree.cc proto/beta.pb.cc)
-target_link_libraries(test_tree gtest gtest_main glog protobuf caffe2 caffe2_protos pthread gvc cgraph)
+target_link_libraries(test_tree gtest gtest_main glog protobuf ${CAFFE_LIBS} pthread gvc cgraph)
 add_test(NAME test_tree COMMAND test_tree )
 
 add_executable(test_example  test/test_example.cc )
@@ -25,7 +28,7 @@ add_test(NAME test_example COMMAND test_example )
 
 
 add_executable(test_network  test/test_network.cc network/net.cc)
-target_link_libraries(test_network gtest gtest_main glog caffe2 caffe2_protos protobuf pthread)
+target_link_libraries(test_network gtest gtest_main glog ${CAFFE_LIBS} protobuf pthread)
 add_test(NAME test_network COMMAND test_network)
 endif()
 
@@ -38,6 +41,9 @@ target_link_libraries(test_graphviz gvc cgraph glog)
 
 #add_library(libproto proto/beta.pb.cc)
 add_executable(toy test/toy.cc )
-target_link_libraries(toy  caffe2 caffe2_protos protobuf)
+target_link_libraries(toy  ${CAFFE_LIBS} protobuf)
 add_executable(test_caffe2 test/test_caffe2.cc network/net.cc)
-target_link_libraries(test_caffe2 caffe2 caffe2_protos protobuf glog)
+target_link_libraries(test_caffe2 ${CAFFE_LIBS} protobuf glog)
+
+add_executable(test_mcts test/test_mcts.cc proto/beta.pb.cc network/net.cc)
+target_link_libraries(test_mcts ${CAFFE_LIBS} protobuf glog pthread gvc cgraph)
