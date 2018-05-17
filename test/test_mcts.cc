@@ -14,6 +14,6 @@ int main(){
     read_from_text("parameters.txt", parameters);
 
     mcts->init(parameters);
-    //mcts->run();
+    mcts->run();
     return 0;
 }

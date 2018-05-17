@@ -43,6 +43,7 @@ class Node{
         index_(0), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
             node_state_.reset(new State());
+            action_.reset(new Action());
 
             
         }
@@ -52,19 +53,19 @@ class Node{
         index_(index), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
             node_state_.reset(new State());
-
+            action_.reset(new Action());
         }
         Node( Index index):
         N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
         index_(index), name_(std::to_string(index)), keep_flag_(true), parent_(nullptr){
             child_.clear();
             node_state_.reset(new State());
-
+            action_.reset(new Action());
 
         }    
 
         Node(const Node<State, Action>& node){
-           
+          
 
         }
 
@@ -261,7 +262,6 @@ class Tree{
     typedef typename map<Index, NodeDef* >::iterator Iterator;
     public:
         Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread, int board_size, int batch_size, int channels):L_(L),  num_simulation_(num_simulation),counter_(0),  v_resign_(v_resign), num_thread_(num_thread){
-
             context_.reset(new Context(epsilon));
             network_.reset(new Network<State,Action, DataContext>(board_size, batch_size, channels));
             inv_tau_ = 1.0f/tau;
@@ -269,10 +269,8 @@ class Tree{
             sample_.reset( new Sample() );
             graph_viz_.reset(new GraphViz<NodeDef>() );
         }
-
-        
-
         ~Tree(){
+
 
         }
 
@@ -295,9 +293,6 @@ class Tree{
             graph_viz_->add_node(node);
             return add_node(node, index);
         }
-
-        
-
 
         bool add_node(NodeDef* node){
            // LOG(INFO)<< "adding "<< index<<" node: "<< node->name();

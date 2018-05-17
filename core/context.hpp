@@ -13,6 +13,8 @@
 namespace Beta{
   
 
+
+
   template<typename State, typename Action>
   class Context{
     public:
@@ -49,12 +51,17 @@ namespace Beta{
 
         //virtual void get_legal_action(const Tensor<CPUContext>& current) = 0;
 
+        virtual void get_legal_action(const State& state) = 0;
+
+
         size_t size_legal_action(){
           return current_legal_action_.size(); 
         }
         const Action& legal_action(int index){
           return current_legal_action_[index];
         }
+
+        
 
 
         Action sample_from_pai(){
@@ -93,7 +100,9 @@ namespace Beta{
 
       }
 
-      
+      void get_legal_action(State& state){
+
+      }
 
       protected:
         
@@ -122,16 +131,9 @@ namespace Beta{
         }
 
       }
-
-      void get_legal_action(const Tensor<CPUContext>& current){
-        //
-
-
+      void get_legal_action(const State& state){
 
       }
-
-
-
     protected:
       
       
@@ -156,14 +158,28 @@ namespace Beta{
 
       }
 
-
-      void get_legal_action(const Tensor<CPUContext>& current){
-        //
-
-
-
-
+      void get_legal_action(const State& state){
+        Blob* input = state.input();
+        TensorCPU* t = input->GetMutable<TensorCPU>();
+        assert(state.batch_size() != 1);
+        for(int i = 0; i < state.batch_size(); ++ i){
+          for(int j = 0; j < state.channel(); ++ j){
+            for(int p = 0; p < state.board_size(); ++ p){
+              for(int q = 0; q < state.board_size(); ++ q){
+                  if( t->data<float>()[] <= 0.00001f ){
+                    State legal;
+                    legal.ReshapeLike(state);
+                    legal.set_input(i,j,p,q,1.0);
+                    Action action(j,p,q);
+                    this->current_legal_states_->push_back(legal);
+                    this->current_legal_action_->push_back(action);
+                  }
+              }
+            }
+          }
+        }
       }
+
 
 
 

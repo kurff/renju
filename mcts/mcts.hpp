@@ -9,6 +9,7 @@ namespace Beta{
 template <typename State, typename Action, typename Context, typename DataContext>
 //multiple thread run
 class MCTS{
+    typedef Node<State, Action> NodeDef;
     public:
         MCTS(){
 
@@ -34,8 +35,9 @@ class MCTS{
             return true;
         }
 
-        void run(State root){
-            tree_->run();
+        void run(){
+            NodeDef* root = new NodeDef("root");
+            tree_->run(root);
 
 
         }

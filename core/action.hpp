@@ -74,6 +74,18 @@ class ChessAction: public Action{
         ~ChessAction(){
 
         }
+
+        ChessAction(int c, int y, int x):c_(c), y_(y), x_(x){
+            
+        }
+        ChessAction(ChessAction& action){
+            x_ = action.x();
+            y_ = action.y();
+            c_ = action.c();
+            prior_ = action.prior();
+            noise_ = action.noise();
+            epsilon_ = action.epsilon();
+        }
         const int x() const {return x_;}
         const int y() const {return y_;}
         const int c() const {return c_;}
@@ -81,11 +93,15 @@ class ChessAction: public Action{
         const float confidence() {
             return (1-epsilon_)*prior_ + epsilon_*noise_;
         }
+        const float epsilon(){
+            return epsilon_;
+        }
         const float noise(){return noise_;}
 
         void set_x(int x){x_ = x;}
         void set_y(int y){y_ = y;}
         void set_c(int c){c_ = c;}
+
 
 
         void set_prior(float prior){prior_=prior;}
