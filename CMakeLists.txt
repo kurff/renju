@@ -9,7 +9,9 @@ set(CAFFE_LIBS caffe2)
 
 link_directories(/usr/local/lib)
 link_directories(/usr/lib/graphviz /usr/lib/)
+
 include_directories(/usr/include/graphviz)
+include_directories(/usr/local/Cellar/graphviz/2.40.1/include/graphviz/)
 
 if (test)
 enable_testing()

@@ -28,15 +28,15 @@ namespace Beta{
                 TensorCPU* t = input_->GetMutable<TensorCPU>();
                 TensorCPU* ts = state.input()->GetMutable<TensorCPU>();
                 CPUContext context;
-                t->CopyFrom<CPUContext, CPUContext>(ts, &context);
+                t->CopyFrom<CPUContext, CPUContext>(*ts, &context);
 
                 TensorCPU* p = prob_->GetMutable<TensorCPU>();
                 TensorCPU* ps = state.input()->GetMutable<TensorCPU>();
-                p->CopyFrom<CPUContext, CPUContext>(ps, &context);
+                p->CopyFrom<CPUContext, CPUContext>(*ps, &context);
 
             }
 
-            void ReshapeLike(State& state){
+            void ReshapeLike(const State& state){
                 init(state.batch_size(), state.board_size(), state.channel());
             }
 
@@ -82,7 +82,7 @@ namespace Beta{
 
             
 
-            Blob* input(){ return input_.get();}
+            Blob* input() const { return input_.get();}
             Blob* prob(){return prob_.get();}
             Blob* z(){return z_.get();}
         protected:

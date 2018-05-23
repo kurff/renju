@@ -36,6 +36,9 @@ TEST(TreeTest, AddDeleteNode){
     NodeDef* node = new NodeDef(child);
     tree->add_node(n, node);
     tree->render();
+    
+
+
     //tree->add_node(,node, child);
 
     

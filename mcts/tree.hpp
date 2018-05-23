@@ -35,15 +35,15 @@ using namespace caffe2;
 
 namespace Beta{
 typedef unsigned long Index;
-template<typename State, typename Action>
+template<typename StateType, typename ActionType>
 class Node{
     
     public:
         Node(string name):N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
         index_(0), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
-            node_state_.reset(new State());
-            action_.reset(new Action());
+            node_state_.reset(new StateType());
+            action_.reset(new ActionType());
 
             
         }
@@ -52,24 +52,24 @@ class Node{
         N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
         index_(index), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
-            node_state_.reset(new State());
-            action_.reset(new Action());
+            node_state_.reset(new StateType());
+            action_.reset(new ActionType());
         }
         Node( Index index):
         N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
         index_(index), name_(std::to_string(index)), keep_flag_(true), parent_(nullptr){
             child_.clear();
-            node_state_.reset(new State());
-            action_.reset(new Action());
+            node_state_.reset(new StateType());
+            action_.reset(new ActionType());
 
         }    
 
-        Node(const Node<State, Action>& node){
+        Node(const Node<StateType, ActionType>& node){
           
 
         }
 
-        Node(const State & state, string name){
+        Node(const StateType & state, string name){
             node_state_ = state;
             name_ = name;
 
@@ -90,7 +90,7 @@ class Node{
     
         //float& sN(){return N_;}
         
-        void get(Node<State, Action>& node){
+        void get(Node<StateType, ActionType>& node){
             lock_guard<mutex> lock(mutex_);
             node.N_ = N_;
             node.Q_ = Q_;
@@ -106,7 +106,7 @@ class Node{
             node.node_state_ = node_state_;
             node.action_ = action_;
         }
-        void set(const Node<State, Action>& node){
+        void set(const Node<StateType, ActionType>& node){
             lock_guard<mutex> lock(mutex_);
             child_ = node.child();
             parent_ = node.parent();
@@ -125,7 +125,7 @@ class Node{
             circle_index_ = node.circle_index();
         }
 
-        void insert_child(Node<State, Action>* node, Index index){
+        void insert_child(Node<StateType, ActionType>* node, Index index){
             lock_guard<mutex> lock(mutex_);
             node->set_index(index);
             child_.insert(std::make_pair(node->index(), node) );
@@ -134,7 +134,7 @@ class Node{
 
         
     
-        void set_parent(Node<State,Action>* p){
+        void set_parent(Node<StateType,ActionType>* p){
             parent_ = p;
         }
         void set_index(Index index){index_ = index;}
@@ -216,10 +216,10 @@ class Node{
 
     
     public:
-        const map<Index, Node<State, Action>*  > child(){return child_;}
-        const Node<State, Action>* parent(){return parent_;}
-        const shared_ptr<State> node_state(){ return node_state_;}
-        const shared_ptr<Action> action(){return action_;}
+        const map<Index, Node<StateType, ActionType>*  > child(){return child_;}
+        const Node<StateType, ActionType>* parent(){return parent_;}
+        const shared_ptr<StateType> node_state(){ return node_state_;}
+        const shared_ptr<ActionType> action(){return action_;}
         const Index index(){return index_;}
         const string name(){return name_;}
         const float N(){return N_;}
@@ -234,10 +234,10 @@ class Node{
         const int child_index(){return child_index_;}
 
     protected:
-        map<Index,  Node<State, Action>*  > child_;
-        Node<State, Action>* parent_;
-        shared_ptr<State> node_state_;
-        shared_ptr<Action> action_; // edge of 
+        map<Index,  Node<StateType, ActionType>*  > child_;
+        Node<StateType, ActionType>* parent_;
+        shared_ptr<StateType> node_state_;
+        shared_ptr<ActionType> action_; // edge of 
         Index index_;
         string name_;
         float N_;
@@ -256,14 +256,14 @@ class Node{
 };
 
 
-template<typename State, typename Action, typename Context,typename DataContext>
+template<typename StateType, typename ActionType, typename ContextType,typename DataContext>
 class Tree{
-    typedef Node<State, Action> NodeDef;
+    typedef Node<StateType, ActionType> NodeDef;
     typedef typename map<Index, NodeDef* >::iterator Iterator;
     public:
         Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread, int board_size, int batch_size, int channels):L_(L),  num_simulation_(num_simulation),counter_(0),  v_resign_(v_resign), num_thread_(num_thread){
-            context_.reset(new Context(epsilon));
-            network_.reset(new Network<State,Action, DataContext>(board_size, batch_size, channels));
+            context_.reset(new ContextType(epsilon));
+            network_.reset(new Network<StateType,ActionType, DataContext>(board_size, batch_size, channels));
             inv_tau_ = 1.0f/tau;
             thread_pool_.reset(new TaskThreadPool(num_thread_));
             sample_.reset( new Sample() );
@@ -392,7 +392,7 @@ class Tree{
 
 
 
-        void copy_to_batch(Node<State, Action>* node){
+        void copy_to_batch(Node<StateType, ActionType>* node){
 
 
 
@@ -499,8 +499,8 @@ class Tree{
         // multiple-thread for pararel computation
         shared_ptr<TaskThreadPool> thread_pool_;
         int num_thread_;
-        shared_ptr<Network<State, Action, DataContext> > network_;
-        shared_ptr<Context> context_;
+        shared_ptr<Network<StateType, ActionType, DataContext> > network_;
+        shared_ptr<ContextType> context_;
         Index counter_;
         //queue<Tensor<TesnorCPU>* > batch_;
         
