@@ -42,7 +42,7 @@ class Node{
         Node(string name):N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
         index_(0), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
-            node_state_.reset(new StateType());
+            state_.reset(new StateType());
             action_.reset(new ActionType());
 
             
@@ -52,14 +52,14 @@ class Node{
         N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
         index_(index), name_(name), keep_flag_(true), parent_(nullptr){
             child_.clear();
-            node_state_.reset(new StateType());
+            state_.reset(new StateType());
             action_.reset(new ActionType());
         }
         Node( Index index):
         N_(0.0f),W_(0.0f),Q_(0.0f),P_(0.0f), 
         index_(index), name_(std::to_string(index)), keep_flag_(true), parent_(nullptr){
             child_.clear();
-            node_state_.reset(new StateType());
+            state_.reset(new StateType());
             action_.reset(new ActionType());
 
         }    
@@ -69,9 +69,11 @@ class Node{
 
         }
 
-        Node(const StateType & state, string name){
-            node_state_ = state;
-            name_ = name;
+        Node(const StateType & state, string name): name_(name){
+            //state_ = state;
+            state_.reset(new StateType(state));
+
+            //name_ = name;
 
 
         }
@@ -103,14 +105,14 @@ class Node{
             node.index_ = index_;
             node.batch_index_ = batch_index_;
             node.circle_index_ = circle_index_;
-            node.node_state_ = node_state_;
+            node.state_ = state_;
             node.action_ = action_;
         }
         void set(const Node<StateType, ActionType>& node){
             lock_guard<mutex> lock(mutex_);
             child_ = node.child();
             parent_ = node.parent();
-            node_state_ = node.node_state();
+            state_ = node.state();
             action_ = node.action();
             index_ = node.index();
             name_ = node.name();
@@ -217,8 +219,9 @@ class Node{
     
     public:
         const map<Index, Node<StateType, ActionType>*  > child(){return child_;}
-        const Node<StateType, ActionType>* parent(){return parent_;}
-        const shared_ptr<StateType> node_state(){ return node_state_;}
+        const Node<StateType, ActionType>* const_parent(){return parent_;}
+        Node<StateType, ActionType>* parent(){return parent_;}
+        const shared_ptr<StateType> state(){ return state_;}
         const shared_ptr<ActionType> action(){return action_;}
         const Index index(){return index_;}
         const string name(){return name_;}
@@ -236,7 +239,7 @@ class Node{
     protected:
         map<Index,  Node<StateType, ActionType>*  > child_;
         Node<StateType, ActionType>* parent_;
-        shared_ptr<StateType> node_state_;
+        shared_ptr<StateType> state_;
         shared_ptr<ActionType> action_; // edge of 
         Index index_;
         string name_;
@@ -367,9 +370,9 @@ class Tree{
                 LOG(INFO)<<"visit "<< ele->name()<<" index: "<<ele->index()<<" child size: "<< ele->child().size();
                 float maxQ = 0;
                 if(ele->child().size() ==0){
-                    context_->get_legal_action(ele->node_state());
+                    context_->get_legal_action(*(ele->state()));
                     for(int i = 0; i < context_->size_legal_action(); ++ i){
-                        NodeDef* node = new NodeDef (context_->get_legal_action(),"Node"+std::to_string(counter_));
+                        NodeDef* node = new NodeDef (context_->legal_state(i),"Node"+std::to_string(counter_));
                         add_node(ele, node);
                         leafs_.push(node);
                     }
@@ -417,7 +420,7 @@ class Tree{
             // }
             while(leafs_.size()){
                 NodeDef* node = leafs_.front();                
-                network_->forward(node->state());
+                network_->forward(*(node->state()));
                 backup(node);
                 leafs_.pop();
 
@@ -428,7 +431,6 @@ class Tree{
             queue<NodeDef* > cache;
             cache.push(node);
             while(cache.size()){
-                
                 NodeDef* node = cache.front();
                 node->update();
                 cache.push(node->parent());

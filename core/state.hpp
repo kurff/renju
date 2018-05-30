@@ -23,7 +23,7 @@ namespace Beta{
 
             }
 
-            State(State& state){
+            State(const State& state){
                 ReshapeLike(state);
                 TensorCPU* t = input_->GetMutable<TensorCPU>();
                 TensorCPU* ts = state.input()->GetMutable<TensorCPU>();
@@ -33,6 +33,8 @@ namespace Beta{
                 TensorCPU* p = prob_->GetMutable<TensorCPU>();
                 TensorCPU* ps = state.input()->GetMutable<TensorCPU>();
                 p->CopyFrom<CPUContext, CPUContext>(*ps, &context);
+
+
 
             }
 

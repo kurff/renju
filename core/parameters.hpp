@@ -25,8 +25,7 @@ namespace Beta{
 
 
 void read_from_text(string file, Parameters* parameters){
-    int fd = open(file.c_str(), O_RDONLY);
-                
+    int fd = open(file.c_str(), O_RDONLY);            
     FileInputStream* input = new FileInputStream(fd);
     bool success = google::protobuf::TextFormat::Parse(input, (Message*)(parameters));
     delete input;

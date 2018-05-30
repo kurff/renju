@@ -32,12 +32,12 @@ namespace Beta{
 
 
 
-        StateType& get_next_state(int index){
-          assert(index < 0 || index >= current_legal_states_.size());
+        StateType& legal_state(int index){
+          assert(index >= 0 && index < current_legal_states_.size());
           return *(current_legal_states_[index].get());
         }
 
-        void push(Tensor<TensorCPU>* pai){
+        void push(TensorCPU* pai){
             pai_.push_back(pai);
         }
 
@@ -80,7 +80,7 @@ namespace Beta{
         std::vector<std::shared_ptr<StateType> > current_legal_states_;
 
         // label of ground truth
-        std::vector<Tensor<TensorCPU>* > pai_;
+        std::vector<TensorCPU* > pai_;
         int z_; // -1 loss, 0 draw, 1 win
         float epsilon_;
 

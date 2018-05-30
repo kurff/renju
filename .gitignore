@@ -1,3 +1,2 @@
 build
-proto/beta.pb.cc
-proto/beta.pb.h
+proto
