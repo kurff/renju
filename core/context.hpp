@@ -12,10 +12,6 @@
 // get features 
 
 namespace Beta{
-  
-
-
-
   template<typename StateType, typename ActionType>
   class Context{
     public:

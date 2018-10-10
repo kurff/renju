@@ -1,14 +1,11 @@
 #ifndef __STATE_HPP__
 #define __STATE_HPP__
 
-#include "caffe2/core/tensor.h"
-#include "caffe2/core/blob.h"
+#include "caffe/caffe.hpp"
 #include <memory>
 using namespace caffe2;
 
 namespace Beta{
-
-
     // state should be in search space
     class State{
         public:
