@@ -7,7 +7,7 @@
 #include <queue>
 
 
-#include "caffe2/core/tensor.h"
+
 
 
 #include "utils/utils.hpp"
@@ -29,7 +29,7 @@
 
 
 using namespace std;
-using namespace caffe2;
+
 
 #include "mcts/thread_pool.h"
 

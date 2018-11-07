@@ -5,7 +5,7 @@ SET(CMAKE_C_COMPILER g++)
 add_compile_options(-std=c++11)
 
 #set(CAFFE_LIBS caffe2 caffe2_protos)
-set(CAFFE_LIBS caffe2)
+set(CAFFE_LIBS caffe)
 
 link_directories(/usr/local/lib)
 link_directories(/usr/lib/graphviz /usr/lib/)
@@ -44,8 +44,6 @@ target_link_libraries(test_graphviz gvc cgraph glog)
 #add_library(libproto proto/beta.pb.cc)
 add_executable(toy test/toy.cc )
 target_link_libraries(toy  ${CAFFE_LIBS} protobuf)
-add_executable(test_caffe2 test/test_caffe2.cc network/net.cc)
-target_link_libraries(test_caffe2 ${CAFFE_LIBS} protobuf glog)
 
 add_executable(test_mcts test/test_mcts.cc proto/beta.pb.cc network/net.cc)
 target_link_libraries(test_mcts ${CAFFE_LIBS} protobuf glog pthread gvc cgraph)
