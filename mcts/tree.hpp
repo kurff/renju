@@ -259,14 +259,14 @@ class Node{
 };
 
 
-template<typename StateType, typename ActionType, typename ContextType,typename DataContext>
+template<typename StateType, typename ActionType, typename ContextType>
 class Tree{
     typedef Node<StateType, ActionType> NodeDef;
     typedef typename map<Index, NodeDef* >::iterator Iterator;
     public:
         Tree(int L, int num_simulation, float tau, float v_resign, float epsilon, int num_thread, int board_size, int batch_size, int channels):L_(L),  num_simulation_(num_simulation),counter_(0),  v_resign_(v_resign), num_thread_(num_thread){
             context_.reset(new ContextType(epsilon));
-            network_.reset(new Network<StateType,ActionType, DataContext>(board_size, batch_size, channels));
+            network_.reset(new Network<StateType,ActionType>(board_size, batch_size, channels));
             inv_tau_ = 1.0f/tau;
             thread_pool_.reset(new TaskThreadPool(num_thread_));
             sample_.reset( new Sample() );
@@ -501,7 +501,7 @@ class Tree{
         // multiple-thread for pararel computation
         shared_ptr<TaskThreadPool> thread_pool_;
         int num_thread_;
-        shared_ptr<Network<StateType, ActionType, DataContext> > network_;
+        shared_ptr<Network<StateType, ActionType> > network_;
         shared_ptr<ContextType> context_;
         Index counter_;
         //queue<Tensor<TesnorCPU>* > batch_;

@@ -6,7 +6,7 @@
 #include <queue>
 #include "core/parameters.hpp"
 namespace Beta{
-template <typename StateType, typename ActionType, typename ContextType, typename DataContext>
+template <typename StateType, typename ActionType, typename ContextType>
 //multiple thread run
 class MCTS{
     typedef Node<StateType, ActionType> NodeDef;
@@ -19,8 +19,7 @@ class MCTS{
         }
 
         bool init(Parameters* parameters){
-
-            tree_.reset(new Tree<StateType, ActionType, ContextType, DataContext>(
+            tree_.reset(new Tree<StateType, ActionType, ContextType>(
                parameters->l(),
                parameters->num_simulation(),
                parameters->tau(),
@@ -43,7 +42,7 @@ class MCTS{
         }
     protected:
         shared_ptr<ContextType > context_;
-        shared_ptr<Tree<StateType, ActionType, ContextType, DataContext> > tree_;
+        shared_ptr<Tree<StateType, ActionType, ContextType> > tree_;
         
 
 
