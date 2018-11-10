@@ -15,8 +15,6 @@ namespace Beta{
 
             State(const State& state);
 
-            void init(int num, int channel, int height, int width);
-
             void init_input(int num, int channel, int height, int width);
 
             void init_prob(int num, int channel, int height, int width);
@@ -29,13 +27,13 @@ namespace Beta{
 
             
 
-            Blob* input() const { return input_.get();}
-            Blob* prob(){return prob_.get();}
-            Blob* z(){return z_.get();}
+            Blob<float>* input() const { return input_.get();}
+            Blob<float>* prob(){return prob_.get();}
+            Blob<float>* z(){return z_.get();}
         protected:
-            std::shared_ptr<Blob> input_;
-            std::shared_ptr<Blob> prob_;
-            std::shared_ptr<Blob> z_;
+            std::shared_ptr<Blob<float> > input_;
+            std::shared_ptr<Blob<float> > prob_;
+            std::shared_ptr<Blob<float> > z_;
 
 
             

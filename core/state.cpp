@@ -2,9 +2,9 @@
 
 namespace Beta{
     State::State(){
-        input_.reset(new Blob());
-        prob_.reset(new Blob());
-        z_.reset(new Blob());
+        input_.reset(new Blob<float>());
+        prob_.reset(new Blob<float>());
+        z_.reset(new Blob<float>());
     }
 
     State::~State(){
@@ -12,12 +12,6 @@ namespace Beta{
     }
 
     State::State(const State& state){
-
-    }
-
-    void State::init(int num, int channel, int height, int width){
-        
-
 
     }
 

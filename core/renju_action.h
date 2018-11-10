@@ -16,8 +16,8 @@ class RenJuAction: public Action{
 
         const float prior();
         const float confidence();
-        
-        //return (1-epsilon_)*prior_ + epsilon_*noise_;
+
+        void calc_confidence();
         
         const float epsilon();
         const float noise();
@@ -28,13 +28,21 @@ class RenJuAction: public Action{
 
         int* mutable_x();
         int* mutable_y();
+        int* mutable_c();
+
+        float* mutable_prior();
+        float* mutable_confidence();
+        float* mutable_noise();
+        float* mutable_epsilon();
+
+
 
     protected:  
-        int x_; // the 
+        int x_;
         int y_;
         int c_;
         float prior_;
-        float confidence_;  // confidence_ = (1-epsilon)* w + epsilon * noise_; 
+        float confidence_;   
         float noise_;
         float epsilon_;        
 

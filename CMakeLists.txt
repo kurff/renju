@@ -10,10 +10,18 @@ set(CAFFE_LIBS caffe)
 link_directories(/usr/local/lib)
 link_directories(/usr/lib/graphviz /usr/lib/)
 
+
 include_directories(/usr/include/graphviz)
 include_directories(/usr/local/Cellar/graphviz/2.40.1/include/graphviz/)
+include_directories(./)
+include_directories(caffe/distribute/include)
+include_directories(/usr/local/cuda/include/)
 
+link_directories(/usr/local/cuda/lib64/)
+link_directories(caffe/distribute/lib/)
 
+add_executable(test_network test/test_network.cc network/network.cpp)
+target_link_libraries(test_network ${CAFFE_LIBS} glog protobuf boost_system boost_filesystem gtest gtest_main)
 
 
 

@@ -15,5 +15,4 @@ message Parameters{
     required float tau=8[default=0.1];
     required float v_resign=9[default=0.1];
     required int32 num_thread=10[default=1];
-
 }
