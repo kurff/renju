@@ -6,7 +6,7 @@
 using namespace Beta;
 TEST(NETWORK, build){
     Network<int, int> network;
-    //network.init();
+    network.init("lenet_solver.prototxt");
 
 
 }

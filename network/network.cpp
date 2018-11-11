@@ -15,10 +15,14 @@ namespace Beta{
     }
 
     template<typename StateType, typename ActionType>
+    void Network<StateType, ActionType>::init(const string& solver_file){
+        caffe::ReadSolverParamsFromTextFileOrDie(solver_file, &solver_param_);
+        init(solver_param_);
+    }
+
+    template<typename StateType, typename ActionType>
     void Network<StateType, ActionType>::init(const SolverParameter& param){
         solver_.reset(SolverRegistry<float>::CreateSolver(param));
-        
-
     }
 
     template<typename StateType, typename ActionType>

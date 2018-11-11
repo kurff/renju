@@ -14,6 +14,7 @@ namespace Beta{
             ~Network();
 
             void init(const SolverParameter& param);
+            void init(const string& solver_file);
             void init(const std::string& prototxt, const std::string& model_file);
             void update();
             void forward_train(const StateType& state);
@@ -24,6 +25,7 @@ namespace Beta{
             std::shared_ptr<Solver<float> > solver_;
         // net for evaluation
             std::shared_ptr<Net<float> > net_;
+            caffe::SolverParameter solver_param_;
 
 
 
