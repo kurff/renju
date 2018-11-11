@@ -25,9 +25,7 @@ namespace Beta{
 
             
 
-            
-
-            Blob<float>* input() const { return input_.get();}
+            Blob<float>* input(){ return input_.get();}
             Blob<float>* prob(){return prob_.get();}
             Blob<float>* z(){return z_.get();}
         protected:

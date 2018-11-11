@@ -20,7 +20,7 @@ include_directories(/usr/local/cuda/include/)
 link_directories(/usr/local/cuda/lib64/)
 link_directories(caffe/distribute/lib/)
 
-add_executable(test_network test/test_network.cc network/network.cpp)
+add_executable(test_network test/test_network.cc network/network.cpp core/state.cpp)
 target_link_libraries(test_network ${CAFFE_LIBS} glog protobuf boost_system boost_filesystem gtest gtest_main)
 
 

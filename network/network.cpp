@@ -1,7 +1,10 @@
+
 #include "core/state.h"
 #include "core/action.h"
+
 #include "core/renju_action.h"
 #include "network/network.h"
+#include "glog/logging.h"
 
 namespace Beta{
     template<typename StateType, typename ActionType>
@@ -31,13 +34,32 @@ namespace Beta{
     }
 
     template<typename StateType, typename ActionType>
-    void Network<StateType, ActionType>::forward_train(const StateType& state){
-        
+    void Network<StateType, ActionType>::forward_train(StateType* state){
+        vector<caffe::shared_ptr<Net<float> > > test_nets = solver_->test_nets();
+        const int num_nets = test_nets.size();
+        CHECK_EQ(num_nets, 1);
+        int num_inputs = test_nets[0]->num_inputs();
+        CHECK_EQ(num_inputs,2);
+        vector<Blob<float>* > input_blobs = test_nets[0]->input_blobs();
+        Blob<float>* data = input_blobs[0];
+        Blob<float>* label = input_blobs[1];
+        Blob<float>* input = state->input();
+        Blob<float>* prob = state->prob();
+        data->CopyFrom(*input);
+        label->CopyFrom(*prob);
+        LOG(INFO)<<"data " << data->shape_string();
+        LOG(INFO)<<"label "<< label->shape_string();
+        test_nets[0]->Forward();
 
     }
     template<typename StateType, typename ActionType>
-    void Network<StateType, ActionType>::forward_test(const StateType& state){
-
+    void Network<StateType, ActionType>::forward_test(StateType* state){
+        int num_inputs = net_->num_inputs();
+        CHECK_EQ(num_inputs, 1);
+        vector<Blob<float>* > input_blobs = net_->input_blobs();
+        Blob<float>* data = input_blobs[0];
+        LOG(INFO)<<"data: "<< data->shape_string();
+        net_->Forward();
     }
     template<typename StateType, typename ActionType>
     void Network<StateType, ActionType>::init(const std::string& prototxt, const std::string& model_file){
@@ -47,7 +69,7 @@ namespace Beta{
 
     }
     template class Network<State, RenJuAction>;
-    template class Network<int , int>;
+    template class Network<State , State>;
     //template class Network<State, RenJuAction>;
 
 

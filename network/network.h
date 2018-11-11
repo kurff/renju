@@ -17,8 +17,8 @@ namespace Beta{
             void init(const string& solver_file);
             void init(const std::string& prototxt, const std::string& model_file);
             void update();
-            void forward_train(const StateType& state);
-            void forward_test(const StateType& state);
+            void forward_train(StateType* state);
+            void forward_test(StateType* state);
         
         protected:
         // solver file for training
