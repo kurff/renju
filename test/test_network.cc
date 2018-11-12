@@ -5,7 +5,7 @@
 #include "core/state.h"
 using namespace Beta;
 TEST(NETWORK, build){
-    Network<State, State> network;
+    Network<State> network;
     network.init("lenet_solver.prototxt");
     State* state = new State();
     state->init_input(64,1,28,28);

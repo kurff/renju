@@ -7,7 +7,7 @@
 using namespace std;
 using namespace caffe;
 namespace Beta{
-    template<typename StateType, typename ActionType>
+    template<typename StateType>
     class Network{
         public:
             Network();
@@ -16,7 +16,9 @@ namespace Beta{
             void init(const SolverParameter& param);
             void init(const string& solver_file);
             void init(const std::string& prototxt, const std::string& model_file);
-            void update();
+            void update(StateType* state);
+            void set_train(StateType* state);
+            void set_test(StateType* state);
             void forward_train(StateType* state);
             void forward_test(StateType* state);
         
@@ -26,6 +28,7 @@ namespace Beta{
         // net for evaluation
             std::shared_ptr<Net<float> > net_;
             caffe::SolverParameter solver_param_;
+            int step_;
 
 
 
