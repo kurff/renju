@@ -23,6 +23,9 @@ link_directories(caffe/distribute/lib/)
 add_executable(test_network test/test_network.cc network/network.cpp core/state.cpp)
 target_link_libraries(test_network ${CAFFE_LIBS} glog protobuf boost_system boost_filesystem gtest gtest_main)
 
+enable_testing()
+add_executable(simple_queue_test utils/simple_queue_test.cc)
+target_link_libraries(simple_queue_test gtest gtest_main glog pthread)
 
 
 #if (test)
