@@ -49,7 +49,7 @@ class Node{
             Q_ = W_/ N_;
         }
 
-        Blob* compute_pai(float inv_tau, TIndex max_child);
+        Blob<float>* compute_pai(float inv_tau, TIndex max_child);
         // {
         //     lock_guard<mutex> lock(mutex_);
         //     float sum = 0.0f;

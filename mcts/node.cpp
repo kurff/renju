@@ -54,7 +54,7 @@ namespace Beta{
     }
 
     template<typename StateType, typename ActionType>
-    Blob* Node::compute_pai(float inv_tau, TIndex max_child){
+    Blob<float>* Node::compute_pai(float inv_tau, TIndex max_child){
 
     }
 
