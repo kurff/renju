@@ -3,6 +3,8 @@
 #include <memory>
 #include "network/network.h"
 #include "core/state.h"
+
+#include "network/server.h"
 using namespace Beta;
 TEST(NETWORK, build){
     Network<State> network;
@@ -13,5 +15,9 @@ TEST(NETWORK, build){
     int x = 0;
     network.forward_train(state);
 
+
+}
+
+TEST(SERVER, build){
 
 }
