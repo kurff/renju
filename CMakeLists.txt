@@ -16,16 +16,22 @@ include_directories(/usr/local/Cellar/graphviz/2.40.1/include/graphviz/)
 include_directories(./)
 include_directories(caffe/distribute/include)
 include_directories(/usr/local/cuda/include/)
+include_directories(caffe/distribute/include/caffe/proto)
 
 link_directories(/usr/local/cuda/lib64/)
 link_directories(caffe/distribute/lib/)
 
-add_executable(test_network test/test_network.cc network/network.cpp core/state.cpp)
-target_link_libraries(test_network ${CAFFE_LIBS} glog protobuf boost_system boost_filesystem gtest gtest_main)
+add_executable(test_network test/test_network.cc network/network.cpp core/state.cpp network/NetServer.cpp proto/server.pb.cc proto/server.grpc.pb.cc)
+target_link_libraries(test_network ${CAFFE_LIBS} glog grpc grpc++ protobuf boost_system boost_filesystem gtest gtest_main)
 
-enable_testing()
+add_executable(test )
+
+
 add_executable(simple_queue_test utils/simple_queue_test.cc)
 target_link_libraries(simple_queue_test gtest gtest_main glog pthread)
+
+
+
 
 
 #if (test)

@@ -4,7 +4,7 @@
 #include "network/network.h"
 #include "core/state.h"
 
-#include "network/server.h"
+#include "network/NetServer.h"
 using namespace Beta;
 TEST(NETWORK, build){
     Network<State> network;
@@ -19,5 +19,11 @@ TEST(NETWORK, build){
 }
 
 TEST(SERVER, build){
+    NetServer<State>* server = new NetServer<State>();
+    server->init("lenet_solver.prototxt");
+
+
+
 
 }
+

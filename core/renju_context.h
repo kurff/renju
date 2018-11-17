@@ -7,17 +7,11 @@ namespace Beta{
   template<typename StateType, typename ActionType>
   class RenjuContext: public Context<StateType, ActionType>{
     public:
-      RenjuContext(float epsilon): Context<StateType,ActionType>(epsilon){
+      RenjuContext(float epsilon): Context<StateType,ActionType>(epsilon);
 
-      }
+      ~RenjuContext();
 
-      ~RenjuContext(){
-
-      }
-
-      void get_legal_action(const StateType& state){
-
-      }
+      void get_legal_action(const StateType& state);
 
       protected:
         

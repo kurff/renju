@@ -1,3 +1,6 @@
+#include "core/state.h"
+#include "core/renju_context.h"
+#include "core/renju_action.h"
 #include "mcts/mcts.h"
 
 namespace Beta{
