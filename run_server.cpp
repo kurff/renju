@@ -8,6 +8,7 @@ DEFINE_string(prototxt, "*.prototxt", "prototxt file of caffe model");
 
 
 int main(int argc, char** argv){
+    
 
 
 
