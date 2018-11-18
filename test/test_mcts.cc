@@ -1,10 +1,15 @@
-#include "mcts/mcts.hpp"
-#include "core/action.hpp"
-#include "core/context.hpp"
-#include "core/state.hpp"
-#include "core/parameters.hpp"
+#include <memory>
+#include "gtest/gtest.h"
+#include "glog/logging.h"
+#include "mcts_client.h"
 
 using namespace Beta;
 
+TEST(MCTS, submit){
+    
+
+
+
+}
 
 

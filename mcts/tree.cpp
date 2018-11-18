@@ -14,7 +14,7 @@ namespace Beta{
             context_.reset(new ContextType(epsilon));
             network_.reset(new Network<StateType,ActionType>(board_size, batch_size, channels));
             inv_tau_ = 1.0f/tau;
-            thread_pool_.reset(new TaskThreadPool(num_thread_));
+            //thread_pool_.reset(new TaskThreadPool(num_thread_));
             sample_.reset( new Sample() );
             graph_viz_.reset(new GraphViz<NodeDef>() );
     }

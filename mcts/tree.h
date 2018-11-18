@@ -18,18 +18,12 @@
 #include <functional>
 #include "network/network.h"
 
-
 #include "utils/graphviz.hpp"
 #include "utils/utils.hpp"
-#include "mcts/thread_pool.h"
 #include "mcts/node.h"
 
 using namespace std;
 namespace Beta{
-
-
-
-
 template<typename StateType, typename ActionType>
 class Tree{
     typedef Node<StateType, ActionType> NodeDef;
@@ -92,7 +86,7 @@ class Tree{
         //queue<function<void (NodeDef* ) > > tasks_;
         queue<NodeDef* > leafs_;
         // multiple-thread for pararel computation
-        shared_ptr<TaskThreadPool> thread_pool_;
+        //shared_ptr<TaskThreadPool> thread_pool_;
         int num_thread_;
         Index counter_;
         vector<NodeDef*> validate_action_;
