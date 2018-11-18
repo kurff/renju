@@ -24,11 +24,15 @@ link_directories(caffe/distribute/lib/)
 add_executable(test_network test/test_network.cc network/network.cpp core/state.cpp network/NetServer.cpp proto/server.pb.cc proto/server.grpc.pb.cc)
 target_link_libraries(test_network ${CAFFE_LIBS} glog grpc grpc++ protobuf boost_system boost_filesystem gtest gtest_main)
 
-add_executable(test )
+#add_executable(test )
 
 
 add_executable(simple_queue_test utils/simple_queue_test.cc)
 target_link_libraries(simple_queue_test gtest gtest_main glog pthread)
+
+#add_executable(run_client run_client.cpp)
+add_executable(run_server run_server.cpp)
+target_link_libraries(run_server ${CAFFE_LIBS} glog grpc grpc++ protobuf boost_system boost_filesystem gtest gtest_main)
 
 
 

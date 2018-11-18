@@ -9,6 +9,7 @@
 DEFINE_string(channel, "192.168.0.107:5342", "channel of client");
 DEFINE_string(param, "lenet_solver.prototxt", "parameter file of ");
 
+using namespace Beta;
 int main(int argc, char** argv){
 
     ::google::InitGoogleLogging(argv[0]);
