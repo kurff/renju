@@ -4,6 +4,7 @@
 namespace Beta{
     typedef unsigned long Index;
     typedef unsigned long NodeIndex;
+    typedef unsigned long TIndex;
 
 
 

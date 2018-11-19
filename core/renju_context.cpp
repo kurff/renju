@@ -4,21 +4,21 @@
 #include "core/renju_context.h"
 namespace Beta{
     template<typename StateType, typename ActionType>
-    RenjuContext<StateType, ActionType>::RenjuContext(){
+    RenJuContext<StateType, ActionType>::RenJuContext(float epsilon): Context<StateType,ActionType>(epsilon){
 
     }
 
     template<typename StateType, typename ActionType>
-    RenjuContext<StateType, ActionType>::~RenjuContext(){
+    RenJuContext<StateType, ActionType>::~RenJuContext(){
 
     }
 
     template<typename StateType, typename ActionType>
-    void RenjuContext::get_legal_action(const StateType& state){
+    void RenJuContext<StateType, ActionType>::get_legal_action(const StateType& state){
 
     }
 
-    template class RenjuContext<State, RenJuAction>;
+    template class RenJuContext<State, RenJuAction>;
 
 
 

@@ -16,7 +16,7 @@ using namespace grpc;
 
 namespace Beta{
     template<typename StateType, typename ActionType, typename ContextType>
-    class MCTSClient : public MCTS<StateType, ActionType, ContextType>, {
+    class MCTSClient : public MCTS<StateType, ActionType, ContextType> {
         public:
             MCTSClient(std::shared_ptr<grpc::Channel> channel);
             ~MCTSClient();
@@ -31,7 +31,7 @@ namespace Beta{
 
         protected:
             std::unique_ptr<Evaluation::Stub> stub_;
-            std::shared_ptr<SimpleQueue<std::shared_ptr< Request> > > queue_;
+            std::shared_ptr<SimpleQueue< Request > > queue_;
             std::shared_ptr<TaskThreadPool> thread_pool_;
     };
 

@@ -6,18 +6,18 @@
 namespace Beta{
 
     template<typename StateType, typename ActionType, typename ContextType>
-    MCTS::MCTS(){
+    MCTS<StateType, ActionType, ContextType>::MCTS(){
 
     }
 
     template<typename StateType, typename ActionType, typename ContextType>    
-    MCTS::~MCTS(){
+    MCTS<StateType, ActionType, ContextType>::~MCTS(){
 
     } 
 
     template<typename StateType, typename ActionType, typename ContextType>
-    bool MCTS::init(Parameters* parameters){
-        tree_.reset(new Tree<StateType, ActionType, ContextType>(
+    bool MCTS<StateType, ActionType, ContextType>::init(Parameters* parameters){
+        tree_.reset(new Tree<StateType, ActionType>(
                parameters->l(),
                parameters->num_simulation(),
                parameters->tau(),
@@ -33,10 +33,12 @@ namespace Beta{
     }
 
     template<typename StateType, typename ActionType, typename ContextType>
-    void MCTS::run(){
+    void MCTS<StateType, ActionType, ContextType>::run(){
         NodeDef* root = new NodeDef("root");
         tree_->run(root);
     }
+
+    template class MCTS<State, RenJuAction, RenJuContext<State, RenJuAction> > ;
 
     
 

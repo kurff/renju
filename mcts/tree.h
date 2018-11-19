@@ -90,16 +90,15 @@ class Tree{
         int num_thread_;
         Index counter_;
         vector<NodeDef*> validate_action_;
-        shared_ptr<Sample> sample_;
+        std::shared_ptr<Sample> sample_;
         mutex mutex_;
         int L_;
         int num_simulation_;
         float v_resign_;
         float inv_tau_;
         TIndex max_child_;
-        shared_ptr<GraphViz<NodeDef> > graph_viz_;
+        std::shared_ptr<GraphViz<NodeDef> > graph_viz_;
 };
 
 } //end of namespace Beta
-
 #endif

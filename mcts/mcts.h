@@ -4,7 +4,7 @@
 
 #include "tree.h"
 #include "proto/beta.pb.h"
-#include "core/parameters.hpp"
+#include "core/parameters.h"
 
 namespace Beta{
 template <typename StateType, typename ActionType, typename ContextType>
@@ -20,7 +20,7 @@ class MCTS{
         
     protected:
         std::shared_ptr<ContextType > context_;
-        std::shared_ptr<Tree<StateType, ActionType, ContextType> > tree_;
+        std::shared_ptr<Tree<StateType, ActionType> > tree_;
 
         
 

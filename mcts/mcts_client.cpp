@@ -1,9 +1,11 @@
-
+#include "core/state.h"
+#include "core/renju_context.h"
+#include "core/renju_action.h"
 #include "mcts/mcts_client.h"
 namespace Beta{
     template<typename StateType, typename ActionType, typename ContextType>
     MCTSClient<StateType, ActionType, ContextType>::MCTSClient(std::shared_ptr<grpc::Channel> channel) 
-    : MCTS<StateType, ActionType, ContextType>(), stub_(Evaluation::NewStub(channel)), queue_(new SimpleQueue<std::shared_ptr< Request> >() ){
+    : MCTS<StateType, ActionType, ContextType>(), stub_(Evaluation::NewStub(channel)), queue_(new SimpleQueue<Request>() ){
         
 
     }
@@ -25,10 +27,10 @@ namespace Beta{
     template<typename StateType, typename ActionType, typename ContextType>
     string MCTSClient<StateType, ActionType, ContextType>::evaluate_train(){
         grpc::ClientContext grpc_context;
-        std::shared_ptr<Request> request;
-        queue_.pop(request);
+        Request request;
+        queue_->Pop(&request);
         Reply reply;
-        Status status = stub_->Forward_train(&grpc_context, request.get(), &reply);
+        Status status = stub_->Forward_train(&grpc_context, request, &reply);
         if (status.ok()) {
             return "success";
         }else {
@@ -42,10 +44,10 @@ namespace Beta{
     template<typename StateType, typename ActionType, typename ContextType>
     string MCTSClient<StateType, ActionType, ContextType>::evaluate_test(){
         grpc::ClientContext grpc_context;
-        std::shared_ptr<Request> request;
-        queue_.pop(request);
+        Request request;
+        queue_->Pop(&request);
         Reply reply;
-        Status status = stub_->Forward_test(&grpc_context, request.get(), &reply);
+        Status status = stub_->Forward_test(&grpc_context, request, &reply);
         if (status.ok()) {
             return "success";
         }else {
@@ -58,10 +60,10 @@ namespace Beta{
     template<typename StateType, typename ActionType, typename ContextType>
     string MCTSClient<StateType, ActionType, ContextType>::fake_example(){
         grpc::ClientContext grpc_context;
-        std::shared_ptr<Request> request(new Request());
+        Request request;
         
         Reply reply;
-        Status status = stub_->Forward_test(&grpc_context, request.get(), &reply);
+        Status status = stub_->Forward_test(&grpc_context, request, &reply);
         if (status.ok()) {
             LOG(INFO)<< reply.loss();
             return "success";
@@ -71,5 +73,7 @@ namespace Beta{
             return "RPC failed";
         }
     } 
+
+    template class MCTSClient<State, RenJuAction, RenJuContext<State, RenJuAction> >;
 
 }

@@ -10,7 +10,7 @@
 DEFINE_string(solver_file, "lenet_solver.protottxt", "solver file of network");
 DEFINE_string(prototxt, "*.prototxt", "prototxt file of caffe model");
 DEFINE_string(caffemodel, "*.caffemodel", "weight file of caffe model");
-DEFINE_string(server_address, "server address", "server address");
+DEFINE_string(server_address, "0.0.0.0:5342", "server address");
 
 using namespace Beta;
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv){
     builder.AddListeningPort(FLAGS_server_address, grpc::InsecureServerCredentials());
     // Register "service" as the instance through which we'll communicate with
     // clients. In this case it corresponds to an *synchronous* service.
-    builder.RegisterService(service);
+    builder.RegisterService(service.get());
     // Finally assemble the server.
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
     std::cout << "Server listening on " << FLAGS_server_address << std::endl;

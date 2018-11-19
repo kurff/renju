@@ -75,8 +75,8 @@ class Node{
     public:
         const map<Index, Node<StateType, ActionType>*  > child(){return child_;}
         const Node<StateType, ActionType>* parent(){return parent_;}
-        const shared_ptr<StateType> state(){ return state_;}
-        const shared_ptr<ActionType> action(){return action_;}
+        const std::shared_ptr<StateType> state(){ return state_;}
+        const std::shared_ptr<ActionType> action(){return action_;}
         const Index index(){return index_;}
         const string name(){return name_;}
         const float N(){return N_;}
@@ -109,8 +109,8 @@ class Node{
     protected:
         map<Index,  Node<StateType, ActionType>*  > child_;
         Node<StateType, ActionType>* parent_;
-        shared_ptr<StateType> state_;
-        shared_ptr<ActionType> action_; // edge of 
+        std::shared_ptr<StateType> state_;
+        std::shared_ptr<ActionType> action_; // edge of 
         Index index_;
         string name_;
         float N_;

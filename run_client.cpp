@@ -23,14 +23,13 @@ int main(int argc, char** argv){
         "    http://www.image-net.org/download-images\n");
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-    if (argc != 3 ) {
-        gflags::ShowUsageWithFlagsRestrict(argv[0], "run client");
-        return 1;
-    }
+    
+    gflags::ShowUsageWithFlagsRestrict(argv[0], "run client");
+  
     std::shared_ptr<grpc::Channel> channel(grpc::CreateChannel(
       FLAGS_channel, grpc::InsecureChannelCredentials()));
-    std::shared_ptr<MCTSClient<State,RenJuAction, RenjuContext> > mcts(
-        new MCTSClient<State, RenJuAction, RenjuContext>( channel)
+    std::shared_ptr<MCTSClient<State,RenJuAction, RenJuContext<State, RenJuAction>> > mcts(
+        new MCTSClient<State, RenJuAction, RenJuContext<State, RenJuAction> >( channel)
     );
     mcts->fake_example();
 

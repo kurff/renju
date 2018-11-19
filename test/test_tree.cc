@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "mcts/tree.hpp"
-#include "core/parameters.hpp"
+#include "core/parameters.h"
 #include "core/context.hpp"
 #include "core/state.hpp"
 #include "core/action.hpp"
