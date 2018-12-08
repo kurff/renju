@@ -50,22 +50,6 @@ class Node{
         }
 
         Blob<float>* compute_pai(float inv_tau, TIndex max_child);
-        // {
-        //     lock_guard<mutex> lock(mutex_);
-        //     float sum = 0.0f;
-            
-        //     TensorCPU* tensor = new TensorCPU();
-        //     tensor->Reshape(vector<TIndex>{1,max_child});
-        //     float * p = tensor->mutable_data<float>();
-        //     for(auto child : child_ ){
-        //        sum += pow(child.second->N(), inv_tau);
-        //     }
-        //     for(auto child: child_){
-        //         float value = child.second->N() / sum;
-        //         p[child.second->child_index()] = value;
-        //     }
-        //     return tensor;
-        // }
 
         void serialize(const string& file);
 

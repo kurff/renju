@@ -29,6 +29,7 @@ namespace Beta{
 
     void State::set_input(int n, int c, int y, int x, float v){
         
+        
     }
 
 
