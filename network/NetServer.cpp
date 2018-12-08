@@ -4,7 +4,7 @@
 namespace Beta{
     template<typename StateType>
     NetServer<StateType>::NetServer(){
-
+        state_.reset(new StateType());
     }
 
     template<typename StateType>
@@ -14,7 +14,12 @@ namespace Beta{
 
     template<typename StateType>
     Status NetServer<StateType>::Forward_test(ServerContext* context, const Request* request, Reply* response){
-        response->set_loss(2.0);
+        //response->set_loss(2.0);
+        //request->s()
+
+
+
+
 
         return Status::OK;
     }

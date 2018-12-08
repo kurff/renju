@@ -1,3 +1,4 @@
+#include <string>
 #include "state.h"
 
 namespace Beta{
@@ -28,8 +29,12 @@ namespace Beta{
     }
 
     void State::set_input(int n, int c, int y, int x, float v){
-        
-        
+        int o = input_->offset(n,c,y,x);
+        input_->mutable_cpu_data()[o] = v;
+    }
+
+    void State::set_input(int size, const float* src){
+        std::memcpy(input_->mutable_cpu_data(), src, sizeof(float)*size);
     }
 
 

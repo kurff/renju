@@ -23,6 +23,8 @@ namespace Beta{
 
             void set_input(int n, int c, int y, int x , float v );
 
+            void set_input(int size, const float* src);
+
             
 
             Blob<float>* input(){ return input_.get();}

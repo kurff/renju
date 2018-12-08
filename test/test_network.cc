@@ -27,3 +27,10 @@ TEST(SERVER, build){
 
 }
 
+TEST(NETWORK, test){
+    
+
+
+
+}
+

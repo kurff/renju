@@ -1,6 +1,7 @@
 #ifndef NETWORK_NETSERVER_H_
 #define NETWORK_NETSERVER_H_
 #include <string>
+#include <memory>
 #include "network/network.h"
 #include "proto/server.pb.h"
 #include "proto/server.grpc.pb.h"
@@ -23,7 +24,7 @@ namespace Beta{
             ~NetServer();
 
         protected:
-            
+            std::shared_ptr<StateType> state_;
             
 
 

@@ -72,7 +72,20 @@ namespace Beta{
                 << std::endl;
             return "RPC failed";
         }
-    } 
+    }
+
+    template<typename StateType, typename ActionType, typename ContextType>
+    string MCTSClient<StateType, ActionType, ContextType>::load_example(const string& file){
+
+
+    }
+
+    template<typename StateType, typename ActionType, typename ContextType>
+    string MCTSClient<StateType, ActionType, ContextType>::load_several_examples(const string& file_list){
+        
+
+    }
+
 
     template class MCTSClient<State, RenJuAction, RenJuContext<State, RenJuAction> >;
 

@@ -28,6 +28,12 @@ namespace Beta{
             // for debug
             string fake_example();
 
+            string load_example(const string& file);
+
+            string load_several_examples(const string& file_list);
+
+
+
 
         protected:
             std::unique_ptr<Evaluation::Stub> stub_;
