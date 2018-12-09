@@ -32,11 +32,11 @@ target_link_libraries(simple_queue_test gtest gtest_main glog pthread)
 
 add_executable(run_client run_client.cpp mcts/mcts_client.cpp mcts/mcts.cpp  mcts/tree.cpp mcts/node.cpp proto/beta.pb.cc proto/server.grpc.pb.cc proto/server.pb.cc
 core/renju_context.cpp core/context.cpp core/renju_action.cpp core/state.cpp )
-target_link_libraries(run_client ${CAFFE_LIBS} glog grpc grpc++ protobuf boost_system boost_filesystem gflags gvc cgraph)
+target_link_libraries(run_client ${CAFFE_LIBS} glog grpc grpc++ protobuf opencv_core opencv_imgproc opencv_imgcodecs boost_system boost_filesystem gflags gvc cgraph)
 
 
 
-add_executable(run_server run_server.cpp network/NetServer.cpp proto/server.pb.cc proto/server.grpc.pb.cc network/network.cpp)
+add_executable(run_server run_server.cpp network/NetServer.cpp core/state.cpp proto/server.pb.cc proto/server.grpc.pb.cc network/network.cpp)
 target_link_libraries(run_server ${CAFFE_LIBS} glog grpc grpc++ protobuf boost_system boost_filesystem gtest gtest_main gflags)
 
 

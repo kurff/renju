@@ -17,6 +17,7 @@ namespace Beta{
             NetServer();
 
 
+
             Status Forward_test(ServerContext* context, const Request* request, Reply* response);
 
             Status Forward_train(ServerContext* context, const Request* request, Reply* response);

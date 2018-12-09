@@ -8,6 +8,7 @@
 
 DEFINE_string(channel, "192.168.0.107:5342", "channel of client");
 DEFINE_string(param, "lenet_solver.prototxt", "parameter file of ");
+DEFINE_string(image_name, "mnist_png/testing/0/3.png", "image name");
 
 using namespace Beta;
 int main(int argc, char** argv){
@@ -18,8 +19,8 @@ int main(int argc, char** argv){
 
     gflags::SetUsageMessage("run_client to run mcts search.\n"
         "Usage:\n"
-        "    run_client --channel --param"
-        "The ImageNet dataset for the training demo is at\n"
+        "    run_client --channel --param "
+        "channel for distribute learning\n"
         "    http://www.image-net.org/download-images\n");
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -31,7 +32,8 @@ int main(int argc, char** argv){
     std::shared_ptr<MCTSClient<State,RenJuAction, RenJuContext<State, RenJuAction>> > mcts(
         new MCTSClient<State, RenJuAction, RenJuContext<State, RenJuAction> >( channel)
     );
-    mcts->fake_example();
+    std::string file = FLAGS_image_name;
+    mcts->load_example(file);
 
 
 

@@ -75,9 +75,20 @@ namespace Beta{
         set_test(state);
         net_->Forward();
         auto output_blobs = net_->output_blobs();
+        
+        LOG(INFO)<<"output blobs";
+        for(int i = 0; i < output_blobs[0]->num(); ++ i){
+            for(int j = 0; j < output_blobs[0]->channels(); ++ j){
+                for(int k = 0; k < output_blobs[0]->height(); ++ k){
+                    for(int l = 0; l < output_blobs[0]->width(); ++ l){
+                        LOG(INFO)<<output_blobs[0]->data_at(i,j,k,l);
+                    }
+                }
+            }
+        }
         // get the outputs 
-        state->prob()->CopyFrom(*output_blobs[0]);
-        state->z()->CopyFrom(*output_blobs[1]);
+        //state->prob()->CopyFrom(*output_blobs[0]);
+        //state->z()->CopyFrom(*output_blobs[1]);
 
     }
     template<typename StateType>
